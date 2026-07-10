@@ -32,6 +32,7 @@ export function AuthForm({
         {pending ? "Just a moment…" : mode === "signup" ? "Create account" : "Log in"}
       </button>
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}
+      {state.notice && <p className="rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-800 ring-1 ring-inset ring-emerald-100">{state.notice}</p>}
     </form>
   );
 }

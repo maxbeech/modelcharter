@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { isDbConfigured } from "@/lib/db";
+import { isDbConfigured } from "@/lib/auth";
 import { getAttestation } from "@/lib/attest";
 import { SetupPending } from "@/components/SetupPending";
 import { Section } from "@/components/ui";

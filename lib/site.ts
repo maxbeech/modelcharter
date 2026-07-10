@@ -9,7 +9,7 @@ export const SITE = {
   shortDescription:
     "ModelCharter helps small and mid-sized teams govern AI. Generate an AI usage policy quickly, see which AI tools are safe to use, and check your team has read the rules.",
   description:
-    "ModelCharter is the AI governance tool for companies without a compliance team. Build a tailored AI usage policy with the free generator, look up how 20+ popular AI tools handle your data in the AI Tool Risk Directory, map your obligations under the EU AI Act, NIST AI RMF, ISO 42001 and SOC 2, and keep a register of which tools your team is approved to use.",
+    "ModelCharter is the AI governance tool for companies without a compliance team. Build a tailored AI usage policy with the free generator, look up how 60+ popular AI tools handle your data in the AI Tool Risk Directory, map your obligations under the EU AI Act, NIST AI RMF, ISO 42001 and SOC 2, and keep a register of which tools your team is approved to use.",
   email: "hello@modelcharter.com",
   // Stable last-updated date for sitemap lastmod.
   updated: "2026-06-26",
@@ -26,8 +26,9 @@ export const isPaidPlan = (plan: string | undefined | null): boolean =>
 export type NavLink = { label: string; href: string };
 
 export const NAV: NavLink[] = [
-  { label: "Policy generator", href: "/ai-usage-policy-generator" },
   { label: "Tool directory", href: "/tools" },
+  { label: "Compliance", href: "/compliance" },
+  { label: "Policy generator", href: "/ai-usage-policy-generator" },
   { label: "Frameworks", href: "/frameworks" },
   { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },

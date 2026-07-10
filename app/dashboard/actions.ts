@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { ensureOrg, setToolStatus, savePolicy, createAttestationLink } from "@/lib/workspace";
+import { markAlertsRead, setTracked } from "@/lib/alerts";
 
 // All actions re-derive the org server-side (never trust a client-supplied id),
 // and the workspace helpers verify org membership on every query. Each action
@@ -29,4 +30,18 @@ export async function actionCreateAttestation() {
   if (!org) return;
   await createAttestationLink(org.id);
   revalidatePath("/dashboard/attestations");
+}
+
+export async function actionSetTracked(formData: FormData) {
+  const org = await ensureOrg();
+  if (!org) return;
+  await setTracked(org.id, String(formData.get("slug")), String(formData.get("on")) === "1");
+  revalidatePath("/dashboard/tools");
+}
+
+export async function actionMarkAlertsRead() {
+  const org = await ensureOrg();
+  if (!org) return;
+  await markAlertsRead(org.id);
+  revalidatePath("/dashboard");
 }

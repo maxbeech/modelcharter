@@ -1,18 +1,14 @@
-import bcrypt from "bcryptjs";
-import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
-import { getSql, isDbConfigured } from "./db";
+import { createServerSupabase } from "./supabase/server";
+import { isSupabaseConfigured } from "./supabase/config";
 
-// Self-contained email+password auth. Sessions are stateless JWTs in an
-// httpOnly cookie (signed with AUTH_SECRET). No external email/OAuth provider
-// required, so signup works the moment the DB + secret are configured.
-
-const COOKIE = "mc_session";
-const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
-const secretKey = () => new TextEncoder().encode(process.env.AUTH_SECRET ?? "");
+// Email + password auth on Supabase Auth. Session lives in the Supabase cookies
+// (refreshed by middleware); authorization always uses getUser(), which
+// validates the JWT with the auth server rather than trusting the raw cookie.
 
 export interface SessionUser { id: string; email: string }
-export { isDbConfigured };
+
+// Kept under its historical name so the dashboard/login/signup gates don't churn.
+export { isSupabaseConfigured as isDbConfigured };
 
 export function validatePassword(pw: string): string | null {
   if (pw.length < 8) return "Password must be at least 8 characters.";
@@ -21,53 +17,44 @@ export function validatePassword(pw: string): string | null {
 function normalizeEmail(e: string): string { return e.trim().toLowerCase(); }
 function looksLikeEmail(e: string): boolean { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e); }
 
-async function setSession(user: SessionUser): Promise<void> {
-  const token = await new SignJWT({ email: user.email })
-    .setProtectedHeader({ alg: "HS256" }).setSubject(user.id)
-    .setIssuedAt().setExpirationTime("30d").sign(secretKey());
-  const c = await cookies();
-  // `secure` only in production: browsers drop Secure cookies over http://, which
-  // would silently break login in local dev and on non-TLS previews.
-  c.set(COOKIE, token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: MAX_AGE });
-}
-
 export async function getSession(): Promise<SessionUser | null> {
-  if (!isDbConfigured()) return null;
-  const token = (await cookies()).get(COOKIE)?.value;
-  if (!token) return null;
-  try {
-    const { payload } = await jwtVerify(token, secretKey());
-    return { id: String(payload.sub), email: String(payload.email) };
-  } catch { return null; }
+  if (!isSupabaseConfigured()) return null;
+  const supabase = await createServerSupabase();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return null;
+  return { id: user.id, email: user.email ?? "" };
 }
 
 export async function destroySession(): Promise<void> {
-  (await cookies()).delete(COOKIE);
+  if (!isSupabaseConfigured()) return;
+  const supabase = await createServerSupabase();
+  await supabase.auth.signOut();
 }
 
-export async function signup(email: string, password: string, fullName?: string): Promise<{ ok: boolean; error?: string }> {
-  const sql = getSql();
-  if (!sql) return { ok: false, error: "Accounts are not configured on this deployment yet." };
+export async function signup(email: string, password: string): Promise<{ ok: boolean; error?: string; notice?: string }> {
+  if (!isSupabaseConfigured()) return { ok: false, error: "Accounts are not configured on this deployment yet." };
   const e = normalizeEmail(email);
   if (!looksLikeEmail(e)) return { ok: false, error: "Enter a valid email address." };
   const pwErr = validatePassword(password);
   if (pwErr) return { ok: false, error: pwErr };
-  const existing = await sql`select id from users where email = ${e}`;
-  if (existing.length) return { ok: false, error: "An account with that email already exists. Try logging in." };
-  const hash = await bcrypt.hash(password, 10);
-  const rows = await sql`insert into users (email, password_hash, full_name) values (${e}, ${hash}, ${fullName ?? null}) returning id, email`;
-  await setSession({ id: rows[0].id, email: rows[0].email });
+
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase.auth.signUp({ email: e, password });
+  if (error) {
+    const msg = /registered|already/i.test(error.message)
+      ? "An account with that email already exists. Try logging in."
+      : error.message;
+    return { ok: false, error: msg };
+  }
+  // With email confirmation enabled, signUp returns a user but no session.
+  if (!data.session) return { ok: false, notice: "Account created. Check your email to confirm it, then log in." };
   return { ok: true };
 }
 
 export async function login(email: string, password: string): Promise<{ ok: boolean; error?: string }> {
-  const sql = getSql();
-  if (!sql) return { ok: false, error: "Accounts are not configured on this deployment yet." };
-  const e = normalizeEmail(email);
-  const rows = await sql`select id, email, password_hash from users where email = ${e}`;
-  if (!rows.length) return { ok: false, error: "No account with that email, or wrong password." };
-  const valid = await bcrypt.compare(password, rows[0].password_hash);
-  if (!valid) return { ok: false, error: "No account with that email, or wrong password." };
-  await setSession({ id: rows[0].id, email: rows[0].email });
+  if (!isSupabaseConfigured()) return { ok: false, error: "Accounts are not configured on this deployment yet." };
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.auth.signInWithPassword({ email: normalizeEmail(email), password });
+  if (error) return { ok: false, error: "No account with that email, or wrong password." };
   return { ok: true };
 }

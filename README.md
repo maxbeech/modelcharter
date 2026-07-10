@@ -5,18 +5,26 @@ department: generate an AI usage policy, see which AI tools are safe to use, and
 track that your team has read the rules.
 
 - **Free, no signup:** [AI Usage Policy Generator](/ai-usage-policy-generator) ·
-  [AI Tool Risk Directory](/tools) (20+ tools rated from their own policies) ·
+  [AI Tool Risk Directory](/tools) (60+ tools rated from their own policies) ·
+  [AI vendor risk assessment](/ai-vendor-risk-assessment) ·
+  [compliance hubs](/compliance) (HIPAA / GDPR / SOC 2 / ISO 27001 / no-training) ·
+  per-tool answer pages ("Is X HIPAA compliant?"), comparisons, a glossary ·
   framework guides (EU AI Act, NIST AI RMF, ISO 42001, SOC 2) · blog.
 - **Paid (Team/Business):** shared AI tool register, versioned policy, employee
-  attestation tracking, exportable compliance reports.
+  attestation tracking, and **change alerts** (watch a tool, get told when its
+  data-handling facts change).
 
 ## Stack
 
 Next.js 16 (App Router, TS) + Tailwind 4 on Vercel. The public site is fully
-static/ISR (no backend). The account layer uses **Neon Postgres** with
-self-contained email+password auth (`bcryptjs` + `jose` JWT) and **Stripe** for
-billing, all live in production (Stripe runs in test mode). See
-[SETUP.md](./SETUP.md).
+static/ISR (no backend). The account layer runs on **Supabase** (Postgres + Auth
++ Row Level Security) with email+password auth via `@supabase/ssr`, and **Stripe**
+for billing. A daily Vercel **cron** (`/api/cron/sync-alerts`) snapshots the tool
+facts and raises change alerts. See [SETUP.md](./SETUP.md).
+
+Risk scoring (`lib/risk.ts`) is a transparent weighted average over only the
+signals we could verify, rescaled to 0-100, with the unknowns reported as
+coverage so a thinly-evidenced tool can never earn the best band.
 
 Design uses a warm-paper palette with a deep pine brand and a traffic-signal
 motif (stop / caution / go) that maps to the risk bands, with a Fraunces display

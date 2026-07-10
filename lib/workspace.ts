@@ -1,8 +1,9 @@
-// Server-side data access for the team workspace (Neon Postgres). Tenant
-// scoping is enforced here: every query is keyed on the org the signed-in user
-// belongs to. Assumes the caller has a valid session.
+// Server-side data access for the team workspace (Supabase). Tenant scoping is
+// enforced by Row Level Security: every query runs as the signed-in user, and
+// the policies restrict rows to the orgs they belong to. The org id is still
+// derived server-side (never trusted from the client).
 
-import { getSql } from "@/lib/db";
+import { createServerSupabase } from "@/lib/supabase/server";
 import { getSession } from "@/lib/auth";
 import { TOOLS } from "@/lib/ai-tools";
 
@@ -11,122 +12,93 @@ export interface RegisterRow { id: string; tool_slug: string; name: string; stat
 export interface PolicyRow { id: string; version: number; content_md: string; created_at: string }
 export interface AttestationRow { id: string; token: string; name: string | null; email: string | null; acknowledged_at: string | null; created_at: string }
 
-// Get the user's org, creating a personal one (seeded with the directory) on
-// first visit. Returns null if not signed in / DB unconfigured.
+const REGISTER_STATUSES = ["approved", "restricted", "review", "prohibited"];
+
+type SB = Awaited<ReturnType<typeof createServerSupabase>>;
+
+async function fetchOrg(supabase: SB, userId: string): Promise<Org | null> {
+  const { data: m } = await supabase
+    .from("org_members").select("org_id").eq("user_id", userId).order("created_at", { ascending: true }).limit(1);
+  if (!m?.length) return null;
+  const { data: o } = await supabase
+    .from("orgs").select("id, name, plan, stripe_customer_id").eq("id", m[0].org_id).single();
+  return (o as Org) ?? null;
+}
+
+async function seedRegister(supabase: SB, orgId: string): Promise<void> {
+  const { count } = await supabase.from("tool_register").select("id", { count: "exact", head: true }).eq("org_id", orgId);
+  if (count && count > 0) return;
+  const rows = TOOLS.map((t) => ({ org_id: orgId, tool_slug: t.slug, name: t.name, status: "review" }));
+  await supabase.from("tool_register").upsert(rows, { onConflict: "org_id,tool_slug", ignoreDuplicates: true });
+}
+
+// Resolve the signed-in user's org. The handle_new_user trigger creates it on
+// signup; this also creates one as a fallback, then seeds the register (once)
+// with the directory tools at status "review".
 export async function ensureOrg(): Promise<Org | null> {
-  const sql = getSql();
   const user = await getSession();
-  if (!sql || !user) return null;
+  if (!user) return null;
+  const supabase = await createServerSupabase();
 
-  // Deterministic: always resolve to the user's OLDEST membership.
-  const member = await sql`select org_id from org_members where user_id = ${user.id} order by created_at limit 1`;
-  if (member.length) {
-    const o = await sql`select id, name, plan, stripe_customer_id from orgs where id = ${member[0].org_id}`;
-    return (o[0] as Org) ?? null;
+  let org = await fetchOrg(supabase, user.id);
+  if (!org) {
+    const derived = (user.email.split("@")[1] ?? "My team").replace(/\..*/, "") || "My team";
+    const name = derived.charAt(0).toUpperCase() + derived.slice(1);
+    const { data: created } = await supabase
+      .from("orgs").insert({ name, created_by: user.id }).select("id, name, plan, stripe_customer_id").single();
+    if (created) {
+      await supabase.from("org_members").insert({ org_id: created.id, user_id: user.id, role: "owner" });
+      org = created as Org;
+    }
   }
-
-  // Create the personal org + membership atomically, guarded against a
-  // concurrent first-load creating a duplicate (CTE only inserts if the user
-  // has no membership yet).
-  const name = (user.email.split("@")[1] ?? "My team").replace(/\..*/, "");
-  const created = await sql`
-    with new_org as (
-      insert into orgs (name, created_by)
-      select ${name}, ${user.id}
-      where not exists (select 1 from org_members where user_id = ${user.id})
-      returning id, name, plan, stripe_customer_id
-    ), link as (
-      insert into org_members (org_id, user_id, role)
-      select id, ${user.id}, 'owner' from new_org
-      on conflict (org_id, user_id) do nothing
-    )
-    select * from new_org`;
-  if (!created.length) {
-    // Lost the race: another request created it. Resolve the existing one.
-    // Guard against the brief window where the winner's membership row isn't
-    // visible yet (each Neon HTTP statement is its own round-trip).
-    const m = await sql`select org_id from org_members where user_id = ${user.id} order by created_at limit 1`;
-    if (!m.length) return null;
-    const o = await sql`select id, name, plan, stripe_customer_id from orgs where id = ${m[0].org_id}`;
-    return (o[0] as Org) ?? null;
-  }
-  const org = created[0] as Org;
-  // Seed the register with the known directory tools (status "review").
-  for (const t of TOOLS) {
-    await sql`insert into tool_register (org_id, tool_slug, name, status) values (${org.id}, ${t.slug}, ${t.name}, 'review') on conflict (org_id, tool_slug) do nothing`;
-  }
+  if (org) await seedRegister(supabase, org.id);
   return org;
 }
 
-async function memberOrgId(orgId: string, userId: string): Promise<boolean> {
-  const sql = getSql();
-  if (!sql) return false;
-  const r = await sql`select 1 from org_members where org_id = ${orgId} and user_id = ${userId}`;
-  return r.length > 0;
-}
-
-// Reads verify the current session is a member of the requested org via an
-// `exists` sub-select (no extra round-trip), so a caller can never read another
-// tenant's data even if it passed a foreign org id.
 export async function getRegister(orgId: string): Promise<RegisterRow[]> {
-  const sql = getSql();
-  const user = await getSession();
-  if (!sql || !user) return [];
-  return (await sql`select id, tool_slug, name, status, notes from tool_register
-    where org_id = ${orgId} and exists (select 1 from org_members where org_id = ${orgId} and user_id = ${user.id})
-    order by name`) as RegisterRow[];
+  const supabase = await createServerSupabase();
+  const { data } = await supabase
+    .from("tool_register").select("id, tool_slug, name, status, notes").eq("org_id", orgId).order("name");
+  return (data as RegisterRow[]) ?? [];
 }
 
 export async function setToolStatus(orgId: string, slug: string, name: string, status: string): Promise<void> {
-  const sql = getSql();
-  const user = await getSession();
-  if (!sql || !user || !(await memberOrgId(orgId, user.id))) return;
-  const allowed = ["approved", "restricted", "review", "prohibited"];
-  if (!allowed.includes(status)) return;
-  await sql`insert into tool_register (org_id, tool_slug, name, status, updated_at) values (${orgId}, ${slug}, ${name}, ${status}, now())
-            on conflict (org_id, tool_slug) do update set status = excluded.status, updated_at = now()`;
+  if (!REGISTER_STATUSES.includes(status)) return;
+  const supabase = await createServerSupabase();
+  await supabase.from("tool_register").upsert(
+    { org_id: orgId, tool_slug: slug, name, status, updated_at: new Date().toISOString() },
+    { onConflict: "org_id,tool_slug" },
+  );
 }
 
 export async function getPolicies(orgId: string): Promise<PolicyRow[]> {
-  const sql = getSql();
-  const user = await getSession();
-  if (!sql || !user) return [];
-  // Cast timestamps to text: the driver returns timestamptz as Date objects,
-  // and the UI formats them as strings (.slice).
-  return (await sql`select id, version, content_md, created_at::text as created_at from policies
-    where org_id = ${orgId} and exists (select 1 from org_members where org_id = ${orgId} and user_id = ${user.id})
-    order by version desc`) as PolicyRow[];
+  const supabase = await createServerSupabase();
+  const { data } = await supabase
+    .from("policies").select("id, version, content_md, created_at").eq("org_id", orgId).order("version", { ascending: false });
+  return (data as PolicyRow[]) ?? [];
 }
 
 export async function savePolicy(orgId: string, contentMd: string, inputJson: unknown): Promise<void> {
-  const sql = getSql();
-  const user = await getSession();
-  if (!sql || !user || !(await memberOrgId(orgId, user.id))) return;
-  const latest = await sql`select coalesce(max(version), 0) as v from policies where org_id = ${orgId}`;
-  const version = Number(latest[0].v) + 1;
-  // input_json is a jsonb column — Postgres won't implicitly cast a text param,
-  // so cast explicitly.
-  await sql`insert into policies (org_id, version, content_md, input_json)
-            values (${orgId}, ${version}, ${contentMd}, ${JSON.stringify(inputJson)}::jsonb)`;
+  const supabase = await createServerSupabase();
+  const { data: latest } = await supabase
+    .from("policies").select("version").eq("org_id", orgId).order("version", { ascending: false }).limit(1);
+  const version = ((latest?.[0]?.version as number) ?? 0) + 1;
+  await supabase.from("policies").insert({ org_id: orgId, version, content_md: contentMd, input_json: inputJson ?? null });
 }
 
 export async function getAttestations(orgId: string): Promise<AttestationRow[]> {
-  const sql = getSql();
-  const user = await getSession();
-  if (!sql || !user) return [];
-  return (await sql`select id, token, name, email, acknowledged_at::text as acknowledged_at, created_at::text as created_at from attestations
-    where org_id = ${orgId} and exists (select 1 from org_members where org_id = ${orgId} and user_id = ${user.id})
-    order by created_at desc`) as AttestationRow[];
+  const supabase = await createServerSupabase();
+  const { data } = await supabase
+    .from("attestations").select("id, token, name, email, acknowledged_at, created_at").eq("org_id", orgId).order("created_at", { ascending: false });
+  return (data as AttestationRow[]) ?? [];
 }
 
 export async function createAttestationLink(orgId: string): Promise<string | null> {
-  const sql = getSql();
-  const user = await getSession();
-  if (!sql || !user || !(await memberOrgId(orgId, user.id))) return null;
-  // An attestation link points at a specific policy version, so require one to
-  // exist first (the UI also disables the button until a policy is saved).
-  const pol = await sql`select id from policies where org_id = ${orgId} order by version desc limit 1`;
-  if (!pol.length) return null;
-  const r = await sql`insert into attestations (org_id, policy_id) values (${orgId}, ${pol[0].id}) returning token`;
-  return r[0]?.token ?? null;
+  const supabase = await createServerSupabase();
+  const { data: pol } = await supabase
+    .from("policies").select("id").eq("org_id", orgId).order("version", { ascending: false }).limit(1);
+  if (!pol?.length) return null;
+  const { data } = await supabase
+    .from("attestations").insert({ org_id: orgId, policy_id: pol[0].id }).select("token").single();
+  return (data?.token as string) ?? null;
 }

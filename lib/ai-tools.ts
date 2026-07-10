@@ -12,7 +12,8 @@ export type Verdict = "yes" | "no" | "opt-out" | "n/a" | null;
 export type Confidence = "high" | "medium" | "verify";
 export type Category =
   | "assistant" | "coding" | "meetings" | "writing"
-  | "productivity" | "image" | "video" | "audio" | "search" | "design";
+  | "productivity" | "image" | "video" | "audio" | "search" | "design"
+  | "customer-support" | "sales";
 
 export interface Source { claim: string; url: string }
 
@@ -49,6 +50,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   assistant: "AI assistants", coding: "Coding", meetings: "Meetings & notetakers",
   writing: "Writing", productivity: "Productivity", image: "Image",
   video: "Video", audio: "Audio", search: "Search", design: "Design",
+  "customer-support": "Customer support", sales: "Sales & CRM",
 };
 
 function v(x: unknown): Verdict {

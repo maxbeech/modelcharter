@@ -1,10 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Static/ISR public site; long revalidation set per-route. No image domains
-  // needed (we use inline SVG + system rendering). Keep config minimal so the
-  // Vercel remote build stays fast.
   poweredByHeader: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/photos/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

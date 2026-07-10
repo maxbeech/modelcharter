@@ -1,6 +1,73 @@
 # Changelog
 
-## 2026-06-26 — Rebrand to ModelCharter
+## 2026-07-07 (later): Supabase re-platform, weighted scoring, change alerts
+
+Completed the work deferred from the Vetlark merge, on **Supabase** (the account
+layer moved off Neon).
+
+- **Neon to Supabase (full).** Replaced the custom Neon Postgres + bcrypt/jose
+  JWT auth with Supabase Auth + Postgres + Row Level Security. New `@supabase/ssr`
+  clients (`lib/supabase/{server,client,admin,middleware}`), root `middleware.ts`
+  for session refresh, and SQL migrations under `supabase/migrations/` with RLS on
+  every table, a security-definer org-membership helper in a private schema, and a
+  `handle_new_user` trigger that gives each account a personal org. `lib/workspace`,
+  the dashboard, the Stripe webhook and the public attestation page were rewritten
+  onto Supabase (the webhook + attest + cron use the service-role client). Removed
+  `@neondatabase/serverless`, `bcryptjs`, `jose` and `db/`, `scripts/migrate.mjs`.
+- **Weighted-coverage risk model.** `lib/risk.ts` is now a weighted average over
+  only the verified signals, rescaled to 0-100, with a `coverage` metric. Unknown
+  facts lower confidence instead of silently counting as risk, and a tool with
+  thin evidence (or that trains on your data by default) can never be rated Low.
+- **Fact-change detection + alerts.** `lib/fact-signature.ts` diffs the current
+  catalog against a stored snapshot of watched fact values. A daily cron
+  (`/api/cron/sync-alerts`, fail-closed on `CRON_SECRET`, scheduled in
+  `vercel.json`) raises an alert for any team watching a tool whose facts changed.
+  New Supabase tables (`tool_fact_snapshots`, `tracked_tools`, `tool_alerts`), a
+  "Watch" toggle on the tool register, and a change-alerts panel on the dashboard.
+- **Tests.** New `test/fact-signature.test.mts`; `risk` tests rewritten for the
+  coverage model. Full suite green; build passes.
+
+Note: the code, migrations and RLS are complete and build green with an empty env
+(the account layer degrades to a setup-pending state). Applying the migrations and
+verifying auth end-to-end needs a live Supabase project (`NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`).
+
+## 2026-07-07: Merge Vetlark (catalog, registry pages, tools, content)
+
+Folded the genuinely additive parts of the retired Vetlark prototype (the same
+product, built independently by another team) into ModelCharter, adapted to the
+Neon/static stack. Nothing Supabase-specific was ported. All additions are
+public, static and no-DB.
+
+- **Directory expanded 22 to 60 tools.** Merged 38 net-new AI tools from Vetlark's
+  catalog into `data/ai-tools.json`, mapped faithfully to our schema with sources
+  preserved. Four unsourced "pending verification" stubs were deliberately dropped
+  to keep the honesty contract. Added two categories (customer support, sales).
+- **Registry answer pages.** `/tools/{slug}/{hipaa|gdpr|soc2|iso27001|training}`,
+  the head-term "Is X HIPAA compliant?" / "Does X train on your data?" pages,
+  answered from the same sourced facts (about 300 pages). Linked from each tool
+  profile. `lib/registry-questions.ts`.
+- **Compliance hubs.** `/compliance` and `/compliance/{hipaa|gdpr|soc-2|iso-27001|no-training}`
+  plus industry hubs (healthcare, legal, finance, enterprise), each listing the
+  tools that pass, computed from the facts. `lib/registry-frameworks.ts`.
+- **Comparisons.** `/compare/{a}-vs-{b}` side-by-side pages; popular pairs are
+  pre-rendered, any valid pair renders on demand. `lib/compare.ts`.
+- **Free AI vendor risk assessment tool** at `/ai-vendor-risk-assessment`: pick a
+  tool and your data types for an explainable approve / conditional / reject
+  verdict, with CSV export. Pure engine in `lib/risk-assessment.ts` + `lib/csv.ts`.
+- **Glossary.** `/glossary` and `/glossary/{term}`: 10 definitional pages (HIPAA
+  BAA, SOC 2, GDPR DPA, subprocessors, model training, shadow AI and more).
+- **3 new blog posts** ported and rewritten (consumer vs business tiers, how to vet
+  an AI tool, shadow AI). Cannibalising posts (duplicating the new registry pages)
+  were intentionally NOT ported.
+- **Wiring.** Nav, footer, sitemap and `llms.txt` updated for every new surface.
+  New tests in `test/registry.test.mts`. Build now emits ~496 static pages.
+
+Deliberately deferred (recommended next): adopt Vetlark's weighted-coverage
+scoring model, and its fact-signature change-detection + alerting (both need a
+Neon migration and dashboard work).
+
+## 2026-06-26: Rebrand to ModelCharter
 
 Full rebrand from Greenlightly to ModelCharter across all source files, metadata,
 legal copy, tests, package configuration and deployment config. Domain updated to

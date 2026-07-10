@@ -1,26 +1,35 @@
-// Public attestation lookups (no auth — access is by the unguessable token).
-import { getSql } from "@/lib/db";
+import "server-only";
+import { createAdminSupabase } from "@/lib/supabase/admin";
+
+// Public attestation lookups: no auth, access is by the unguessable token. Runs
+// through the service-role client (server only) so the public sign page can read
+// and write a single attestation row by token without an anon RLS policy.
 
 export interface AttestView { orgName: string; version: number | null; contentMd: string | null; acknowledged: boolean }
 
 export async function getAttestation(token: string): Promise<AttestView | null> {
-  const sql = getSql();
-  if (!sql) return null;
-  const rows = await sql`
-    select o.name as org_name, p.version, p.content_md, (a.acknowledged_at is not null) as acknowledged
-    from attestations a join orgs o on o.id = a.org_id
-    left join policies p on p.id = a.policy_id
-    where a.token = ${token}`;
-  if (!rows.length) return null;
-  const r = rows[0];
-  return { orgName: r.org_name, version: r.version ?? null, contentMd: r.content_md ?? null, acknowledged: Boolean(r.acknowledged) };
+  const admin = createAdminSupabase();
+  if (!admin || !token) return null;
+  const { data: a } = await admin
+    .from("attestations").select("org_id, policy_id, acknowledged_at").eq("token", token).maybeSingle();
+  if (!a) return null;
+  const { data: o } = await admin.from("orgs").select("name").eq("id", a.org_id).maybeSingle();
+  let version: number | null = null;
+  let contentMd: string | null = null;
+  if (a.policy_id) {
+    const { data: p } = await admin.from("policies").select("version, content_md").eq("id", a.policy_id).maybeSingle();
+    version = (p?.version as number) ?? null;
+    contentMd = (p?.content_md as string) ?? null;
+  }
+  return { orgName: (o?.name as string) ?? "", version, contentMd, acknowledged: Boolean(a.acknowledged_at) };
 }
 
 export async function signAttestation(token: string, name: string, email: string): Promise<boolean> {
-  const sql = getSql();
-  if (!sql) return false;
-  if (!name.trim() || !email.trim()) return false;
-  const r = await sql`update attestations set name = ${name.trim()}, email = ${email.trim().toLowerCase()}, acknowledged_at = now()
-                      where token = ${token} and acknowledged_at is null returning id`;
-  return r.length > 0;
+  const admin = createAdminSupabase();
+  if (!admin || !name.trim() || !email.trim()) return false;
+  const { data } = await admin
+    .from("attestations")
+    .update({ name: name.trim(), email: email.trim().toLowerCase(), acknowledged_at: new Date().toISOString() })
+    .eq("token", token).is("acknowledged_at", null).select("id");
+  return (data?.length ?? 0) > 0;
 }

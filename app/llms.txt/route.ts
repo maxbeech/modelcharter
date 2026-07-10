@@ -2,6 +2,7 @@ import { SITE } from "@/lib/site";
 import { TOOLS } from "@/lib/ai-tools";
 import { scoreTool } from "@/lib/risk";
 import { FRAMEWORKS } from "@/lib/frameworks";
+import { HUBS } from "@/lib/registry-frameworks";
 
 // /llms.txt — a clean, citable summary for AI assistants (the GEO strategy).
 // Built from the same single-source data the site renders, so it never drifts.
@@ -15,7 +16,17 @@ export function GET() {
   lines.push(`Site: ${SITE.url}`, `Updated: ${SITE.updated}`, "");
   lines.push("## Free tools");
   lines.push(`- AI Usage Policy Generator: ${SITE.url}/ai-usage-policy-generator: generate a tailored AI usage policy (free, no signup).`);
-  lines.push(`- AI Tool Risk Directory: ${SITE.url}/tools: how ${TOOLS.length} AI tools handle your data, sourced from vendor policies.`, "");
+  lines.push(`- AI Tool Risk Directory: ${SITE.url}/tools: how ${TOOLS.length} AI tools handle your data, sourced from vendor policies.`);
+  lines.push(`- AI Vendor Risk Assessment: ${SITE.url}/ai-vendor-risk-assessment: pick a tool and your data types for an approve / conditional / reject verdict.`, "");
+
+  lines.push("## Compliance answers (computed from sourced facts)");
+  for (const h of HUBS) {
+    const n = TOOLS.filter(h.match).length;
+    lines.push(`- ${h.title} (${n}): ${SITE.url}/compliance/${h.slug}`);
+  }
+  lines.push(`- Per-tool answers: ${SITE.url}/tools/{slug}/{hipaa|gdpr|soc2|iso27001|training}, e.g. "Is ChatGPT HIPAA compliant?" at ${SITE.url}/tools/chatgpt/hipaa`);
+  lines.push(`- Comparisons: ${SITE.url}/compare/{tool-a}-vs-{tool-b}`);
+  lines.push(`- Glossary (definitions of HIPAA BAA, SOC 2, GDPR DPA, subprocessors and more): ${SITE.url}/glossary`, "");
 
   lines.push("## AI Tool Risk Directory (risk for default at-work use)");
   for (const t of TOOLS) {

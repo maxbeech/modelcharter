@@ -14,7 +14,9 @@ export function pageMeta(opts: {
   const url = `${SITE.url}${opts.path}`;
   const title = opts.path === "/" ? opts.title : `${opts.title} · ${SITE.name}`;
   return {
-    title,
+    // Absolute so the root layout's `%s · ModelCharter` template does not append
+    // the brand a second time (pageMeta already includes it for non-home pages).
+    title: { absolute: title },
     description: opts.description,
     keywords: opts.keywords,
     alternates: { canonical: url },

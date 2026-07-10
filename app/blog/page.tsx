@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { POSTS } from "@/lib/posts";
 import { JsonLd } from "@/components/JsonLd";
 import { Section } from "@/components/ui";
@@ -25,11 +26,24 @@ export default function Page() {
       />
       <Section className="grid gap-5 py-14 sm:py-16 md:grid-cols-2">
         {posts.map((p) => (
-          <Link key={p.slug} href={`/blog/${p.slug}`} className="group flex flex-col rounded-2xl border border-line bg-white p-7 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md">
-            <time className="text-xs font-medium uppercase tracking-wide text-ink-faint">{p.date}</time>
-            <h2 className="mt-2 font-display text-xl font-semibold leading-snug text-ink group-hover:text-brand-700">{p.title}</h2>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">{p.description}</p>
-            <span className="mt-4 inline-block text-sm font-semibold text-brand-700">Read →</span>
+          <Link key={p.slug} href={`/blog/${p.slug}`} className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md">
+            {p.image && (
+              <div className="relative h-44 w-full overflow-hidden">
+                <Image
+                  src={p.image.src}
+                  alt={p.image.alt}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                />
+              </div>
+            )}
+            <div className="flex flex-1 flex-col p-7">
+              <time className="text-xs font-medium uppercase tracking-wide text-ink-faint">{p.date}</time>
+              <h2 className="mt-2 font-display text-xl font-semibold leading-snug text-ink group-hover:text-brand-700">{p.title}</h2>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-soft">{p.description}</p>
+              <span className="mt-4 inline-block text-sm font-semibold text-brand-700">Read →</span>
+            </div>
           </Link>
         ))}
       </Section>

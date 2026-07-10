@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TOOLS, getTool, CATEGORY_LABELS, type AiTool } from "@/lib/ai-tools";
 import { scoreTool, bandSummary } from "@/lib/risk";
+import { allQuestions } from "@/lib/registry-questions";
 import { JsonLd } from "@/components/JsonLd";
 import { RiskPill, VerdictTag, Section } from "@/components/ui";
 import { RiskGauge } from "@/components/marketing";
@@ -126,6 +127,18 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               <Link href="/ai-usage-policy-generator" className="mt-3 inline-block rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-800 hover:bg-brand-50">Generate a policy →</Link>
             </div>
           </aside>
+        </div>
+
+        <div className="mt-12">
+          <h2 className="font-display text-xl font-semibold text-ink">Common questions about {t.name}</h2>
+          <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+            {allQuestions().map((q) => (
+              <Link key={q.slug} href={`/tools/${t.slug}/${q.slug}`} className="flex items-center justify-between gap-3 rounded-xl border border-line bg-white px-4 py-3 text-sm transition-colors hover:border-brand-300">
+                <span className="font-medium text-ink">{q.ask(t.name)}</span>
+                <span className="flex-none text-brand-700">→</span>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {related.length > 0 && (

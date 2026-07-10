@@ -3,9 +3,12 @@ import { eq, ok, done } from "./_assert.mts";
 
 // pageMeta: canonical + title templating.
 const m = pageMeta({ title: "Tools", description: "d", path: "/tools" });
+const titleText = (t: unknown) => (t && typeof t === "object" && "absolute" in t ? (t as { absolute: string }).absolute : String(t));
 eq(m.alternates?.canonical, "https://www.modelcharter.com/tools", "canonical built from SITE.url + path");
-ok(String(m.title).includes("ModelCharter"), "non-home title appends brand");
-eq(String(pageMeta({ title: "Home", description: "d", path: "/" }).title), "Home", "home title not suffixed");
+ok(titleText(m.title).includes("ModelCharter"), "non-home title appends brand");
+// Absolute title (so the layout template does not double the brand suffix).
+ok(m.title !== null && typeof m.title === "object" && "absolute" in m.title, "title is absolute to avoid template doubling");
+eq(titleText(pageMeta({ title: "Home", description: "d", path: "/" }).title), "Home", "home title not suffixed");
 
 // faqLd shape.
 const faq = faqLd([{ q: "Q1", a: "A1" }, { q: "Q2", a: "A2" }]) as any;

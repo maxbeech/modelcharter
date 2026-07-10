@@ -10,7 +10,7 @@ import { pageMeta, datasetLd, breadcrumbLd, faqLd } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "AI Tool Risk Directory: is that AI tool safe for work?",
   description:
-    "How 20+ popular AI tools handle your data: whether they train on it, retention, and their SOC 2, GDPR DPA and HIPAA status. Each is rated for default at-work use and sourced from the vendor's own policies. ChatGPT, Claude, Gemini, Copilot, Otter and more.",
+    "How 60+ popular AI tools handle your data: whether they train on it, retention, and their SOC 2, GDPR DPA and HIPAA status. Each is rated for default at-work use and sourced from the vendor's own policies. ChatGPT, Claude, Gemini, Copilot, Otter and more.",
   path: "/tools",
   keywords: ["ai tool risk", "is chatgpt safe for work", "ai tool directory", "ai vendor risk", "which ai tools are safe"],
 });

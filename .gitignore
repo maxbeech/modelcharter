@@ -8,3 +8,5 @@ out
 next-env.d.ts
 .DS_Store
 data/ai-tools.research.json
+.env*
+supabase/.temp
