@@ -1,5 +1,5 @@
 {
-  "generated": "2026-06-18",
+  "generated": "2026-07-07",
   "tools": [
     {
       "slug": "chatgpt",
@@ -27,11 +27,26 @@
       "enterprise_plan": "ChatGPT Enterprise",
       "notable_risk": "Consumer/free ChatGPT uses your chats for training unless you proactively disable it, so staff pasting work data into personal accounts can leak it into model improvement.",
       "sources": [
-        {"claim": "Business data (Team/Enterprise/API) not used for training by default; consumer trains unless opted out", "url": "https://openai.com/enterprise-privacy/"},
-        {"claim": "How consumer data is used to improve models and how to opt out", "url": "https://openai.com/policies/how-your-data-is-used-to-improve-model-performance/"},
-        {"claim": "Certifications: SOC 2 Type 2, ISO 27001, ISO 42001, EU data residency, HIPAA BAA via API", "url": "https://trust.openai.com/"},
-        {"claim": "HIPAA BAA availability for API Services", "url": "https://help.openai.com/en/articles/8660679-how-can-i-get-a-business-associate-agreement-baa-with-openai"},
-        {"claim": "EU data residency for ChatGPT Enterprise/Edu/API", "url": "https://openai.com/index/introducing-data-residency-in-europe/"}
+        {
+          "claim": "Business data (Team/Enterprise/API) not used for training by default; consumer trains unless opted out",
+          "url": "https://openai.com/enterprise-privacy/"
+        },
+        {
+          "claim": "How consumer data is used to improve models and how to opt out",
+          "url": "https://openai.com/policies/how-your-data-is-used-to-improve-model-performance/"
+        },
+        {
+          "claim": "Certifications: SOC 2 Type 2, ISO 27001, ISO 42001, EU data residency, HIPAA BAA via API",
+          "url": "https://trust.openai.com/"
+        },
+        {
+          "claim": "HIPAA BAA availability for API Services",
+          "url": "https://help.openai.com/en/articles/8660679-how-can-i-get-a-business-associate-agreement-baa-with-openai"
+        },
+        {
+          "claim": "EU data residency for ChatGPT Enterprise/Edu/API",
+          "url": "https://openai.com/index/introducing-data-residency-in-europe/"
+        }
       ],
       "confidence": "high"
     },
@@ -61,9 +76,18 @@
       "enterprise_plan": "Claude Enterprise (Claude for Work)",
       "notable_risk": "Even when a consumer opts out of training, conversations flagged for safety review can still be retained up to two years and used to improve models without notifying the user.",
       "sources": [
-        {"claim": "Aug 2025 consumer terms: Free/Pro/Max train unless opted out, 5-year retention; commercial (Team/Enterprise/API) excluded", "url": "https://www.anthropic.com/news/updates-to-our-consumer-terms"},
-        {"claim": "Certifications: ISO 42001 for responsible AI", "url": "https://www.anthropic.com/news/anthropic-achieves-iso-42001-certification-for-responsible-ai"},
-        {"claim": "Certifications obtained (SOC 2 Type II, ISO 27001, ISO 42001) and HIPAA BAA availability", "url": "https://privacy.claude.com/en/articles/10015870-what-certifications-has-anthropic-obtained"}
+        {
+          "claim": "Aug 2025 consumer terms: Free/Pro/Max train unless opted out, 5-year retention; commercial (Team/Enterprise/API) excluded",
+          "url": "https://www.anthropic.com/news/updates-to-our-consumer-terms"
+        },
+        {
+          "claim": "Certifications: ISO 42001 for responsible AI",
+          "url": "https://www.anthropic.com/news/anthropic-achieves-iso-42001-certification-for-responsible-ai"
+        },
+        {
+          "claim": "Certifications obtained (SOC 2 Type II, ISO 27001, ISO 42001) and HIPAA BAA availability",
+          "url": "https://privacy.claude.com/en/articles/10015870-what-certifications-has-anthropic-obtained"
+        }
       ],
       "confidence": "high"
     },
@@ -93,10 +117,22 @@
       "enterprise_plan": "Google Workspace with Gemini (Business/Enterprise)",
       "notable_risk": "Personal Gemini accounts have human reviewers reading a sample of chats (kept up to 3 years even after you delete activity), so confidential work content typed into a personal account can be seen by reviewers.",
       "sources": [
-        {"claim": "Consumer Gemini Apps human review and training; Workspace data not trained/reviewed", "url": "https://support.google.com/gemini/answer/13594961?hl=en"},
-        {"claim": "Workspace Gemini does not use customer data to train models outside the domain", "url": "https://workspace.google.com/security/ai-privacy/"},
-        {"claim": "HIPAA BAA and additional ISO certifications (incl. ISO 42001) for the Gemini app", "url": "https://workspaceupdates.googleblog.com/2024/12/hippa-and-more-iso-certifications-for-the-gemini-app-on-web-and-mobile.html"},
-        {"claim": "SOC compliance for Gemini", "url": "https://workspaceupdates.googleblog.com/2024/08/gemini-soc-compliance.html"}
+        {
+          "claim": "Consumer Gemini Apps human review and training; Workspace data not trained/reviewed",
+          "url": "https://support.google.com/gemini/answer/13594961?hl=en"
+        },
+        {
+          "claim": "Workspace Gemini does not use customer data to train models outside the domain",
+          "url": "https://workspace.google.com/security/ai-privacy/"
+        },
+        {
+          "claim": "HIPAA BAA and additional ISO certifications (incl. ISO 42001) for the Gemini app",
+          "url": "https://workspaceupdates.googleblog.com/2024/12/hippa-and-more-iso-certifications-for-the-gemini-app-on-web-and-mobile.html"
+        },
+        {
+          "claim": "SOC compliance for Gemini",
+          "url": "https://workspaceupdates.googleblog.com/2024/08/gemini-soc-compliance.html"
+        }
       ],
       "confidence": "high"
     },
@@ -126,9 +162,18 @@
       "enterprise_plan": "Microsoft 365 Copilot",
       "notable_risk": "Copilot inherits the user's existing permissions, so over-shared SharePoint/OneDrive content becomes far easier for employees to surface. That is an oversharing and governance risk rather than a training one.",
       "sources": [
-        {"claim": "Prompts, responses, and Graph data not used to train foundation LLMs", "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection"},
-        {"claim": "GDPR, EU Data Boundary, ISO/IEC 27018 compliance and DPA coverage", "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy"},
-        {"claim": "Microsoft ISO/IEC 42001 AI management system certification", "url": "https://learn.microsoft.com/en-us/compliance/regulatory/offering-iso-42001"}
+        {
+          "claim": "Prompts, responses, and Graph data not used to train foundation LLMs",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/enterprise-data-protection"
+        },
+        {
+          "claim": "GDPR, EU Data Boundary, ISO/IEC 27018 compliance and DPA coverage",
+          "url": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-privacy"
+        },
+        {
+          "claim": "Microsoft ISO/IEC 42001 AI management system certification",
+          "url": "https://learn.microsoft.com/en-us/compliance/regulatory/offering-iso-42001"
+        }
       ],
       "confidence": "high"
     },
@@ -158,9 +203,18 @@
       "enterprise_plan": "GitHub Copilot Business / Copilot Enterprise",
       "notable_risk": "On individual (free/Pro) plans, code snippets can be retained and used for model improvement unless opted out, so developers on personal accounts may expose proprietary code.",
       "sources": [
-        {"claim": "Copilot Business/Enterprise data not used to train models incl. third-party models; individual opt-out", "url": "https://docs.github.com/en/copilot/reference/ai-models/about-ai-models-used-by-github-copilot"},
-        {"claim": "Free/Pro/Pro+ Privacy Statement update on Copilot data use for model training", "url": "https://github.com/orgs/community/discussions/188488"},
-        {"claim": "Compliance: SOC 2 Type 2, ISO 27001 (GitHub Trust Center)", "url": "https://copilot.github.trust.page/faq"}
+        {
+          "claim": "Copilot Business/Enterprise data not used to train models incl. third-party models; individual opt-out",
+          "url": "https://docs.github.com/en/copilot/reference/ai-models/about-ai-models-used-by-github-copilot"
+        },
+        {
+          "claim": "Free/Pro/Pro+ Privacy Statement update on Copilot data use for model training",
+          "url": "https://github.com/orgs/community/discussions/188488"
+        },
+        {
+          "claim": "Compliance: SOC 2 Type 2, ISO 27001 (GitHub Trust Center)",
+          "url": "https://copilot.github.trust.page/faq"
+        }
       ],
       "confidence": "medium"
     },
@@ -190,9 +244,18 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "Some AI features can optionally enable data-retaining LLMs via workspace settings, so an admin must confirm the workspace stays on zero/short-retention configurations.",
       "sources": [
-        {"claim": "By default Notion and its AI subprocessors do not use Customer Data to train any models; contractual agreements prohibit it.", "url": "https://www.notion.com/help/notion-ai-security-practices"},
-        {"claim": "Notion AI is in scope of SOC 2 Type 2 report and ISO 27001 certification; GDPR and HIPAA (via zero-retention LLM APIs) supported.", "url": "https://www.notion.com/security"},
-        {"claim": "Non-Enterprise plans: LLM providers retain Customer Data 30 days or fewer; Enterprise default zero retention.", "url": "https://www.notion.com/help/notion-ai-security-practices"}
+        {
+          "claim": "By default Notion and its AI subprocessors do not use Customer Data to train any models; contractual agreements prohibit it.",
+          "url": "https://www.notion.com/help/notion-ai-security-practices"
+        },
+        {
+          "claim": "Notion AI is in scope of SOC 2 Type 2 report and ISO 27001 certification; GDPR and HIPAA (via zero-retention LLM APIs) supported.",
+          "url": "https://www.notion.com/security"
+        },
+        {
+          "claim": "Non-Enterprise plans: LLM providers retain Customer Data 30 days or fewer; Enterprise default zero retention.",
+          "url": "https://www.notion.com/help/notion-ai-security-practices"
+        }
       ],
       "confidence": "high"
     },
@@ -222,9 +285,18 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "Otter trains its own models on de-identified user content by default and its meeting assistant can auto-join calendar meetings, raising consent and surveillance concerns (it is the subject of a wiretap/consent class action).",
       "sources": [
-        {"claim": "Otter uses a proprietary method to de-identify user data before training its own models; third-party AI providers do not train on customer data.", "url": "https://otter.ai/privacy-security"},
-        {"claim": "Otter holds a SOC 2 Type 2 report and follows GDPR, CCPA, HIPAA, and ISO 27001/2 frameworks.", "url": "https://otter.ai/privacy-security"},
-        {"claim": "Otter.ai is subject to a class-action lawsuit over recording consent / two-party consent.", "url": "https://www.getvoibe.com/resources/is-otter-safe/"}
+        {
+          "claim": "Otter uses a proprietary method to de-identify user data before training its own models; third-party AI providers do not train on customer data.",
+          "url": "https://otter.ai/privacy-security"
+        },
+        {
+          "claim": "Otter holds a SOC 2 Type 2 report and follows GDPR, CCPA, HIPAA, and ISO 27001/2 frameworks.",
+          "url": "https://otter.ai/privacy-security"
+        },
+        {
+          "claim": "Otter.ai is subject to a class-action lawsuit over recording consent / two-party consent.",
+          "url": "https://www.getvoibe.com/resources/is-otter-safe/"
+        }
       ],
       "confidence": "medium"
     },
@@ -254,9 +326,18 @@
       "enterprise_plan": "Enterprise Pro",
       "notable_risk": "On consumer plans data is used to improve models unless you turn off the default-on 'AI data retention' toggle, and reporting alleges Perplexity shared conversational data with ad/tracking platforms (incl. in Incognito).",
       "sources": [
-        {"claim": "Sonar API / Enterprise: Perplexity does not use customer data to train models and maintains Zero Data Retention; SOC 2 Type II attested.", "url": "https://docs.perplexity.ai/docs/resources/privacy-security"},
-        {"claim": "Consumer users can opt out of AI training via the 'AI data retention' toggle in account settings; logged-out users cannot opt out.", "url": "https://joindeleteme.com/ai-privacy-settings/perplexity-ai-opt-out-data-training-guide/"},
-        {"claim": "Enterprise Pro provides SSO/SAML (SAML 2.0, OIDC), SOC 2 Type 2, audit logs and Zero Data Retention; enterprise data never used to train models.", "url": "https://www.perplexity.ai/enterprise/security"}
+        {
+          "claim": "Sonar API / Enterprise: Perplexity does not use customer data to train models and maintains Zero Data Retention; SOC 2 Type II attested.",
+          "url": "https://docs.perplexity.ai/docs/resources/privacy-security"
+        },
+        {
+          "claim": "Consumer users can opt out of AI training via the 'AI data retention' toggle in account settings; logged-out users cannot opt out.",
+          "url": "https://joindeleteme.com/ai-privacy-settings/perplexity-ai-opt-out-data-training-guide/"
+        },
+        {
+          "claim": "Enterprise Pro provides SSO/SAML (SAML 2.0, OIDC), SOC 2 Type 2, audit logs and Zero Data Retention; enterprise data never used to train models.",
+          "url": "https://www.perplexity.ai/enterprise/security"
+        }
       ],
       "confidence": "medium"
     },
@@ -286,8 +367,14 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "On free/Premium consumer tiers Grammarly uses de-identified content for product improvement/training unless you opt out, and HIPAA coverage requires an Enterprise BAA (not available on Free/Premium/Business).",
       "sources": [
-        {"claim": "Grammarly does not allow LLM providers to train on user content, but uses aggregated de-identified samples for product improvement/training unless users opt out.", "url": "https://support.grammarly.com/hc/en-us/articles/20916119474829-Privacy-and-security-FAQs"},
-        {"claim": "Grammarly holds SOC 2 Type 2 and ISO 27001/27002; is HIPAA-compliant only with an Enterprise BAA.", "url": "https://www.grammarly.com/compliance"}
+        {
+          "claim": "Grammarly does not allow LLM providers to train on user content, but uses aggregated de-identified samples for product improvement/training unless users opt out.",
+          "url": "https://support.grammarly.com/hc/en-us/articles/20916119474829-Privacy-and-security-FAQs"
+        },
+        {
+          "claim": "Grammarly holds SOC 2 Type 2 and ISO 27001/27002; is HIPAA-compliant only with an Enterprise BAA.",
+          "url": "https://www.grammarly.com/compliance"
+        }
       ],
       "confidence": "medium"
     },
@@ -317,9 +404,18 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "Fireflies' bot auto-joins calendar meetings to record/transcribe, creating consent exposure, and HIPAA-grade Private Storage plus EU data hosting are gated to Enterprise deals.",
       "sources": [
-        {"claim": "0-day retention ensures meeting data is never used for AI model training; Fireflies signed BAAs with OpenAI and other ASR vendors so no data is stored or used to train their algorithms.", "url": "https://guide.fireflies.ai/articles/2154538358-policy-on-keeping-information-safe"},
-        {"claim": "Fireflies is SOC 2 Type II (audited annually), GDPR and HIPAA compliant and aligns with ISO 27001.", "url": "https://fireflies.ai/security"},
-        {"claim": "SSO/SAML and EU data hosting / Private Storage are available on the Enterprise plan; DPA uses SCCs for EU/UK/Swiss transfers.", "url": "https://fireflies.ai/data-processing-agreement"}
+        {
+          "claim": "0-day retention ensures meeting data is never used for AI model training; Fireflies signed BAAs with OpenAI and other ASR vendors so no data is stored or used to train their algorithms.",
+          "url": "https://guide.fireflies.ai/articles/2154538358-policy-on-keeping-information-safe"
+        },
+        {
+          "claim": "Fireflies is SOC 2 Type II (audited annually), GDPR and HIPAA compliant and aligns with ISO 27001.",
+          "url": "https://fireflies.ai/security"
+        },
+        {
+          "claim": "SSO/SAML and EU data hosting / Private Storage are available on the Enterprise plan; DPA uses SCCs for EU/UK/Swiss transfers.",
+          "url": "https://fireflies.ai/data-processing-agreement"
+        }
       ],
       "confidence": "medium"
     },
@@ -349,10 +445,22 @@
       "enterprise_plan": "AI Companion (included with eligible paid Zoom Workplace accounts: Pro/Business/Enterprise)",
       "notable_risk": "AI Companion must process meeting audio/transcripts to function, and those inputs can be retained up to ~30 days for support/debugging, so disabling or admin-scoping the feature is the only way to keep sensitive conversations out of that processing pipeline.",
       "sources": [
-        {"claim": "Zoom does not use customer audio, video, chat, screen sharing, attachments, or other communications-like customer content to train its own or third-party AI models (across all tiers).", "url": "https://www.zoom.com/en/products/ai-assistant/resources/privacy-security/"},
-        {"claim": "AI Companion whitepaper confirms ISO 27001, ISO 27701, ISO 27017/18 and SOC 2 in scope; GDPR DPA available; EU data residency offered.", "url": "https://www.zoom.com/en/products/ai-assistant/resources/privacy-security/"},
-        {"claim": "Zoom Global DPA (GDPR data processing agreement).", "url": "https://media.zoom.com/download/assets/zoom-global-dpa.pdf"},
-        {"claim": "AI Companion inputs retained up to 30 days for support/debugging; data-handling details.", "url": "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0057861"}
+        {
+          "claim": "Zoom does not use customer audio, video, chat, screen sharing, attachments, or other communications-like customer content to train its own or third-party AI models (across all tiers).",
+          "url": "https://www.zoom.com/en/products/ai-assistant/resources/privacy-security/"
+        },
+        {
+          "claim": "AI Companion whitepaper confirms ISO 27001, ISO 27701, ISO 27017/18 and SOC 2 in scope; GDPR DPA available; EU data residency offered.",
+          "url": "https://www.zoom.com/en/products/ai-assistant/resources/privacy-security/"
+        },
+        {
+          "claim": "Zoom Global DPA (GDPR data processing agreement).",
+          "url": "https://media.zoom.com/download/assets/zoom-global-dpa.pdf"
+        },
+        {
+          "claim": "AI Companion inputs retained up to 30 days for support/debugging; data-handling details.",
+          "url": "https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0057861"
+        }
       ],
       "confidence": "verify"
     },
@@ -382,9 +490,18 @@
       "enterprise_plan": "Enterprise Grid (Slack AI is a paid add-on on paid plans; admins can scope AI features)",
       "notable_risk": "The 'no training' guarantee covers generative LLMs, but Slack's non-generative machine-learning features have historically processed customer messages on an opt-out (not opt-in) basis, so admins must proactively review AI/ML data settings rather than assume default protection.",
       "sources": [
-        {"claim": "Customer Data is never used to train third-party LLMs; AI in Slack uses off-the-shelf LLMs hosted on Slack's cloud provider (AWS) within Slack's trust boundary and does not retain Customer Data after inference.", "url": "https://slack.com/trust/data-management/privacy-principles"},
-        {"claim": "Slack AI security: customer data is never used to train third-party LLMs; admins/owners control which AI features members can use; AI responses are ephemeral while recaps are retained ~90 days.", "url": "https://slack.com/help/articles/28310650165907-Security-for-AI-features-in-Slack"},
-        {"claim": "Slack holds enterprise security and compliance certifications including SOC 2 Type II, ISO 27001, GDPR DPA availability, HIPAA BAA support, and EU data residency options.", "url": "https://slack.com/trust/compliance/regulations"}
+        {
+          "claim": "Customer Data is never used to train third-party LLMs; AI in Slack uses off-the-shelf LLMs hosted on Slack's cloud provider (AWS) within Slack's trust boundary and does not retain Customer Data after inference.",
+          "url": "https://slack.com/trust/data-management/privacy-principles"
+        },
+        {
+          "claim": "Slack AI security: customer data is never used to train third-party LLMs; admins/owners control which AI features members can use; AI responses are ephemeral while recaps are retained ~90 days.",
+          "url": "https://slack.com/help/articles/28310650165907-Security-for-AI-features-in-Slack"
+        },
+        {
+          "claim": "Slack holds enterprise security and compliance certifications including SOC 2 Type II, ISO 27001, GDPR DPA availability, HIPAA BAA support, and EU data residency options.",
+          "url": "https://slack.com/trust/compliance/regulations"
+        }
       ],
       "confidence": "verify"
     },
@@ -414,9 +531,18 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "On the free/Pro tier Privacy Mode is opt-in and OFF by default, so an at-work user who does not enable it has their code, prompts and editor actions stored and used to train Cursor's models.",
       "sources": [
-        {"claim": "Privacy Mode opt-in for free/Pro and training on code when Privacy Mode is off; Privacy Mode enforced/default-on for Teams/Enterprise", "url": "https://cursor.com/data-use"},
-        {"claim": "SOC 2 Type II attestation report available on request; Privacy Mode available to free/Pro and enforceable by team/enterprise admins", "url": "https://cursor.com/security"},
-        {"claim": "ISO 27001 certification and GDPR-compliant DPA; Privacy Mode enforced by default for Teams and Enterprise; ZDR with subprocessors", "url": "https://cursor.com/docs/enterprise/privacy-and-data-governance"}
+        {
+          "claim": "Privacy Mode opt-in for free/Pro and training on code when Privacy Mode is off; Privacy Mode enforced/default-on for Teams/Enterprise",
+          "url": "https://cursor.com/data-use"
+        },
+        {
+          "claim": "SOC 2 Type II attestation report available on request; Privacy Mode available to free/Pro and enforceable by team/enterprise admins",
+          "url": "https://cursor.com/security"
+        },
+        {
+          "claim": "ISO 27001 certification and GDPR-compliant DPA; Privacy Mode enforced by default for Teams and Enterprise; ZDR with subprocessors",
+          "url": "https://cursor.com/docs/enterprise/privacy-and-data-governance"
+        }
       ],
       "confidence": "medium"
     },
@@ -446,9 +572,18 @@
       "enterprise_plan": null,
       "notable_risk": "The hosted DeepSeek app and API store user prompts and personal data on servers in the People's Republic of China (subject to Chinese law) and use inputs to train models by default. This is a major governance risk that has led to government bans and restrictions in Italy, South Korea, Australia, and multiple US federal agencies.",
       "sources": [
-        {"claim": "User data is collected, processed and stored in the People's Republic of China and inputs are used to train and improve DeepSeek's models, with a stated right to opt out of training.", "url": "https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html"},
-        {"claim": "No verifiable SOC 2 / ISO 27001 / ISO 42001 certification, DPA, BAA, or EU data residency for the hosted DeepSeek service (third-party certification claims are conflicting and unverified against official sources).", "url": "https://sonomos.ai/blog/is-deepseek-safe-gdpr-hipaa-2026/"},
-        {"claim": "DeepSeek has been banned or restricted by Italy (Jan 2025), South Korea, Australia (government devices), and US federal agencies (e.g. NASA, US Navy) over data-handling and China data-access concerns.", "url": "https://www.aljazeera.com/news/2025/2/6/which-countries-have-banned-deepseek-and-why"}
+        {
+          "claim": "User data is collected, processed and stored in the People's Republic of China and inputs are used to train and improve DeepSeek's models, with a stated right to opt out of training.",
+          "url": "https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html"
+        },
+        {
+          "claim": "No verifiable SOC 2 / ISO 27001 / ISO 42001 certification, DPA, BAA, or EU data residency for the hosted DeepSeek service (third-party certification claims are conflicting and unverified against official sources).",
+          "url": "https://sonomos.ai/blog/is-deepseek-safe-gdpr-hipaa-2026/"
+        },
+        {
+          "claim": "DeepSeek has been banned or restricted by Italy (Jan 2025), South Korea, Australia (government devices), and US federal agencies (e.g. NASA, US Navy) over data-handling and China data-access concerns.",
+          "url": "https://www.aljazeera.com/news/2025/2/6/which-countries-have-banned-deepseek-and-why"
+        }
       ],
       "confidence": "medium"
     },
@@ -478,9 +613,18 @@
       "enterprise_plan": null,
       "notable_risk": "All prompts and generated images are public by default and licensed for model training, and Stealth Mode (Pro/Mega only) merely hides outputs from the public gallery without exempting them from training, so confidential work-related content should not be used.",
       "sources": [
-        {"claim": "Midjourney's ToS grants a broad license to reproduce/prepare derivative works of prompts and images (training), content is public and remixable by default, and Stealth Mode only prevents publishing while Midjourney still retains the license to use content for service improvement.", "url": "https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service"},
-        {"claim": "Third-party AI vendor risk profile: SOC 2/ISO/GDPR DPA/HIPAA/EU residency/SSO status unknown/unverified; no sequestered (VPC/on-prem) access and no enterprise SLAs available.", "url": "https://www.credo.ai/ai-vendor-directory/midjourney"},
-        {"claim": "Stealth Mode is available only on Pro/Mega plans and keeps generations private from the public gallery.", "url": "https://docs.midjourney.com/hc/en-us/articles/32019750070669-Stealth-Mode"}
+        {
+          "claim": "Midjourney's ToS grants a broad license to reproduce/prepare derivative works of prompts and images (training), content is public and remixable by default, and Stealth Mode only prevents publishing while Midjourney still retains the license to use content for service improvement.",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service"
+        },
+        {
+          "claim": "Third-party AI vendor risk profile: SOC 2/ISO/GDPR DPA/HIPAA/EU residency/SSO status unknown/unverified; no sequestered (VPC/on-prem) access and no enterprise SLAs available.",
+          "url": "https://www.credo.ai/ai-vendor-directory/midjourney"
+        },
+        {
+          "claim": "Stealth Mode is available only on Pro/Mega plans and keeps generations private from the public gallery.",
+          "url": "https://docs.midjourney.com/hc/en-us/articles/32019750070669-Stealth-Mode"
+        }
       ],
       "confidence": "verify"
     },
@@ -510,9 +654,18 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "Jasper relies on third-party LLM providers (e.g., OpenAI/Anthropic) under no-training API agreements, so an at-work user's confidential prompts still transit external model vendors and trust rests on contractual rather than self-hosted controls.",
       "sources": [
-        {"claim": "Company data and outputs are never used to train third-party LLMs", "url": "https://www.jasper.ai/trust"},
-        {"claim": "SOC 2, GDPR, CCPA certifications and downloadable SOC 2 report", "url": "https://security.jasper.ai/"},
-        {"claim": "Security program aligned to AICPA Trust Services Principles; SSO, audit logs, granular permissions; encryption (TLS in transit, AES-256 at rest); non-retention of user data for training", "url": "https://www.jasper.ai/security"}
+        {
+          "claim": "Company data and outputs are never used to train third-party LLMs",
+          "url": "https://www.jasper.ai/trust"
+        },
+        {
+          "claim": "SOC 2, GDPR, CCPA certifications and downloadable SOC 2 report",
+          "url": "https://security.jasper.ai/"
+        },
+        {
+          "claim": "Security program aligned to AICPA Trust Services Principles; SSO, audit logs, granular permissions; encryption (TLS in transit, AES-256 at rest); non-retention of user data for training",
+          "url": "https://www.jasper.ai/security"
+        }
       ],
       "confidence": "medium"
     },
@@ -542,9 +695,18 @@
       "enterprise_plan": "Business (and Enterprise)",
       "notable_risk": "On individual Free/Plus plans your presentation content is fed into AI model improvement by default, so an at-work user must manually opt out (or move to a Team/Business workspace) to keep client material out of training.",
       "sources": [
-        {"claim": "Free/Plus default-on training with opt-out; Team/Business locked off", "url": "https://help.gamma.app/en/articles/12281928-does-gamma-use-my-content-to-train-its-ai-features"},
-        {"claim": "SOC 2 Type II compliant", "url": "https://trust.gamma.app/"},
-        {"claim": "Data Processing Addendum (GDPR)", "url": "https://gamma.app/dpa"}
+        {
+          "claim": "Free/Plus default-on training with opt-out; Team/Business locked off",
+          "url": "https://help.gamma.app/en/articles/12281928-does-gamma-use-my-content-to-train-its-ai-features"
+        },
+        {
+          "claim": "SOC 2 Type II compliant",
+          "url": "https://trust.gamma.app/"
+        },
+        {
+          "claim": "Data Processing Addendum (GDPR)",
+          "url": "https://gamma.app/dpa"
+        }
       ],
       "confidence": "medium"
     },
@@ -574,10 +736,22 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "On the default consumer tier your submitted audio/voice data is used to improve models unless you flip the opt-out toggle, and voice cloning carries real consent/likeness-misuse exposure if someone uploads a voice they aren't authorized to clone.",
       "sources": [
-        {"claim": "Consumer default model-improvement use with opt-out toggle", "url": "https://help.elevenlabs.io/hc/en-us/articles/29952728805393-Is-my-data-used-to-improve-ElevenLabs-AI-models"},
-        {"claim": "Enterprise no-training, Zero Retention Mode", "url": "https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode"},
-        {"claim": "SOC 2 Type II, ISO 27001, ISO 42001, HIPAA, GDPR certifications", "url": "https://compliance.elevenlabs.io/"},
-        {"claim": "EU data residency (Enterprise)", "url": "https://elevenlabs.io/docs/overview/administration/data-residency"}
+        {
+          "claim": "Consumer default model-improvement use with opt-out toggle",
+          "url": "https://help.elevenlabs.io/hc/en-us/articles/29952728805393-Is-my-data-used-to-improve-ElevenLabs-AI-models"
+        },
+        {
+          "claim": "Enterprise no-training, Zero Retention Mode",
+          "url": "https://elevenlabs.io/docs/eleven-api/resources/zero-retention-mode"
+        },
+        {
+          "claim": "SOC 2 Type II, ISO 27001, ISO 42001, HIPAA, GDPR certifications",
+          "url": "https://compliance.elevenlabs.io/"
+        },
+        {
+          "claim": "EU data residency (Enterprise)",
+          "url": "https://elevenlabs.io/docs/overview/administration/data-residency"
+        }
       ],
       "confidence": "high"
     },
@@ -607,9 +781,18 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "The main governance gotcha is consent provenance for AI avatars and voices. Synthesia requires documented consent for any likeness, so an at-work user must ensure they have rights to any face or voice they upload to create a custom avatar.",
       "sources": [
-        {"claim": "Does not pre-train AI on customer inputs/outputs; fine-tuning only on customer instruction", "url": "https://www.synthesia.io/legal/ai-governance-practices"},
-        {"claim": "SOC 2 Type II, ISO 27001, ISO 27701, ISO 42001 (world-first), GDPR", "url": "https://security.synthesia.io/"},
-        {"claim": "World's first ISO 42001-compliant AI video company", "url": "https://www.synthesia.io/post/synthesia-world-first-iso-42001-compliant-ai-video-company"}
+        {
+          "claim": "Does not pre-train AI on customer inputs/outputs; fine-tuning only on customer instruction",
+          "url": "https://www.synthesia.io/legal/ai-governance-practices"
+        },
+        {
+          "claim": "SOC 2 Type II, ISO 27001, ISO 27701, ISO 42001 (world-first), GDPR",
+          "url": "https://security.synthesia.io/"
+        },
+        {
+          "claim": "World's first ISO 42001-compliant AI video company",
+          "url": "https://www.synthesia.io/post/synthesia-world-first-iso-42001-compliant-ai-video-company"
+        }
       ],
       "confidence": "high"
     },
@@ -639,9 +822,18 @@
       "enterprise_plan": "Canva Enterprise (also Teams/Business)",
       "notable_risk": "There is a genuine discrepancy between Canva's stated opt-in default and third-party reports of training toggles being on by default for Free/Pro accounts, so an at-work individual user should explicitly verify and disable both 'usage' and 'content' AI-training toggles in privacy settings.",
       "sources": [
-        {"claim": "Teams/Business/Enterprise content never used for training; consumer training controlled via privacy preferences (disputed default)", "url": "https://www.canva.com/policies/ai-product-terms/"},
-        {"claim": "Magic Studio safe-use / training-consent guidance", "url": "https://www.canva.com/help/using-magic-studio-safely-and-legally/"},
-        {"claim": "Canva Shield: safe, fair, secure AI (SOC 2 / ISO 27001 / GDPR posture)", "url": "https://www.canva.com/newsroom/news/safe-ai-canva-shield/"}
+        {
+          "claim": "Teams/Business/Enterprise content never used for training; consumer training controlled via privacy preferences (disputed default)",
+          "url": "https://www.canva.com/policies/ai-product-terms/"
+        },
+        {
+          "claim": "Magic Studio safe-use / training-consent guidance",
+          "url": "https://www.canva.com/help/using-magic-studio-safely-and-legally/"
+        },
+        {
+          "claim": "Canva Shield: safe, fair, secure AI (SOC 2 / ISO 27001 / GDPR posture)",
+          "url": "https://www.canva.com/newsroom/news/safe-ai-canva-shield/"
+        }
       ],
       "confidence": "verify"
     },
@@ -671,9 +863,18 @@
       "enterprise_plan": "Adobe Firefly for enterprise / Creative Cloud for enterprise",
       "notable_risk": "The bigger governance question is output provenance and indemnity scope rather than training. Firefly is 'commercially safe' and IP-indemnified mainly for enterprise customers, so individual and free users should not assume the same legal coverage for generated assets.",
       "sources": [
-        {"claim": "Adobe does not use customer content to train Firefly models; commercially safe approach", "url": "https://business.adobe.com/products/firefly-business/firefly-ai-approach.html"},
-        {"claim": "Adobe does not use customer content to train Firefly (Adobe Express enterprise security overview)", "url": "https://www.adobe.com/cc-shared/assets/pdf/trust-center/ungated/whitepapers/creative-cloud/adobe-express-for-enterprise-security-overview.pdf"},
-        {"claim": "SOC 2 Type II, ISO 27001, GDPR, HIPAA-ready certifications", "url": "https://www.adobe.com/trust/compliance/compliance-list.html"}
+        {
+          "claim": "Adobe does not use customer content to train Firefly models; commercially safe approach",
+          "url": "https://business.adobe.com/products/firefly-business/firefly-ai-approach.html"
+        },
+        {
+          "claim": "Adobe does not use customer content to train Firefly (Adobe Express enterprise security overview)",
+          "url": "https://www.adobe.com/cc-shared/assets/pdf/trust-center/ungated/whitepapers/creative-cloud/adobe-express-for-enterprise-security-overview.pdf"
+        },
+        {
+          "claim": "SOC 2 Type II, ISO 27001, GDPR, HIPAA-ready certifications",
+          "url": "https://www.adobe.com/trust/compliance/compliance-list.html"
+        }
       ],
       "confidence": "high"
     },
@@ -703,11 +904,1688 @@
       "enterprise_plan": "Enterprise",
       "notable_risk": "The biggest gotcha is the auto-join bot behaviour. Read can be invited by any participant and join meetings automatically, so sensitive conversations may be silently recorded or transcribed unless hosts and participants actively remove it.",
       "sources": [
-        {"claim": "Default opt-out of training; opt-in only via settings checkbox", "url": "https://support.read.ai/hc/en-us/articles/25702259763091-Security-Privacy-Overview"},
-        {"claim": "SOC 2 Type II, HIPAA, GDPR compliant; privacy-first notetaker", "url": "https://www.read.ai/articles/read-ai-the-privacy-first-meeting-notetaker-and-ai-assistant"},
-        {"claim": "Auto-join behaviour, host approval, opt-out controls", "url": "https://www.read.ai/privacy"}
+        {
+          "claim": "Default opt-out of training; opt-in only via settings checkbox",
+          "url": "https://support.read.ai/hc/en-us/articles/25702259763091-Security-Privacy-Overview"
+        },
+        {
+          "claim": "SOC 2 Type II, HIPAA, GDPR compliant; privacy-first notetaker",
+          "url": "https://www.read.ai/articles/read-ai-the-privacy-first-meeting-notetaker-and-ai-assistant"
+        },
+        {
+          "claim": "Auto-join behaviour, host approval, opt-out controls",
+          "url": "https://www.read.ai/privacy"
+        }
       ],
       "confidence": "high"
+    },
+    {
+      "slug": "heygen",
+      "name": "HeyGen",
+      "vendor": "HeyGen",
+      "category": "video",
+      "homepage_url": "https://www.heygen.com",
+      "privacy_url": "https://www.heygen.com/privacy",
+      "dpa_url": "https://www.heygen.com/data-processing-addendum",
+      "trust_url": "https://security.heygen.com",
+      "subprocessors_url": "https://security.heygen.com/#subprocessors",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Non-enterprise inputs and outputs may be used to train and improve HeyGen's avatar models; consumer users can request opt-out by emailing privacy@heygen.com.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Enterprise customer data is excluded from training by default under the Master SaaS Agreement.",
+      "training_optout": "yes",
+      "retention": "After account deletion, data is kept in backups about 30 days then permanently erased; Enterprise customer data deleted within 60 days of termination.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": "no",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (excluded from training, DPA, SSO and SCIM, contractual deletion terms)",
+      "notable_risk": "HeyGen holds SOC 2 Type II and stays US only. On consumer plans HeyGen may use your inputs to improve its models unless you email to opt out, and there is no BAA, so keep PHI out of it.",
+      "sources": [
+        {
+          "claim": "Training posture, SOC 2, SSO",
+          "url": "https://www.heygen.com/security"
+        },
+        {
+          "claim": "Opt-out and retention",
+          "url": "https://www.heygen.com/privacy"
+        },
+        {
+          "claim": "GDPR DPA",
+          "url": "https://www.heygen.com/data-processing-addendum"
+        },
+        {
+          "claim": "US-only storage, no EU residency",
+          "url": "https://www.heygen.com/gdpr-compliant"
+        },
+        {
+          "claim": "Enterprise exclusion from training",
+          "url": "https://www.heygen.com/master-saas-agreement"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://security.heygen.com/#subprocessors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "pika",
+      "name": "Pika",
+      "vendor": "Pika",
+      "category": "video",
+      "homepage_url": "https://pika.art",
+      "privacy_url": "https://pika.art/privacy-policy",
+      "trains_on_personal_data": "yes",
+      "trains_on_personal_data_note": "Pika's terms and privacy policy state it may use your inputs, outputs and interactions to train and improve its models; only 'AI Self' likeness data is ring-fenced to that user.",
+      "trains_on_business_data": "yes",
+      "training_optout": "no",
+      "soc2": null,
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": null,
+      "hipaa_baa": null,
+      "data_region_eu": "no",
+      "sso_saml": null,
+      "notable_risk": "A consumer creative tool with a thin trust posture: Pika may use your inputs and outputs to train its models by default, with no documented opt-out, no DPA, and no published SOC 2 or BAA. Keep confidential or regulated content out of it.",
+      "sources": [
+        {
+          "claim": "Trains on inputs and outputs; US-based, no EU residency",
+          "url": "https://pika.art/privacy-policy"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "luma-ai",
+      "name": "Luma AI (Dream Machine)",
+      "vendor": "Luma AI",
+      "category": "video",
+      "homepage_url": "https://lumalabs.ai",
+      "privacy_url": "https://lumalabs.ai/learning-hub/privacy-policy",
+      "dpa_url": "https://lumalabs.ai/learning-hub/legal/enterprise-dpa",
+      "subprocessors_url": "https://lumalabs.ai/legal/subprocessors",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Free and standard paid consumer tiers grant Luma rights to train on your input and output; there is no in-app opt-out for consumer tiers.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Enterprise and API customers get an explicit no-training guarantee via the Enterprise agreement or API Terms.",
+      "training_optout": "yes",
+      "retention": "Input exportable for 30 days after account or subscription termination, after which Luma may delete it; content already incorporated into models is not removed.",
+      "soc2": null,
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "no",
+      "data_region_eu": "no",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise or API (only tiers with a contractual no-training guarantee, DPA and SSO)",
+      "notable_risk": "Luma trains on your content on consumer tiers; only Enterprise and API get a contractual no-training guarantee. It is explicitly not HIPAA-ready and has no verified SOC 2 or ISO 27001, so treat it as a creative tool rather than a compliance-grade one.",
+      "sources": [
+        {
+          "claim": "Tier-based training, consumer no opt-out",
+          "url": "https://lumalabs.ai/legal/tos"
+        },
+        {
+          "claim": "Enterprise no-training guarantee and SSO",
+          "url": "https://lumalabs.ai/legal/enterprise-terms-of-service"
+        },
+        {
+          "claim": "Enterprise DPA with SCCs",
+          "url": "https://lumalabs.ai/learning-hub/legal/enterprise-dpa"
+        },
+        {
+          "claim": "US hosting, no EU residency",
+          "url": "https://lumalabs.ai/learning-hub/privacy-policy"
+        },
+        {
+          "claim": "Public subprocessor list",
+          "url": "https://lumalabs.ai/legal/subprocessors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "ideogram",
+      "name": "Ideogram",
+      "vendor": "Ideogram",
+      "category": "image",
+      "homepage_url": "https://ideogram.ai",
+      "privacy_url": "https://ideogram.ai/legal/privacy",
+      "trust_url": "https://trust.ideogram.ai",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "The consumer web tier has no stated no-training commitment and user input is used to improve products; there is no documented opt-out for free web users.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "API and Enterprise inputs are not used to train Ideogram's shared models, with custom training opt-in only.",
+      "training_optout": "yes",
+      "retention": "Consumer retention unspecified ('as long as reasonably necessary'); Enterprise offers configurable retention with a 30-minute minimum.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (SOC 2 controls, DPA, no shared-model training, SSO). Free-tier images and prompts are public by default and cannot be deleted.",
+      "notable_risk": "On the free tier, Ideogram images and prompts are public by default and cannot be deleted, with no stated no-training commitment. Enterprise flips that with SOC 2 controls, a DPA on request, SSO and no shared-model training. No BAA and no verified ISO 27001.",
+      "sources": [
+        {
+          "claim": "Tier-based training, SOC 2 controls, DPA, SSO, retention",
+          "url": "https://ideogram.ai/enterprise/"
+        },
+        {
+          "claim": "Free-tier images and prompts public by default",
+          "url": "https://ideogram.ai/legal/privacy"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "leonardo-ai",
+      "name": "Leonardo AI",
+      "vendor": "Leonardo.Ai (Canva)",
+      "category": "image",
+      "homepage_url": "https://leonardo.ai",
+      "privacy_url": "https://leonardo.ai/privacy-policy",
+      "dpa_url": "https://leonardo.ai/data-processing-addendum/",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Free content is public by default and licensed to Leonardo to improve its services; free users have no opt-out other than upgrading.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Private Mode (paid members only) keeps generations out of training and public visibility.",
+      "training_optout": "yes",
+      "retention": "Retention governed by Leonardo's Data Retention Policy; customer personal data destroyed on termination, with deletion-on-request automated within 30 days.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": null,
+      "enterprise_plan": "Paid tier with Private Mode enabled (no training use, not publicly visible). Free-tier content is public by default with no way to make it private.",
+      "notable_risk": "Free Leonardo content is public by default and used to improve the service; only paid members can switch on Private Mode. There is a DPA and a SOC 2 commitment, but no verified ISO 27001, no BAA and no enterprise SSO. Fine for creative work, not for regulated data.",
+      "sources": [
+        {
+          "claim": "Public vs private images, Private Mode training opt-out",
+          "url": "https://intercom.help/leonardo-ai/en/articles/8044029-private-public-images"
+        },
+        {
+          "claim": "DPA, SOC 2 commitment, retention, subprocessor annex",
+          "url": "https://leonardo.ai/data-processing-addendum/"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "figma-ai",
+      "name": "Figma AI",
+      "vendor": "Figma",
+      "category": "design",
+      "homepage_url": "https://www.figma.com",
+      "privacy_url": "https://www.figma.com/legal/privacy/",
+      "dpa_url": "https://www.figma.com/legal/dpa/",
+      "trust_url": "https://compliance.figma.com",
+      "subprocessors_url": "https://www.figma.com/sub-processors/",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Content training is on by default for Starter and Professional teams; admins can toggle 'Content training' in Settings. Content is de-identified and Education and Government data is excluded.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Content training is off by default on Organization and Enterprise plans.",
+      "training_optout": "yes",
+      "retention": "No fixed window for AI inputs and outputs (third-party model providers store data temporarily or not at all); customer content deleted or returned within 30 days of contract termination.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (content training off by default, EU residency, SSO and SCIM, governance controls); Organization also defaults training off",
+      "notable_risk": "Figma holds SOC 2 Type II and ISO 27001, and content training defaults off on Organization and Enterprise (on for Starter and Professional unless an admin turns it off). The gap is HIPAA: the AUP bars PHI and no BAA is offered.",
+      "sources": [
+        {
+          "claim": "Content training defaults by tier and admin toggle",
+          "url": "https://help.figma.com/hc/en-us/articles/17725942479127-Manage-AI-settings-and-content-training-for-your-team-or-organization"
+        },
+        {
+          "claim": "SOC 2, ISO 27001, SSO",
+          "url": "https://www.figma.com/security/"
+        },
+        {
+          "claim": "GDPR DPA and retention",
+          "url": "https://www.figma.com/legal/dpa/"
+        },
+        {
+          "claim": "EU hosting for Enterprise",
+          "url": "https://www.figma.com/blog/eu-hosting-for-figma-and-figjam-files/"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://www.figma.com/sub-processors/"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "framer-ai",
+      "name": "Framer AI",
+      "vendor": "Framer",
+      "category": "design",
+      "homepage_url": "https://www.framer.com",
+      "privacy_url": "https://www.framer.com/legal/privacy-statement",
+      "dpa_url": "https://www.framer.com/legal/data-processing-addendum",
+      "trust_url": "https://www.framer.com/legal/security",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Non-Enterprise customers grant Framer a license to use de-identified inputs and outputs to train Framer AI models; there is no self-serve opt-out on non-Enterprise plans other than the Enterprise contract.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Enterprise customer data is not used for training, and third-party model providers are contractually barred from training on it.",
+      "training_optout": "yes",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "no",
+      "data_region_eu": "no",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (excluded from AI training, SOC 2 and ISO 27001 report access, SSO and SCIM, workspace AI-disable)",
+      "notable_risk": "Framer holds SOC 2 and ISO 27001, but only Enterprise excludes your site content from AI training; other plans grant a training license by default with no self-serve opt-out. Hosting is US only and Framer states it is not for PHI.",
+      "sources": [
+        {
+          "claim": "Tier-based AI training license and Enterprise exclusion",
+          "url": "https://www.framer.com/legal/ai-notice"
+        },
+        {
+          "claim": "SOC 2, ISO 27001, US hosting, SSO",
+          "url": "https://www.framer.com/legal/security"
+        },
+        {
+          "claim": "GDPR DPA with SCCs",
+          "url": "https://www.framer.com/legal/data-processing-addendum"
+        },
+        {
+          "claim": "Not designed for HIPAA, no PHI",
+          "url": "https://www.framer.com/help/articles/framer-hipaa-compliance/"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "replit",
+      "name": "Replit",
+      "vendor": "Replit",
+      "category": "coding",
+      "homepage_url": "https://replit.com",
+      "privacy_url": "https://replit.com/privacy-policy",
+      "dpa_url": "https://replit.com/dpa",
+      "trust_url": "https://trust.replit.com",
+      "subprocessors_url": "https://replit.com/subprocessors",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "The consumer privacy policy cites a legitimate-interest basis to improve code-generation technology; there is no documented self-serve opt-out toggle.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "The Commercial Agreement (paid and business customers) guarantees Replit will not use Customer Content to train ML models.",
+      "training_optout": "yes",
+      "retention": "Account data deleted within 30 days of a deletion request; customers get 30 days post-termination to migrate content.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": "no",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (SSO and SCIM, private deployments) on top of the Commercial Agreement's no-training term",
+      "notable_risk": "On the paid Commercial Agreement, Replit will not train on your code and rides a SOC 2 Type II attestation with a DPA and public subprocessor list. Hosting is US-first with no EU residency and no BAA, so it is not positioned for PHI.",
+      "sources": [
+        {
+          "claim": "Commercial Agreement no-training term",
+          "url": "https://replit.com/commercial-agreement"
+        },
+        {
+          "claim": "SOC 2 Type II, US hosting",
+          "url": "https://docs.replit.com/teams/information-security/overview"
+        },
+        {
+          "claim": "GDPR DPA with SCCs",
+          "url": "https://replit.com/dpa"
+        },
+        {
+          "claim": "Retention",
+          "url": "https://replit.com/privacy-policy"
+        },
+        {
+          "claim": "Public subprocessor list",
+          "url": "https://replit.com/subprocessors"
+        },
+        {
+          "claim": "Enterprise SSO",
+          "url": "https://replit.com/enterprise"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "tabnine",
+      "name": "Tabnine",
+      "vendor": "Tabnine",
+      "category": "coding",
+      "homepage_url": "https://www.tabnine.com",
+      "privacy_url": "https://www.tabnine.com/privacy-policy/",
+      "trust_url": "https://trust.tabnine.com",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Tabnine states it never uses your code to train any of its models; its completion and Protected chat models are trained only on permissively licensed open-source code.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Zero code retention: code is processed ephemerally and immediately discarded; operational metrics kept about one week.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": null,
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (self-hosted, VPC or air-gapped): private models, SSO and full data-residency control",
+      "notable_risk": "Tabnine says it never trains on your code, keeps zero code retention, holds SOC 2 and ISO 27001, and can run on-prem or air-gapped. The open questions are a signed BAA and a formal DPA, both unverified on its own pages, so confirm before regulated use.",
+      "sources": [
+        {
+          "claim": "No training on your code",
+          "url": "https://www.tabnine.com/code-privacy/"
+        },
+        {
+          "claim": "Zero code retention, US SaaS, SSO",
+          "url": "https://docs.tabnine.com/main/welcome/readme/security"
+        },
+        {
+          "claim": "SOC 2 and ISO 27001",
+          "url": "https://trust.tabnine.com"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "windsurf",
+      "name": "Windsurf",
+      "vendor": "Cognition (formerly Codeium)",
+      "category": "coding",
+      "homepage_url": "https://windsurf.com",
+      "privacy_url": "https://cognition.com/legal/privacy-policy",
+      "dpa_url": "https://devin.ai/windsurf/dpa",
+      "trust_url": "https://trust.cognition.ai/",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Cognition may use customer data for model training by default; the free tier has no stated opt-out.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Paid tiers can opt out (which also enables Zero Data Retention); Enterprise carries a no-training guarantee.",
+      "training_optout": "yes",
+      "retention": "No fixed day-count published; retained for the duration of the customer relationship. Under elected Zero Data Retention, data is deleted upon output generation.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (SSO plus no-training guarantee); any paid tier can also elect Opt-Out plus Zero Data Retention",
+      "notable_risk": "Cognition holds SOC 2 Type 2 and ISO 27001, but Windsurf's own terms say customer code may be used for training by default; the opt-out with Zero Data Retention is available only on paid tiers, and free-tier users have no documented opt-out. HIPAA and EU residency are unconfirmed.",
+      "sources": [
+        {
+          "claim": "Tier-based training and opt-out",
+          "url": "https://cognition.com/legal/platform-terms-of-service"
+        },
+        {
+          "claim": "Opt-out, Zero Data Retention, SSO, US infrastructure",
+          "url": "https://docs.devin.ai/admin/security"
+        },
+        {
+          "claim": "Windsurf DPA with SCCs",
+          "url": "https://devin.ai/windsurf/dpa"
+        },
+        {
+          "claim": "SOC 2 Type 2, ISO 27001, subprocessors",
+          "url": "https://trust.cognition.ai/"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "sourcegraph-cody",
+      "name": "Sourcegraph Cody",
+      "vendor": "Sourcegraph",
+      "category": "coding",
+      "homepage_url": "https://sourcegraph.com/cody",
+      "privacy_url": "https://sourcegraph.com/terms/privacy",
+      "dpa_url": "https://info.sourcegraph.com/hubfs/Sourcegraph%20DPA.pdf",
+      "trust_url": "https://security.sourcegraph.com/",
+      "subprocessors_url": "https://sourcegraph.com/terms/subprocessors",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Sourcegraph and its partner LLMs do not use Cody Enterprise or Pro code to train models. Cody Free and Pro were sunset in July 2025, so the product is now Enterprise-only.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Partner LLMs retain no input or output beyond generating the response (zero retention); general infrastructure logs retained up to 365 days.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": "no",
+      "sso_saml": "yes",
+      "enterprise_plan": "Cody Enterprise (self-hosted or single-tenant): the only generally-available tier",
+      "notable_risk": "A strong disclosure posture: SOC 2 Type II, ISO 27001:2022, a public DPA and subprocessor list, and a contractual no-training and zero-retention policy. The managed offering is US only (EU residency needs self-hosting).",
+      "sources": [
+        {
+          "claim": "No-training, Enterprise-only product",
+          "url": "https://sourcegraph.com/terms/cody-notice"
+        },
+        {
+          "claim": "Zero retention, SSO, US hosting",
+          "url": "https://sourcegraph.com/security"
+        },
+        {
+          "claim": "Public DPA with SCCs",
+          "url": "https://info.sourcegraph.com/hubfs/Sourcegraph%20DPA.pdf"
+        },
+        {
+          "claim": "SOC 2 Type II and ISO 27001:2022",
+          "url": "https://sourcegraph.com/blog/sourcegraph-is-iso-27001-certified"
+        },
+        {
+          "claim": "US-only managed offering",
+          "url": "https://sourcegraph.com/terms/privacy"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://sourcegraph.com/terms/subprocessors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "bolt-new",
+      "name": "Bolt.new",
+      "vendor": "StackBlitz",
+      "category": "coding",
+      "homepage_url": "https://bolt.new",
+      "privacy_url": "https://stackblitz.com/privacy-policy",
+      "trust_url": "https://trust.bolt.new/",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "StackBlitz may use AI inputs and outputs on an aggregated, anonymized or de-identified basis to improve the service; the ability to limit or opt out depends on account type or plan.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Opt-out availability depends on account type or plan; no specific toggle or tier list is documented publicly.",
+      "training_optout": "yes",
+      "retention": "Active accounts retained while active; closed accounts deleted or anonymized within a commercially reasonable period not to exceed thirty days (subject to backups, logs, legal holds).",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (dedicated-tenant deployment, SSO, admin controls)",
+      "notable_risk": "Bolt.new has a real trust center confirming SOC 2 Type 2 and GDPR, and its Enterprise tier adds SSO and dedicated-tenant deployment. ISO 27001, a HIPAA BAA and a locatable subprocessor list are unconfirmed, and training opt-out is only vaguely plan-dependent.",
+      "sources": [
+        {
+          "claim": "AI training use and plan-dependent opt-out, retention",
+          "url": "https://stackblitz.com/privacy-policy"
+        },
+        {
+          "claim": "SOC 2 Type 2, GDPR",
+          "url": "https://trust.bolt.new/"
+        },
+        {
+          "claim": "Enterprise SSO and dedicated-tenant deployment",
+          "url": "https://bolt.new/enterprise/"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "v0",
+      "name": "v0",
+      "vendor": "Vercel",
+      "category": "coding",
+      "homepage_url": "https://v0.app",
+      "privacy_url": "https://v0.app/policy",
+      "dpa_url": "https://vercel.com/legal/dpa",
+      "trust_url": "https://security.vercel.com/",
+      "subprocessors_url": "https://security.vercel.com/",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Hobby content, and Pro content unless opted out, may be used to train models; paid Pro is opted-in by default and you opt out in Team Settings. Pre-release Stealth Models are excluded from these protections.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Enterprise carries a contractual warranty that v0 content is not used for training.",
+      "training_optout": "yes",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (contractual no-training warranty; paid Pro only if you manually opt out)",
+      "notable_risk": "v0 inherits Vercel's platform compliance program (SOC 2 Type 2, ISO 27001:2022, GDPR DPA, HIPAA BAA availability) rather than v0-specific certs. Its training policy is tier-gated: Hobby and, unless opted out, Pro content can be used to train models.",
+      "sources": [
+        {
+          "claim": "Tier-based training and Enterprise no-training warranty",
+          "url": "https://vercel.com/legal/ai-product-terms"
+        },
+        {
+          "claim": "Opt-out in Team Settings",
+          "url": "https://v0.app/policy"
+        },
+        {
+          "claim": "SOC 2, ISO 27001, HIPAA BAA",
+          "url": "https://vercel.com/docs/security/compliance"
+        },
+        {
+          "claim": "GDPR DPA",
+          "url": "https://vercel.com/legal/dpa"
+        },
+        {
+          "claim": "SSO",
+          "url": "https://vercel.com/docs/saml"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://security.vercel.com/"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "lovable",
+      "name": "Lovable",
+      "vendor": "Lovable",
+      "category": "coding",
+      "homepage_url": "https://lovable.dev",
+      "privacy_url": "https://lovable.dev/privacy",
+      "dpa_url": "https://lovable.dev/data-processing-agreement",
+      "trust_url": "https://trust.lovable.dev/",
+      "subprocessors_url": "https://lovable.dev/subprocessors",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Lovable's docs describe an opt-out default (customer data may be used for model training unless you opt out); Free and Pro users opt out by emailing privacy@lovable.dev. This conflicts with the marketing page's blanket no-training claim.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Business and Enterprise have a workspace opt-out toggle at Settings, Privacy and security.",
+      "training_optout": "yes",
+      "retention": "General log data retained up to 90 days; personal data deleted within 30 days of account termination (except fraud-prevention data); backups up to 90 days.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Business or Enterprise (self-serve training opt-out, DPA, region selection, SSO)",
+      "notable_risk": "Lovable has SOC 2 Type I and II and ISO 27001:2022 and EU, US and Australia data-residency options, but its own pages give conflicting signals on training: marketing says no training while the docs describe an opt-out default. Confirm HIPAA directly since no BAA language was found.",
+      "sources": [
+        {
+          "claim": "Opt-out training default and mechanism",
+          "url": "https://docs.lovable.dev/features/business/data-opt-out"
+        },
+        {
+          "claim": "SOC 2 and ISO 27001:2022",
+          "url": "https://lovable.dev/blog/lovable-security"
+        },
+        {
+          "claim": "EU, US, Australia residency",
+          "url": "https://lovable.dev/security"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://lovable.dev/data-processing-agreement"
+        },
+        {
+          "claim": "Retention",
+          "url": "https://lovable.dev/privacy"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://lovable.dev/subprocessors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "devin",
+      "name": "Devin",
+      "vendor": "Cognition",
+      "category": "coding",
+      "homepage_url": "https://devin.ai",
+      "privacy_url": "https://cognition.com/privacy-policy",
+      "dpa_url": "https://cognition.com/documents/Cognition-DPA.pdf",
+      "trust_url": "https://trust.cognition.ai/",
+      "subprocessors_url": "https://cognition.com/documents/Cognition-DPA.pdf",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "By default Cognition may use non-Enterprise data for model training; toggle off in Devin's Data Controls settings (also enables Zero Data Retention). On the Team plan only admins can toggle it.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Enterprise customers are never trained on without express prior written consent.",
+      "training_optout": "yes",
+      "retention": "Zero Data Retention available once training opt-out is elected; post-termination deletion window stated inconsistently across Cognition's pages (30 vs 90 days).",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": "no",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (no-training-without-consent guarantee plus tenant-isolated or VPC deployment)",
+      "notable_risk": "Devin holds SOC 2 Type II and ISO 27001:2022 with a downloadable DPA and dated all-US subprocessor list. But non-Enterprise customers are opted into model training by default and must turn it off, and there is no EU residency or confirmed BAA.",
+      "sources": [
+        {
+          "claim": "Tier-based training, opt-out, Zero Data Retention, SSO",
+          "url": "https://docs.devin.ai/admin/security"
+        },
+        {
+          "claim": "SOC 2 Type II",
+          "url": "https://cognition.com/legal/security"
+        },
+        {
+          "claim": "ISO 27001:2022",
+          "url": "https://trust.cognition.ai/"
+        },
+        {
+          "claim": "GDPR DPA, all-US subprocessors, no EU residency",
+          "url": "https://cognition.com/documents/Cognition-DPA.pdf"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "claude-code",
+      "name": "Claude Code",
+      "vendor": "Anthropic",
+      "category": "coding",
+      "homepage_url": "https://claude.com/product/claude-code",
+      "privacy_url": "https://www.anthropic.com/legal/privacy",
+      "dpa_url": "https://www.anthropic.com/legal/commercial-terms",
+      "trust_url": "https://trust.anthropic.com",
+      "subprocessors_url": "https://trust.anthropic.com",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Consumer accounts (Free, Pro, Max) are trained on when the data-sharing setting is enabled; turn off data sharing at claude.ai settings.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Commercial users (Team, Enterprise, API) are not trained on for code or prompts sent to Claude Code under commercial terms.",
+      "training_optout": "yes",
+      "retention": "Commercial: 30-day standard retention; Zero Data Retention available to qualified Enterprise accounts. Consumer: 5 years if data-sharing is on, otherwise 30 days.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Team, Enterprise or API (commercial terms): not the consumer Free, Pro or Max tiers",
+      "notable_risk": "Under commercial terms, Claude Code is not trained on, retains data 30 days by default (Zero Data Retention on qualified Enterprise), and rides Anthropic's SOC 2 and ISO 27001 with a BAA available. Consumer accounts are trained on when data-sharing is enabled and can retain data for 5 years.",
+      "sources": [
+        {
+          "claim": "Tier-based training, opt-out, retention",
+          "url": "https://code.claude.com/docs/en/data-usage"
+        },
+        {
+          "claim": "SOC 2, ISO 27001, HIPAA BAA, subprocessors",
+          "url": "https://trust.anthropic.com"
+        },
+        {
+          "claim": "GDPR DPA via commercial terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms"
+        },
+        {
+          "claim": "SSO on Team and Enterprise",
+          "url": "https://www.anthropic.com/enterprise"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "gemini-code-assist",
+      "name": "Gemini Code Assist",
+      "vendor": "Google",
+      "category": "coding",
+      "homepage_url": "https://codeassist.google",
+      "privacy_url": "https://developers.google.com/gemini-code-assist/resources/privacy-notice-gemini-code-assist-individuals",
+      "dpa_url": "https://cloud.google.com/terms/data-processing-addendum",
+      "trust_url": "https://cloud.google.com/security/compliance",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "For individuals (free tier), prompts, code and output are collected to improve Google products, with human review, and disconnected copies stored up to 18 months.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Standard and Enterprise: Google does not use your data to train its models without your permission, and prompts and responses are handled statelessly (not stored).",
+      "training_optout": "yes",
+      "retention": "Standard and Enterprise: stateless, prompts and responses are not stored in Google Cloud. Individuals: disconnected copies retained up to 18 months.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": null,
+      "enterprise_plan": "Gemini Code Assist Standard or Enterprise (not the free Individual tier)",
+      "notable_risk": "On Standard and Enterprise, Gemini Code Assist is not trained on without permission, is stateless, and carries SOC 1/2/3 and ISO 27001 with VPC Service Controls. The free Individual tier is different: code and prompts are collected to improve Google products with human review and up to 18-month retention.",
+      "sources": [
+        {
+          "claim": "Tier-based training, stateless handling, SOC and ISO",
+          "url": "https://docs.cloud.google.com/gemini/docs/codeassist/security-privacy-compliance"
+        },
+        {
+          "claim": "Individual data governance and retention",
+          "url": "https://developers.google.com/gemini-code-assist/docs/data-governance"
+        },
+        {
+          "claim": "Google Cloud DPA",
+          "url": "https://cloud.google.com/terms/data-processing-addendum"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "amazon-q-developer",
+      "name": "Amazon Q Developer",
+      "vendor": "Amazon Web Services",
+      "category": "coding",
+      "homepage_url": "https://aws.amazon.com/q/developer",
+      "privacy_url": "https://aws.amazon.com/privacy/",
+      "trust_url": "https://aws.amazon.com/compliance/programs/",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Free tier: content (questions, responses, generated code) may be used for model training unless you opt out via IDE settings or an AWS Organizations AI services opt-out policy.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Pro tier: content is not used for service improvement or model training.",
+      "training_optout": "yes",
+      "soc2": null,
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": null,
+      "hipaa_baa": null,
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Amazon Q Developer Pro (content not used for training; Region-based residency)",
+      "notable_risk": "On the Pro tier, Amazon Q Developer is not used for training and stores content in the Region where your profile was created (some features US-only). The Free tier can use your code for model training unless you opt out. Per-service SOC 2 and ISO scope and a BAA for ePHI should be confirmed via AWS Artifact.",
+      "sources": [
+        {
+          "claim": "Tier-based training and opt-out",
+          "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/service-improvement.html"
+        },
+        {
+          "claim": "Region residency and SSO",
+          "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/data-storage.html"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "sana",
+      "name": "Sana",
+      "vendor": "Sana Labs",
+      "category": "productivity",
+      "homepage_url": "https://sana.ai",
+      "privacy_url": "https://sanalabs.com/legal/privacy-notice",
+      "dpa_url": "https://sanalabs.com/download/legal/Data-Processing-Agreement.pdf",
+      "trust_url": "https://trust.sanalabs.com/",
+      "subprocessors_url": "https://sanalabs.com/download/legal/subprocessors.pdf",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Sana states no customer data is used to train its or third-party LLMs, and AI subprocessors are contractually barred from training on it.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Backups are fully anonymised within 30 days of the backup date, then retained only in anonymised form.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (single-tenant deployment, SAML and SCIM, DPA)",
+      "notable_risk": "Sana states it does not train models on customer data, holds SOC 2 and ISO 27001, and publishes a subprocessor list and DPA. HIPAA BAA availability and a firm EU data-residency guarantee are not documented publicly, so confirm both before handling PHI or EU-restricted data.",
+      "sources": [
+        {
+          "claim": "No training, SOC 2, ISO 27001, SSO",
+          "url": "https://sanalabs.com/products/sana/security"
+        },
+        {
+          "claim": "Subprocessors barred from training",
+          "url": "https://support.sana.ai/en/articles/374688-data-handling-and-privacy-at-sana-agents"
+        },
+        {
+          "claim": "Backup anonymisation and infrastructure",
+          "url": "https://help.sana.ai/en/articles/153270-sana-s-security-and-infrastructure-setup"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://sanalabs.com/download/legal/Data-Processing-Agreement.pdf"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://sanalabs.com/download/legal/subprocessors.pdf"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "glean",
+      "name": "Glean",
+      "vendor": "Glean",
+      "category": "search",
+      "homepage_url": "https://glean.com",
+      "privacy_url": "https://www.glean.com/privacy",
+      "dpa_url": "https://www.glean.com/legal/dpa",
+      "trust_url": "https://trust.glean.com/",
+      "subprocessors_url": "https://www.glean.com/legal/subprocessors",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Zero-retention agreements with model providers mean your data is never stored or used for model training.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Zero-retention agreements with model providers; product-specific retention terms sit in the DPA.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (single-tenant or self-hosted deployment; BAA and DPA available)",
+      "notable_risk": "Glean says it never uses customer data to train models thanks to zero-retention agreements with model providers, offers single-tenant and regional (incl. EU) deployment, and will sign a HIPAA BAA. ISO 27001 status was not independently verifiable from its public pages.",
+      "sources": [
+        {
+          "claim": "No training, zero retention, EU regions, SOC 2, SSO",
+          "url": "https://www.glean.com/security"
+        },
+        {
+          "claim": "HIPAA BAA",
+          "url": "https://www.glean.com/legal/baa"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://www.glean.com/legal/dpa"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://www.glean.com/legal/subprocessors"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "guru",
+      "name": "Guru",
+      "vendor": "Guru",
+      "category": "productivity",
+      "homepage_url": "https://getguru.com",
+      "privacy_url": "https://www.getguru.com/privacy",
+      "trust_url": "https://www.getguru.com/security",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Guru states your data is never used to train, nor retained by, third-party LLMs; document snippets are removed immediately after the answer returns.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Content sent to third-party LLMs is deleted immediately after the output returns (zero-day retention on the LLM side).",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "All plans (custom pricing; SSO, SCIM and DLP described as standard across packages)",
+      "notable_risk": "Guru states it does not train on customer content and applies zero-retention handling for data passed to third-party LLMs, backed by SOC 2 Type II with platform-wide SSO, DPA and BAA support. No ISO 27001 certification or EU data-residency option was found.",
+      "sources": [
+        {
+          "claim": "No training, zero retention, SOC 2, BAA, DPA, SSO",
+          "url": "https://www.getguru.com/security"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "dropbox-dash",
+      "name": "Dropbox Dash",
+      "vendor": "Dropbox",
+      "category": "search",
+      "homepage_url": "https://dash.dropbox.com",
+      "dpa_url": "https://assets.dropbox.com/documents/en/legal/dfb-data-processing-agreement.pdf",
+      "trust_url": "https://trust.dropbox.com/?product=dash",
+      "subprocessors_url": "https://www.dropbox.com/privacy/subprocessor/dash",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Dropbox states no customer data is used for third-party model training and it will not build generative AI models using your content without consent.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "90-day retention window for content processed through Dash before deletion.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "no",
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Business or Enterprise (note: no HIPAA BAA for Dash on any tier)",
+      "notable_risk": "Dash inherits Dropbox's compliance stack (SOC 2 Type II, its own ISO 27001 certificate and a dedicated subprocessor list) and states content is not used to train third-party models, with a 90-day retention window. Dropbox explicitly excludes Dash from HIPAA BAA coverage, so it is not suitable for PHI on any plan.",
+      "sources": [
+        {
+          "claim": "No training, 90-day retention",
+          "url": "https://trust.dropbox.com/ai"
+        },
+        {
+          "claim": "Dash not HIPAA-covered",
+          "url": "https://help.dropbox.com/security/hipaa-hitech-overview"
+        },
+        {
+          "claim": "SOC 2 and ISO 27001 for Dash",
+          "url": "https://trust.dropbox.com/?product=dash"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://assets.dropbox.com/documents/en/legal/dfb-data-processing-agreement.pdf"
+        },
+        {
+          "claim": "Dash subprocessor list, SSO",
+          "url": "https://www.dropbox.com/privacy/subprocessor/dash"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "coda-ai",
+      "name": "Coda AI",
+      "vendor": "Coda (Grammarly)",
+      "category": "productivity",
+      "homepage_url": "https://coda.io",
+      "privacy_url": "https://coda.io/trust/privacy",
+      "dpa_url": "https://coda.io/trust/dpa",
+      "trust_url": "https://coda.io/trust",
+      "subprocessors_url": "https://coda.io/trust/subprocessor",
+      "trains_on_personal_data": null,
+      "trains_on_personal_data_note": "Coda's help centre states it does not allow AI vendors to train on customer content, but that page blocks automated verification. Confirm directly.",
+      "trains_on_business_data": null,
+      "training_optout": null,
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (SOC 2 report access, SCIM)",
+      "notable_risk": "Coda holds SOC 2 Type II and ISO 27001 and publishes its AI subprocessors, but since Grammarly's acquisition its legal pages redirect to Grammarly documents. Several AI-specific details (no-training claim, retention, EU residency, BAA) could not be independently verified.",
+      "sources": [
+        {
+          "claim": "SOC 2, ISO 27001, SSO, infrastructure",
+          "url": "https://coda.io/trust/security"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://coda.io/trust/dpa"
+        },
+        {
+          "claim": "AI subprocessors (Anthropic, OpenAI, Azure)",
+          "url": "https://coda.io/trust/subprocessor"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "clickup-ai",
+      "name": "ClickUp Brain",
+      "vendor": "ClickUp",
+      "category": "productivity",
+      "homepage_url": "https://clickup.com",
+      "dpa_url": "https://clickup.com/terms/dpa",
+      "trust_url": "https://security.clickup.com/",
+      "subprocessors_url": "https://clickup.com/terms/dpa/subprocessors",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "ClickUp's AI partners are prohibited from using your data to train their models, and ClickUp gains no right to use Customer Data for training; zero third-party data retention.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Zero Data Retention with LLM partners: no input is retained by the model after processing; data is deleted from provider systems as soon as possible.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (HIPAA BAA, EU and APAC residency and full compliance-report access are Enterprise-gated)",
+      "notable_risk": "ClickUp Brain does not train on customer data and enforces zero data retention with its LLM partners, backed by SOC 2 Type II and ISO 27001. HIPAA BAA and EU and APAC data residency are available but Enterprise-tier only.",
+      "sources": [
+        {
+          "claim": "No training, zero retention, HIPAA BAA",
+          "url": "https://clickup.com/terms/ai"
+        },
+        {
+          "claim": "SOC 2, ISO 27001, EU/APAC residency, SSO",
+          "url": "https://clickup.com/security"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://clickup.com/terms/dpa"
+        },
+        {
+          "claim": "AI subprocessors (Anthropic, OpenAI, Azure)",
+          "url": "https://clickup.com/terms/dpa/subprocessors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "asana-ai",
+      "name": "Asana AI",
+      "vendor": "Asana",
+      "category": "productivity",
+      "homepage_url": "https://asana.com",
+      "privacy_url": "https://asana.com/privacy",
+      "dpa_url": "https://asana.com/terms/data-processing",
+      "trust_url": "https://asana.com/trust",
+      "subprocessors_url": "https://asana.com/terms/subprocessors",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Neither Asana nor its AI partners use customer data to train AI models; partner LLMs are contractually barred from training and must delete inputs and outputs after each query.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "AI partners promptly delete input and output data after completing the relevant query and response.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Business or Enterprise (DPA, HIPAA, SSO and EU residency are gated above Free)",
+      "notable_risk": "Asana states neither it nor its AI partners train on customer data, and partner LLMs must delete inputs and outputs after each query; it holds SOC 2 Type II and ISO 27001 with a HIPAA BAA, DPA, EU residency and SSO reserved for paid plans.",
+      "sources": [
+        {
+          "claim": "No training, HIPAA BAA, retention",
+          "url": "https://asana.com/privacy"
+        },
+        {
+          "claim": "SOC 2, ISO 27001, EU residency, SSO",
+          "url": "https://asana.com/trust"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://asana.com/terms/data-processing"
+        },
+        {
+          "claim": "AI subprocessors",
+          "url": "https://asana.com/terms/subprocessors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "monday-ai",
+      "name": "monday AI",
+      "vendor": "monday.com",
+      "category": "productivity",
+      "homepage_url": "https://monday.com",
+      "privacy_url": "https://monday.com/terms/privacy",
+      "dpa_url": "https://monday.com/l/privacy/dpa/",
+      "trust_url": "https://monday.com/trustcenter",
+      "subprocessors_url": "https://monday.com/terms/subprocessors",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "monday.com states it does not use your input or output to train ML models and does not allow others to do so; LLM providers operate under Zero Data Retention agreements.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "LLM providers operate under Zero Data Retention; monday.com may retain data internally up to 60 days to monitor service quality, never shared or used for training.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (HIPAA BAA, EU residency and SSO are Enterprise-gated)",
+      "notable_risk": "monday.com states its AI does not train on customer data and enforces Zero Data Retention with its LLM providers, backed by SOC 2 Type II and ISO 27001. HIPAA BAA, EU data residency and SSO are all Enterprise-tier only.",
+      "sources": [
+        {
+          "claim": "No training, Zero Data Retention",
+          "url": "https://monday.com/w/ai-trust-center"
+        },
+        {
+          "claim": "SOC 2, ISO 27001, SSO",
+          "url": "https://monday.com/trustcenter/security"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://monday.com/l/privacy/dpa/"
+        },
+        {
+          "claim": "HIPAA BAA",
+          "url": "https://monday.com/l/privacy/hipaa-baa/"
+        },
+        {
+          "claim": "EU data region",
+          "url": "https://monday.com/blog/product/new-eu-data-region/"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://monday.com/terms/subprocessors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "airtable-ai",
+      "name": "Airtable AI",
+      "vendor": "Airtable",
+      "category": "productivity",
+      "homepage_url": "https://airtable.com",
+      "privacy_url": "https://www.airtable.com/company/privacy",
+      "dpa_url": "https://www.airtable.com/company/dpa",
+      "trust_url": "https://www.airtable.com/company/trust-and-security",
+      "subprocessors_url": "https://www.airtable.com/company/subprocessors",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Airtable will not use, or permit third-party AI providers to use, input, output or other Customer Data to train the models behind Airtable AI. Input retention is tier-based.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Tier-based: on Free, Team, Pro and Plus, third-party providers may retain input and output up to 30 days for safety moderation; on Business and Enterprise Scale, providers do not retain inputs or outputs (only billing and safety metadata).",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Business or Enterprise Scale (no AI-input retention beyond metadata; BAA eligibility)",
+      "notable_risk": "Airtable AI does not train models on customer inputs, and Business and Enterprise Scale plans get no third-party retention beyond compliance metadata versus a 30-day window on lower tiers. HIPAA BAA and EU residency are reserved for Enterprise Scale.",
+      "sources": [
+        {
+          "claim": "No training, tier-based retention",
+          "url": "https://www.airtable.com/company/ai-terms"
+        },
+        {
+          "claim": "SOC 2, ISO 27001, EU residency, SSO",
+          "url": "https://www.airtable.com/company/trust-and-security"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://www.airtable.com/company/dpa"
+        },
+        {
+          "claim": "HIPAA BAA and AI subprocessors",
+          "url": "https://www.airtable.com/company/subprocessors"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "intercom-fin",
+      "name": "Intercom Fin",
+      "vendor": "Intercom",
+      "category": "customer-support",
+      "homepage_url": "https://www.intercom.com/fin",
+      "privacy_url": "https://www.intercom.com/legal/privacy",
+      "dpa_url": "https://www.intercom.com/legal/data-processing-agreement",
+      "trust_url": "https://trust.intercom.com/",
+      "subprocessors_url": "https://www.intercom.com/legal/subprocessors-list",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Intercom's own fin-cx models are trained on anonymized Customer Data from active workspaces; workspaces with a HIPAA BAA, on EU or AU regional hosting, or on trial are auto-excluded, and you can self-serve opt out in Settings.",
+      "trains_on_business_data": "no",
+      "trains_on_business_data_note": "Third-party LLMs (OpenAI, Anthropic, Google) are contractually barred from training.",
+      "training_optout": "yes",
+      "retention": "No fixed window for active-workspace conversation and ticket data (persists for the life of the account); deleted within 30 days of termination on request.",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Expert plan plus Regional Data Hosting addendum plus signed BAA (the config that gates HIPAA, SSO and auto-exclusion from AI training)",
+      "notable_risk": "On the top Expert plan with Regional Data Hosting and a signed BAA, Fin holds SOC 2 Type II and ISO 27001, keeps third-party LLMs out of training, and offers EU residency. Lower plans train Intercom's own models on anonymized data unless you opt out.",
+      "sources": [
+        {
+          "claim": "Own-model training on anonymized data and opt-out",
+          "url": "https://www.intercom.com/help/en/articles/11993352-ai-model-training-and-fine-tuning-opt-out"
+        },
+        {
+          "claim": "HIPAA, SSO gated to Expert plan",
+          "url": "https://www.intercom.com/help/en/articles/9061614-fin-and-intercom-plans-explained"
+        },
+        {
+          "claim": "SOC 2 and ISO 27001",
+          "url": "https://www.intercom.com/help/en/articles/7053674-accessing-security-and-compliance-documents"
+        },
+        {
+          "claim": "GDPR DPA, retention",
+          "url": "https://www.intercom.com/legal/data-processing-agreement"
+        },
+        {
+          "claim": "EU regional hosting",
+          "url": "https://www.intercom.com/legal/regional-data-hosting-addendum"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://www.intercom.com/legal/subprocessors-list"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "zendesk-ai",
+      "name": "Zendesk AI",
+      "vendor": "Zendesk",
+      "category": "customer-support",
+      "homepage_url": "https://www.zendesk.com",
+      "privacy_url": "https://www.zendesk.co.uk/company/agreements-and-terms/privacy-policy/",
+      "dpa_url": "https://www.zendesk.com/company/data-processing-agreement/",
+      "trust_url": "https://www.zendesk.com/trust-center/",
+      "subprocessors_url": "https://support.zendesk.com/hc/en-us/articles/4408883061530",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "Zendesk trains AI functionality on Service Data by default (most customers instruct Zendesk to train); opt out by contacting support to exclude your subdomains. Integrated third-party LLMs never train on customer data.",
+      "trains_on_business_data": "opt-out",
+      "training_optout": "yes",
+      "retention": "Indefinite while the subscription is active; on cancellation the Service Data Deletion Policy applies (e.g. ticket and user data about 40 days, messaging about 120 days).",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Suite Enterprise plus the Advanced Compliance (HIPAA) and Data Center Location (residency) add-ons",
+      "notable_risk": "Zendesk holds SOC 2 Type II and ISO 27001 and 42001 and will sign a BAA via a paid add-on, but it trains its own AI on Service Data by default; you must contact support to opt out, and EU residency and HIPAA are both paid add-ons.",
+      "sources": [
+        {
+          "claim": "Trains own AI on Service Data by default, opt-out",
+          "url": "https://support.zendesk.com/hc/en-us/articles/4408831944730-Supplemental-terms-Zendesk-s-service-specific-terms"
+        },
+        {
+          "claim": "SOC 2 covers AI Agents",
+          "url": "https://support.zendesk.com/hc/en-us/articles/10070156146842-Zendesk-products-in-scope-by-compliance-program"
+        },
+        {
+          "claim": "ISO 27001, 27018, 27701, 42001",
+          "url": "https://support.zendesk.com/hc/en-us/articles/4408828745626-Zendesk-s-Commitment-to-International-Standards-for-Information-Security-Privacy-and-AI-Governance-ISO-27001-ISO-27018-ISO-27701-and-ISO-42001"
+        },
+        {
+          "claim": "HIPAA BAA add-on",
+          "url": "https://www.zendesk.co.uk/company/business-associate-agreement/"
+        },
+        {
+          "claim": "EU residency add-on",
+          "url": "https://support.zendesk.com/hc/en-us/articles/4408883599130"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://www.zendesk.com/company/data-processing-agreement/"
+        },
+        {
+          "claim": "SSO",
+          "url": "https://support.zendesk.com/hc/en-us/articles/4408883587226-Single-sign-on-SSO-options-in-Zendesk"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://support.zendesk.com/hc/en-us/articles/4408883061530"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "ada",
+      "name": "Ada",
+      "vendor": "Ada",
+      "category": "customer-support",
+      "homepage_url": "https://www.ada.cx",
+      "privacy_url": "https://www.ada.cx/legal/privacy-policy/",
+      "dpa_url": "https://www.ada.cx/legal/data-processing-addendum/",
+      "trust_url": "https://security.ada.cx/",
+      "subprocessors_url": "https://www.ada.cx/legal/subprocessors/",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Customer data is never used to train shared or public models; zero data retention with LLM providers, and any fine-tuning uses a single customer's own de-identified data. Ada is enterprise-only, so there is no consumer tier.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Transcripts are automatically deleted after two years unless personal details are removed; on-demand deletion and export APIs are available.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Enterprise (the only tier) with an executed DPA, HIPAA documentation obtained during procurement, and a negotiated EU data-residency clause",
+      "notable_risk": "Ada is enterprise-only and says it never trains shared models on your data, holds SOC 2 Type II, publishes subprocessors and offers HIPAA documentation and negotiated EU residency. The open questions are ISO 27001 (not listed on its trust center) and confirming a named BAA before regulated deployment.",
+      "sources": [
+        {
+          "claim": "No shared-model training, zero LLM retention, EU residency",
+          "url": "https://www.ada.cx/platform/trust/"
+        },
+        {
+          "claim": "SOC 2 Type II",
+          "url": "https://security.ada.cx/"
+        },
+        {
+          "claim": "HIPAA compliance",
+          "url": "https://www.ada.cx/industry/health-insurance/"
+        },
+        {
+          "claim": "DPA",
+          "url": "https://www.ada.cx/legal/data-processing-addendum/"
+        },
+        {
+          "claim": "Retention",
+          "url": "https://docs.ada.cx/docs/other/data-retention"
+        },
+        {
+          "claim": "Subprocessor list and SSO",
+          "url": "https://www.ada.cx/legal/subprocessors/"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "sierra",
+      "name": "Sierra",
+      "vendor": "Sierra",
+      "category": "customer-support",
+      "homepage_url": "https://sierra.ai",
+      "privacy_url": "https://sierra.ai/privacy-policy",
+      "trust_url": "https://trust.sierra.ai/",
+      "subprocessors_url": "https://trust.sierra.ai/subprocessors",
+      "trains_on_personal_data": null,
+      "trains_on_personal_data_note": "Sierra's trust page says data is only used as you instruct and never shared with other customers, but no explicit 'we do not train on your data' statement was found. Verify in the contract and DPA.",
+      "trains_on_business_data": null,
+      "training_optout": null,
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": null,
+      "notable_risk": "Sierra is ISO 27001 and 42001 certified, lists SOC 2 and HIPAA as maintained standards, and publishes a subprocessor list. Much of the granular detail (no-training commitment, retention, BAA, EU residency, SSO) sits behind a gated trust center and per-customer DPA.",
+      "sources": [
+        {
+          "claim": "SOC 2 and HIPAA listed as maintained standards",
+          "url": "https://sierra.ai/product/trust-and-reliability"
+        },
+        {
+          "claim": "ISO 27001 and ISO 42001 certified",
+          "url": "https://sierra.ai/blog/sierra-is-now-iso-42001-and-iso-27001-certified"
+        },
+        {
+          "claim": "DPA referenced, global data processing",
+          "url": "https://sierra.ai/privacy-policy"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://trust.sierra.ai/subprocessors"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "decagon",
+      "name": "Decagon",
+      "vendor": "Decagon",
+      "category": "customer-support",
+      "homepage_url": "https://decagon.ai",
+      "privacy_url": "https://decagon.ai/legal/privacy",
+      "trust_url": "https://trust.decagon.ai/",
+      "trains_on_personal_data": null,
+      "trains_on_personal_data_note": "Decagon enforces zero-day retention with LLM providers (no foundation-model training), but fine-tunes per-customer models on that customer's own historical conversations with PII removed (not cross-customer). No opt-in or opt-out is documented.",
+      "trains_on_business_data": null,
+      "training_optout": null,
+      "retention": "Zero-day retention is enforced at the LLM-provider layer; no retention period is published for Decagon's own storage.",
+      "soc2": null,
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": null,
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": "yes",
+      "notable_risk": "Decagon confirms zero-day retention with its LLM providers and offers SSO with Okta and Entra, but its SOC 2, ISO 27001 and HIPAA claims appear only as badges without a primary source stating type, scope or date, and no subprocessor list or DPA was found publicly.",
+      "sources": [
+        {
+          "claim": "Zero-day LLM retention, hosting, SSO",
+          "url": "https://decagon.ai/security"
+        },
+        {
+          "claim": "LLM-provider zero-day retention",
+          "url": "https://decagon.ai/legal/security"
+        }
+      ],
+      "confidence": "verify"
+    },
+    {
+      "slug": "salesforce-einstein",
+      "name": "Salesforce Einstein / Agentforce",
+      "vendor": "Salesforce",
+      "category": "sales",
+      "homepage_url": "https://www.salesforce.com/agentforce/",
+      "privacy_url": "https://www.salesforce.com/company/privacy/",
+      "dpa_url": "https://www.salesforce.com/en-us/wp-content/uploads/sites/4/documents/legal/Agreements/data-processing-addendum.pdf",
+      "trust_url": "https://trust.salesforce.com",
+      "subprocessors_url": "https://www.salesforce.com/en-us/wp-content/uploads/sites/4/documents/legal/misc/salesforce-infrastructure-and-subprocessors.pdf",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "The Einstein Trust Layer enforces zero data retention with LLM providers: prompts and responses are not persisted by the model provider or used to train the models.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Zero data retention with third-party LLMs; Salesforce itself keeps an audit trail (original prompt, safety scores, original output).",
+      "soc2": "yes",
+      "iso27001": "yes",
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": "yes",
+      "enterprise_plan": "Salesforce Shield add-on (Platform Encryption, Event Monitoring) on a HIPAA-eligible edition, paired with the Einstein Trust Layer",
+      "notable_risk": "One of the strongest CRM-AI postures: the Einstein Trust Layer enforces zero data retention with LLM providers, and Salesforce publishes AI-scoped SOC 2 and ISO 27001 reports naming Agentforce and Einstein plus a HIPAA BAA and EU residency via Hyperforce. Some Einstein features are not available in the EU Operating Zone.",
+      "sources": [
+        {
+          "claim": "Einstein Trust Layer zero data retention, no training",
+          "url": "https://developer.salesforce.com/docs/ai/agentforce/guide/trust.html"
+        },
+        {
+          "claim": "HIPAA BAA for Agentforce and Einstein",
+          "url": "https://compliance.salesforce.com/en/categories/hipaa"
+        },
+        {
+          "claim": "AI-scoped SOC 2 report",
+          "url": "https://compliance.salesforce.com/en/documents/a006e0000115nJkAAI"
+        },
+        {
+          "claim": "ISO 27001:2022 naming Agentforce and Einstein",
+          "url": "https://compliance.salesforce.com/en/documents/a005A00000wlSboQAE"
+        },
+        {
+          "claim": "EU Operating Zone residency",
+          "url": "https://help.salesforce.com/s/articleView?id=000395407&language=en_US&type=1"
+        },
+        {
+          "claim": "GDPR DPA",
+          "url": "https://security.salesforce.com/general-data-protection-regulation"
+        },
+        {
+          "claim": "Subprocessor list",
+          "url": "https://www.salesforce.com/en-us/wp-content/uploads/sites/4/documents/legal/misc/salesforce-infrastructure-and-subprocessors.pdf"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "notebooklm",
+      "name": "NotebookLM",
+      "vendor": "Google",
+      "category": "search",
+      "homepage_url": "https://notebooklm.google",
+      "privacy_url": "https://support.google.com/notebooklm/answer/17004255",
+      "trust_url": "https://knowledge.workspace.google.com/admin/gemini/generative-ai-in-google-workspace-privacy-hub",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Google states uploads, queries and responses are not used to train generative AI models, on consumer or Workspace and Education accounts alike. Consumer thumbs up or down feedback can get de-identified human review.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Feedback submissions (thumbs up or down) are retained up to 3 years, disconnected from your Google Account. General source and document retention is not detailed in Google's public documentation.",
+      "soc2": "no",
+      "iso27001": "no",
+      "iso42001": null,
+      "gdpr_dpa": null,
+      "hipaa_baa": "no",
+      "data_region_eu": null,
+      "sso_saml": null,
+      "enterprise_plan": "None of the consumer or Workspace-core tiers carry HIPAA, SOC or ISO coverage. Only NotebookLM Enterprise, a separate Google Cloud SKU with its own IAM, VPC-SC and CMEK controls, targets regulated use.",
+      "notable_risk": "NotebookLM does not train on your uploads or queries on either tier, a genuinely strong default. But Google is explicit that the product carries no SOC 2, ISO 27001 or HIPAA BAA today; for regulated data you would need the separate NotebookLM Enterprise product.",
+      "sources": [
+        {
+          "claim": "No training on uploads or queries, no SOC/ISO",
+          "url": "https://knowledge.workspace.google.com/admin/gemini/generative-ai-in-google-workspace-privacy-hub"
+        },
+        {
+          "claim": "Feedback retention, human review",
+          "url": "https://support.google.com/notebooklm/answer/17004255"
+        },
+        {
+          "claim": "Not covered by Google's HIPAA BAA",
+          "url": "https://workspace.google.com/terms/2015/1/hipaa_functionality/"
+        },
+        {
+          "claim": "NotebookLM Enterprise compliance controls",
+          "url": "https://docs.cloud.google.com/gemini/enterprise/docs/compliance-security-controls"
+        }
+      ],
+      "confidence": "high"
+    },
+    {
+      "slug": "you-com",
+      "name": "You.com",
+      "vendor": "You.com",
+      "category": "search",
+      "homepage_url": "https://you.com",
+      "privacy_url": "https://you.com/privacy",
+      "trust_url": "https://trust.you.com",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "You.com's privacy policy states user content will not be used for developing, improving, or training third-party AI or ML models, and its pricing page advertises no model training platform-wide.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "General account and service data is kept for as long as reasonably necessary to provide the services. The Enterprise tier advertises that all queries and data can be automatically purged.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "no",
+      "data_region_eu": "no",
+      "sso_saml": null,
+      "enterprise_plan": "Enterprise plan (adds configurable auto-purge of queries and data and is built to accommodate a signed DPA)",
+      "notable_risk": "You.com says it does not train models on your data and holds a SOC 2 Type 2 report, with a DPA available. It explicitly is not a HIPAA tool, and EU residency is not guaranteed, so keep PHI and EU-locked data out of it.",
+      "sources": [
+        {
+          "claim": "No model training, DPA, no HIPAA, no EU residency",
+          "url": "https://you.com/privacy"
+        },
+        {
+          "claim": "SOC 2 Type 2",
+          "url": "https://home.you.com/security"
+        },
+        {
+          "claim": "Enterprise auto-purge, retention",
+          "url": "https://you.com/pricing"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "consensus",
+      "name": "Consensus",
+      "vendor": "Consensus",
+      "category": "search",
+      "homepage_url": "https://consensus.app",
+      "privacy_url": "https://consensus.app/home/privacy-policy/",
+      "trust_url": "https://help.consensus.app/en/articles/10093291-security",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Consensus states it does not use your data to train large language models: your queries, content and personal information are never used to train AI models, neither its own nor any third party's.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "Data is retained for as long as reasonably necessary for a legitimate business purpose, with query text logged only in anonymized form. A paid Custom Security Option offers separate or no query logging.",
+      "soc2": null,
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": null,
+      "hipaa_baa": null,
+      "data_region_eu": null,
+      "sso_saml": null,
+      "enterprise_plan": "Team or Enterprise Custom Security Option (separate or disabled query logging): pricing and terms by request",
+      "notable_risk": "Consensus is unusually clear that it never trains on your queries or content and does not track individual users by default. It just does not publish any SOC 2, ISO 27001, HIPAA or GDPR DPA documentation, so it is not positioned for regulated or enterprise-compliance use as-is.",
+      "sources": [
+        {
+          "claim": "No training on queries or content",
+          "url": "https://consensus.app/home/privacy-policy/"
+        },
+        {
+          "claim": "Retention and Custom Security Option",
+          "url": "https://help.consensus.app/en/articles/10093291-security"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "vapi",
+      "name": "Vapi",
+      "vendor": "Vapi",
+      "category": "audio",
+      "homepage_url": "https://vapi.ai",
+      "privacy_url": "https://vapi.ai/privacy",
+      "trust_url": "https://security.vapi.ai",
+      "subprocessors_url": "https://security.vapi.ai",
+      "trains_on_personal_data": "opt-out",
+      "trains_on_personal_data_note": "By default, call recordings, transcripts and logs may be retained to help train and improve the AI models. Enabling HIPAA mode (hipaaEnabled true) disables data persistence entirely, which stops this use.",
+      "trains_on_business_data": "opt-out",
+      "training_optout": "yes",
+      "retention": "Default: call recordings, transcripts and logs are retained per the customer's own configuration and may be used to improve the service. With HIPAA mode on, persistence is disabled and nothing is stored.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": null,
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": null,
+      "enterprise_plan": "Any plan with HIPAA mode (hipaaEnabled true) enabled and only HIPAA-compliant provider keys configured: a per-assistant configuration flag, not a separate paid tier.",
+      "notable_risk": "Vapi's default configuration retains call data and can use it to improve the service; you have to explicitly turn on HIPAA mode to disable storage and training use, and even then you choose HIPAA-compliant providers yourself. Treat it as developer infrastructure that requires deliberate configuration.",
+      "sources": [
+        {
+          "claim": "Default retention and training use",
+          "url": "https://vapi.ai/privacy"
+        },
+        {
+          "claim": "HIPAA mode, BAA, opt-out",
+          "url": "https://docs.vapi.ai/security-and-privacy/hipaa"
+        },
+        {
+          "claim": "US and EU infrastructure, data flow",
+          "url": "https://docs.vapi.ai/security-and-privacy/data-flow"
+        },
+        {
+          "claim": "SOC 2 and subprocessors",
+          "url": "https://security.vapi.ai"
+        }
+      ],
+      "confidence": "medium"
+    },
+    {
+      "slug": "bland-ai",
+      "name": "Bland AI",
+      "vendor": "Bland AI",
+      "category": "audio",
+      "homepage_url": "https://www.bland.ai",
+      "privacy_url": "https://www.bland.ai/legal/privacy-policy",
+      "dpa_url": "https://www.bland.ai/legal/data-processing-agreement",
+      "trust_url": "https://www.bland.ai/trust-security",
+      "subprocessors_url": "https://trust.delve.co/blandai",
+      "trains_on_personal_data": "no",
+      "trains_on_personal_data_note": "Bland describes its calling architecture as inference-only: during a call the model operates in inference mode with fixed parameters, and it runs its own models rather than routing calls through third-party frontier providers. Zero-retention processing is available on request.",
+      "trains_on_business_data": "no",
+      "training_optout": null,
+      "retention": "General policy: retained for as long as necessary to provide the service. Zero-retention processing is available on request for sensitive workflows.",
+      "soc2": "yes",
+      "iso27001": null,
+      "iso42001": null,
+      "gdpr_dpa": "yes",
+      "hipaa_baa": "yes",
+      "data_region_eu": "yes",
+      "sso_saml": null,
+      "enterprise_plan": "Any plan, with the BAA and zero-retention processing requested and enabled for the specific regulated workflow: account-level add-ons rather than a distinct paid tier.",
+      "notable_risk": "Bland AI publishes a clearer compliance story than most voice-agent platforms: self-attested SOC 2 Type II, HIPAA with BAA, GDPR with a public DPA and SCCs, plus configurable EU data residency, and calls run through its own models in inference-only mode. ISO 27001 is not listed and SSO is not documented.",
+      "sources": [
+        {
+          "claim": "Inference-only architecture, no training",
+          "url": "https://www.bland.ai/blogs/llm-security-data-privacy"
+        },
+        {
+          "claim": "SOC 2, HIPAA BAA, EU residency, retention",
+          "url": "https://www.bland.ai/trust-security"
+        },
+        {
+          "claim": "Public DPA with SCCs, subprocessor list",
+          "url": "https://www.bland.ai/legal/data-processing-agreement"
+        }
+      ],
+      "confidence": "medium"
     }
   ]
 }
