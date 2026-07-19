@@ -1,5 +1,73 @@
 # Changelog
 
+## 2026-07-19: 15 new blog posts across Academy, News and Reviews
+
+Added 15 fully-written, publication-ready posts on top of the existing 44,
+targeting keywords from `docs/seo_geo_content_plan.md` not yet covered:
+`ai policy`, `iso iec 23894`, `ai risk mitigation`, `ai and data protection`,
+`responsible ai practices`, `ai trust risk and security management`,
+`eu ai act risk categories`, `eu ai policy`, `ai ethics and governance`,
+`ai and personal data`, `claude ai business`, `best ai marketing tools`,
+`ai risk management software`, `ai usage policy`, `nist ai rmf`.
+
+- **Format/category diversity.** 9 Academy posts (skyscraper, deep-dive,
+  how-to, listicle, data study, case study), 3 News posts newsjacking the
+  EU AI Act's 2 August 2026 high-risk deadline, the ICO's 2026 AI/ADM
+  guidance work, and the ethics-governance regulatory convergence, and 3
+  Reviews posts (Claude for Business, AI marketing tools, AI risk
+  management software) - the first Reviews/News content on the site.
+  `Post.category` (`"Academy" | "News" | "Reviews"`) added to the data
+  model for this.
+- **Length and depth.** Each post is 1,200+ words of body copy (checked
+  programmatically), with a TL;DR, a sourced data table, an expert quote
+  from an official body (NIST, ISO, ICO, Gartner, European Commission,
+  Anthropic), 4-5 FAQs, and 3-6 internal links plus 2-5 external citations
+  to primary sources (nist.gov, iso.org, ico.org.uk,
+  digital-strategy.ec.europa.eu, anthropic.com).
+- **Research.** Grounded in 2026 developments: the EU AI Act's Omnibus
+  deferral and 2 August 2026 core deadline, the ICO's AI/ADM Code of
+  Practice consultation and Recruitment Rewired findings, Anthropic's
+  commercial data-training/retention terms, and the NIST AI RMF Playbook.
+- **Images.** All 15 sourced live via the Unsplash MCP with photographer
+  attribution; `images.unsplash.com` added to `next.config.ts` remote
+  patterns alongside the existing Pexels domain.
+- **Verification.** Full test suite, `tsc --noEmit`, `eslint` on changed
+  files, and `next build` all green; confirmed all 15 new slugs render,
+  appear on `/blog`, and are present in `sitemap.xml`.
+
+## 2026-07-12: Blog content overhaul: full-spec rewrite of all 44 posts
+
+Brought every existing blog post up to the publication-ready spec (length,
+images, FAQs, tables, citations, attestation-grade sourcing) instead of
+publishing new ones.
+
+- **Data model.** `lib/posts.ts`'s `Post`/`PostSection` types gained `author`,
+  `tldr`, `table`, `quote` and `faqs` fields. `PostSection.p` now supports
+  inline `[text](url)` markdown links, parsed into real `<Link>`/`<a>`
+  elements by a new `renderInline` helper in `app/blog/[slug]/page.tsx`.
+- **Rendering.** The blog post page now renders a "Key takeaways" TL;DR box,
+  a data table, a pull-quote, and an FAQ section (reusing the existing
+  `FaqSection` component) with `FAQPage` JSON-LD alongside the existing
+  `Article`/`BreadcrumbList` schema.
+- **Images.** All 44 posts now have a featured image (11 were missing);
+  sourced via the Pexels MCP integration with photographer attribution,
+  matching the existing 33.
+- **Content.** All 44 posts rewritten to 1,200-2,500 words (from an average
+  of ~340) with TL;DRs, one data table and one sourced quote each, 3-5 FAQs,
+  3-6 real internal links and 2-5 external citations per post (a shared,
+  pre-verified citation kit: NIST AI RMF, EU AI Act, GDPR, HHS/HIPAA, ISO
+  42001, AICPA SOC 2, and OpenAI/Microsoft/Anthropic/Google privacy pages).
+  Author byline standardised to "ModelCharter Team". Keyword/date/slug
+  preserved from the originals; titles and descriptions lightly tightened.
+- **Style guardrail.** Found and fixed an em/en-dash regression the rewrite
+  introduced (`test/no-em-dash.test.mts` guards against this as an
+  AI-writing tell); all dashes normalised to plain hyphens across
+  `lib/posts.ts`, plus a duplicate-dash bug in the new quote-attribution
+  markup.
+- **Verification.** Full test suite, lint and `next build` all green; spot-
+  checked rendered HTML for TL;DR/table/quote/FAQ/schema/image presence;
+  confirmed all 44 posts appear in `sitemap.xml`.
+
 ## 2026-07-07 (later): Supabase re-platform, weighted scoring, change alerts
 
 Completed the work deferred from the Vetlark merge, on **Supabase** (the account
