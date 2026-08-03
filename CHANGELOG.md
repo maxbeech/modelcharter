@@ -1,5 +1,37 @@
 # Changelog
 
+## 2026-08-03: GEO audit fixes (WebSite schema, AI-crawler robots rules, llms.txt pricing)
+
+Machine-readability audit for AI assistants/answer engines (GEO), following
+the 2026-07-10 general SEO audit (90/100, no quick-win gaps). Found and
+fixed four surface-level gaps a keyword/meta-tag audit would not catch:
+
+- **JSON-LD.** Added a `WebSite` node (`lib/seo.ts` `websiteLd()`, rendered
+  site-wide in `app/layout.tsx` next to the existing `Organization` node).
+  `SoftwareApplication`, `FAQPage`, `Dataset`, `Article` and `BreadcrumbList`
+  were already present and validated as well-formed JSON on every page type
+  checked.
+- **robots.txt.** `GPTBot`, `ChatGPT-User`, `ClaudeBot`, `Claude-User`,
+  `Claude-SearchBot`, `PerplexityBot`, `Perplexity-User`, `Google-Extended`,
+  `CCBot`, `Applebot-Extended` and `Amazonbot` are now named explicitly with
+  the same allow rule as `*`, so AI-crawler access is deliberate rather than
+  only implicit, and can't be silently narrowed by a future edit to the
+  wildcard group.
+- **llms.txt.** Added a `## Plans` section linking `/pricing` and listing
+  the Free/Team/Business tiers from the existing `PLANS` source of truth;
+  it previously described only the free tools.
+- **Freshness.** `SITE.updated` (drives `sitemap.xml` `lastmod` and
+  llms.txt's `Updated:` line) was bumped from 2026-06-26 to 2026-07-27; it
+  had gone stale by over a month across two substantial blog content pushes
+  (2026-07-19, 2026-07-27) that never touched it.
+- **No public API/MCP server found** to audit as an "agent usability"
+  surface; the product is a web dashboard + static marketing/content site.
+
+Content coverage against `docs/seo_geo_content_plan.md`'s "Zero-Click & GEO
+Champions" table was checked and is essentially complete (matching blog
+posts exist for nist-ai-rmf, eu-ai-act, hipaa/gdpr, chatgpt/copilot privacy,
+etc.), so no new content was added.
+
 ## 2026-07-19: 15 new blog posts across Academy, News and Reviews
 
 Added 15 fully-written, publication-ready posts on top of the existing 44,

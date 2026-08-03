@@ -45,7 +45,7 @@ guessed. Risk scoring is transparent and deterministic (`lib/risk.ts`).
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm test         # unit tests (policy, risk, tools, seo, frameworks, site, no-em-dash)
+npm test         # unit tests (policy, risk, tools, seo, frameworks, site, registry, fact-signature, llms-txt, no-em-dash)
 npm run build    # production build
 ```
 
