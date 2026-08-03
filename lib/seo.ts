@@ -42,6 +42,16 @@ export function organizationLd() {
   };
 }
 
+export function websiteLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE.name,
+    url: SITE.url,
+    description: SITE.shortDescription,
+  };
+}
+
 export function softwareAppLd(name: string, description: string, path: string) {
   return {
     "@context": "https://schema.org",

@@ -1,4 +1,4 @@
-import { pageMeta, faqLd, breadcrumbLd, datasetLd, softwareAppLd, articleLd, organizationLd } from "../lib/seo.ts";
+import { pageMeta, faqLd, breadcrumbLd, datasetLd, softwareAppLd, articleLd, organizationLd, websiteLd } from "../lib/seo.ts";
 import { eq, ok, done } from "./_assert.mts";
 
 // pageMeta: canonical + title templating.
@@ -32,5 +32,11 @@ ok(ds.measurementTechnique.includes("22"), "datasetLd notes the count");
 eq((softwareAppLd("n", "d", "/") as any)["@type"], "SoftwareApplication", "softwareAppLd type");
 eq((articleLd({ title: "t", description: "d", path: "/blog/x", date: "2026-06-18" }) as any)["@type"], "Article", "articleLd type");
 eq((organizationLd() as any)["@type"], "Organization", "organizationLd type");
+
+// websiteLd identifies the site itself (distinct from Organization) for GEO.
+const ws = websiteLd() as any;
+eq(ws["@type"], "WebSite", "websiteLd type");
+eq(ws.url, "https://www.modelcharter.com", "websiteLd url is the canonical site url");
+ok(!!ws.name && !!ws.description, "websiteLd carries name + description");
 
 done("seo");

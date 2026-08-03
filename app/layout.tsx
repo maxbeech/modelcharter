@@ -4,7 +4,7 @@ import Link from "next/link";
 import "./globals.css";
 import { SITE, NAV } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
-import { organizationLd } from "@/lib/seo";
+import { organizationLd, websiteLd } from "@/lib/seo";
 import { LogoLink, SignalMark } from "@/components/brand";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
@@ -97,6 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
       <body>
         <JsonLd data={organizationLd()} />
+        <JsonLd data={websiteLd()} />
         <Header />
         <main>{children}</main>
         <Footer />

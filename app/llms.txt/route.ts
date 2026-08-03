@@ -1,4 +1,4 @@
-import { SITE } from "@/lib/site";
+import { SITE, PLANS } from "@/lib/site";
 import { TOOLS } from "@/lib/ai-tools";
 import { scoreTool } from "@/lib/risk";
 import { FRAMEWORKS } from "@/lib/frameworks";
@@ -27,6 +27,14 @@ export function GET() {
   lines.push(`- Per-tool answers: ${SITE.url}/tools/{slug}/{hipaa|gdpr|soc2|iso27001|training}, e.g. "Is ChatGPT HIPAA compliant?" at ${SITE.url}/tools/chatgpt/hipaa`);
   lines.push(`- Comparisons: ${SITE.url}/compare/{tool-a}-vs-{tool-b}`);
   lines.push(`- Glossary (definitions of HIPAA BAA, SOC 2, GDPR DPA, subprocessors and more): ${SITE.url}/glossary`, "");
+
+  lines.push("## Plans");
+  lines.push(`- Pricing: ${SITE.url}/pricing`);
+  for (const plan of PLANS) {
+    const price = plan.price === 0 ? "free" : `$${plan.price}/mo`;
+    lines.push(`- ${plan.name} (${price}): ${plan.blurb}`);
+  }
+  lines.push("");
 
   lines.push("## AI Tool Risk Directory (risk for default at-work use)");
   for (const t of TOOLS) {

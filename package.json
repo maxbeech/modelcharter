@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx test/policy.test.mts && tsx test/risk.test.mts && tsx test/tools.test.mts && tsx test/seo.test.mts && tsx test/frameworks.test.mts && tsx test/site.test.mts && tsx test/registry.test.mts && tsx test/fact-signature.test.mts && tsx test/no-em-dash.test.mts"
+    "test": "tsx test/policy.test.mts && tsx test/risk.test.mts && tsx test/tools.test.mts && tsx test/seo.test.mts && tsx test/frameworks.test.mts && tsx test/site.test.mts && tsx test/registry.test.mts && tsx test/fact-signature.test.mts && tsx test/llms-txt.test.mts && tsx test/no-em-dash.test.mts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",
