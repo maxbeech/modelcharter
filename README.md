@@ -1,5 +1,9 @@
 # ModelCharter
 
+## Observability
+
+Sentry records production errors, logs, request failures and optional user feedback when `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` are configured.
+
 **Charter your AI at work.** AI governance for teams without a compliance
 department: generate an AI usage policy, see which AI tools are safe to use, and
 track that your team has read the rules.

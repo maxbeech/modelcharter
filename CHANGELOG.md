@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-08-27: Production observability
+
+- Added Sentry error, log, App Router request-failure and user-feedback monitoring.
+
 ## 2026-08-03: GEO audit fixes (WebSite schema, AI-crawler robots rules, llms.txt pricing)
 
 Machine-readability audit for AI assistants/answer engines (GEO), following
