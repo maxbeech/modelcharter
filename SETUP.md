@@ -54,6 +54,11 @@ Two recurring prices (Team $49, Business $149) and a webhook at
 updates `orgs.plan` via the service-role client. Each upgrade button disables
 itself when its price is not configured, so it never dead-ends.
 
+Checkout returns to the signed-in dashboard with its session ID. The dashboard
+checks the session belongs to that organisation and is funded before reconciling
+the plan from Stripe, covering delayed webhook delivery. Unfunded sessions never
+grant access, and a failed entitlement write returns 5xx to Stripe for retry.
+
 ## Local dev
 
 ```bash

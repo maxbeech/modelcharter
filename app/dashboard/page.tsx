@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { ensureOrg, getRegister, getPolicies, getAttestations } from "@/lib/workspace";
 import { getAlerts } from "@/lib/alerts";
+import { reconcileCheckoutSession } from "@/lib/billing/entitlements";
+import { redirect } from "next/navigation";
 import { actionMarkAlertsRead } from "./actions";
 
-export default async function DashboardHome() {
+export default async function DashboardHome({ searchParams }: { searchParams: Promise<{ upgraded?: string; session_id?: string }> }) {
   const org = await ensureOrg();
   if (!org) return null;
+  const { session_id: sessionId } = await searchParams;
+  if (sessionId && await reconcileCheckoutSession(sessionId, org.id)) redirect("/dashboard?upgraded=1");
   const [register, policies, attestations, alerts] = await Promise.all([
     getRegister(org.id), getPolicies(org.id), getAttestations(org.id), getAlerts(org.id, 8),
   ]);

@@ -32,6 +32,15 @@ Champions" table was checked and is essentially complete (matching blog
 posts exist for nist-ai-rmf, eu-ai-act, hipaa/gdpr, chatgpt/copilot privacy,
 etc.), so no new content was added.
 
+## Unreleased - 2026-08-26
+
+- Subscription Checkout now returns its session ID to the signed-in dashboard.
+  The return path verifies the organisation, Stripe-funded state, and live
+  subscription before repairing a delayed webhook entitlement update.
+- The webhook accepts only funded Checkout sessions, maps subscription status
+  to Team/Business/Free correctly, and returns 5xx if an entitlement write
+  fails so Stripe retries instead of silently losing a paid account.
+
 ## 2026-07-19: 15 new blog posts across Academy, News and Reviews
 
 Added 15 fully-written, publication-ready posts on top of the existing 44,

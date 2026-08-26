@@ -32,8 +32,8 @@ export async function POST(request: NextRequest) {
     // session-level copy the webhook can't tell Team from Business and defaults to Team.
     metadata: { org_id: org.id, plan },
     subscription_data: { trial_period_days: 14, metadata: { org_id: org.id, plan } },
-    success_url: `${SITE.url}/dashboard?upgraded=1`,
+    success_url: `${SITE.url}/dashboard?upgraded=1&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${SITE.url}/pricing`,
-  });
+  }, { idempotencyKey: `checkout:${org.id}:${plan}` });
   return NextResponse.redirect(session.url ?? `${SITE.url}/pricing`, { status: 303 });
 }

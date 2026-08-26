@@ -22,6 +22,10 @@ static/ISR (no backend). The account layer runs on **Supabase** (Postgres + Auth
 for billing. A daily Vercel **cron** (`/api/cron/sync-alerts`) snapshots the tool
 facts and raises change alerts. See [SETUP.md](./SETUP.md).
 
+Stripe remains the billing source of truth: the signed-in Checkout return verifies
+the completed, funded session and repairs the organisation entitlement if a
+webhook was delayed. Webhook failures return 5xx so Stripe can retry them.
+
 Risk scoring (`lib/risk.ts`) is a transparent weighted average over only the
 signals we could verify, rescaled to 0-100, with the unknowns reported as
 coverage so a thinly-evidenced tool can never earn the best band.
