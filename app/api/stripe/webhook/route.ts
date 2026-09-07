@@ -3,6 +3,7 @@ import { getStripe } from "@/lib/stripe";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import type Stripe from "stripe";
 import { checkoutSessionIsFunded, planForSubscription } from "@/lib/stripe-events";
+import { guardStripeEvent } from "../../../../lib/gate";
 
 // Stripe webhook: updates the org's plan. Verifies the signature and writes with
 // the service-role client (there is no user session in a webhook). Env-gated.
@@ -19,6 +20,16 @@ export async function POST(request: NextRequest) {
     event = stripe.webhooks.constructEvent(body, sig, secret);
   } catch (err) {
     return NextResponse.json({ error: `signature: ${(err as Error).message}` }, { status: 400 });
+  }
+
+  // A Stripe webhook endpoint is registered on an ACCOUNT, so on a shared
+  // account this handler is delivered every other product's events too.
+  // Establish that this one is OURS — by price id, never by metadata or
+  // customer — before anything below acts on it. See lib/gate.ts.
+  const ownership = await guardStripeEvent(stripe, event);
+  if (!ownership.ok) {
+    console.log(ownership.message);
+    return NextResponse.json({ received: true, ignored: ownership.reason });
   }
 
   try {
