@@ -2883,6 +2883,56 @@ export const POSTS: Post[] = [
       { q: "Do we need to implement all four NIST AI RMF functions?", a: "Not immediately. Most small teams get meaningful value from Govern and a basic Map, and grow into Measure and Manage as AI use becomes more complex." },
     ],
   },
+  {
+    slug: "ai-risk-management-framework-guide",
+    title: "AI Risk Management Framework: How to Choose (and Build) One",
+    date: "2026-09-07",
+    description: "Compare NIST AI RMF, ISO 42001/23894 and a lightweight in-house risk register, then build the one your team can actually run.",
+    keyword: "ai risk management framework",
+    category: "Academy",
+    author: "ModelCharter Team",
+    tldr: [
+      "An AI risk management framework is a repeatable method for identifying, scoring and treating AI risk - not a single document.",
+      "It's narrower than a full AI governance framework: it's the scoring method that feeds your policy, tool registry and approval process.",
+      "NIST AI RMF and ISO 42001/23894 are the two published options; most small teams need neither in full.",
+      "A five-column risk register - category, example, likelihood, impact, treatment - covers most of what an auditor or enterprise buyer asks for.",
+      "IBM's 2026 CIO survey found 77% of organisations say AI adoption is outpacing their ability to govern it.",
+    ],
+    body: [
+      { p: "An AI risk management framework is a repeatable method for identifying which AI-related risks your organisation actually faces, scoring how likely and how damaging each one is, and deciding what to do about it before it becomes an incident. It isn't a single document you write once; it's a process you re-run every time a new tool shows up or an existing one changes its terms. The three common starting points are the NIST AI RMF, ISO/IEC 42001 paired with ISO/IEC 23894, or a lightweight in-house risk register built for teams that don't need a certificate. This guide compares the three, explains how a risk management framework differs from a full governance programme, and shows how to build a version one person can actually run." },
+      { h: "What a risk management framework actually contains", p: "Strip away the branding on any of the published options and five parts remain. Identification: a list of the AI systems and tools in use, and the specific ways each could go wrong - a biased screening recommendation, a hallucinated figure in a client report, confidential data leaking into a training set. Categorisation: grouping risks by type, typically data privacy, accuracy or bias, security, regulatory exposure and reputational harm. Scoring: rating each risk's likelihood and impact, usually on a simple 1-5 scale, so a low-probability catastrophe and a frequent minor annoyance don't get treated the same way. Treatment: deciding whether to accept, mitigate, avoid or transfer each risk, and recording that decision somewhere findable. Review: a fixed cadence - quarterly is typical - for re-scoring risks and adding new ones as tools change. Skip the scoring step and every risk looks equally urgent; skip the review step and the register is accurate for exactly one day." },
+      { h: "How this differs from an AI governance framework", p: "The two terms get used interchangeably, which causes real confusion. An [AI governance framework](/blog/ai-governance-framework-guide) is the organisation-wide programme: a usage policy, a tool registry, an approval process and staff attestation. A risk management framework is narrower - it's the specific method that produces the risk ratings feeding into that programme, particularly the registry entries and the [AI risk assessment](/blog/ai-risk-assessment-guide) run on each new tool before it's approved. Put simply, governance is the container; risk management is the scoring method that decides what goes in the 'approved,' 'restricted' and 'blocked' columns of that container. A team can have a governance framework with a weak risk method behind it (approvals based on gut feel) or a rigorous risk method with no governance wrapped around it (a spreadsheet nobody circulates). Neither works well alone." },
+      { h: "Option one: NIST AI RMF", p: "The [NIST AI Risk Management Framework](/blog/nist-ai-risk-management-framework) is voluntary, US-originated guidance built around four functions: Govern, Map, Measure and Manage. It doesn't lead to a certificate, and [NIST's own framework page](https://www.nist.gov/itl/ai-risk-management-framework) is explicit that the goal is to 'better manage risks to individuals, organizations, and society associated with artificial intelligence,' not to produce a pass/fail audit. Its main strength for a risk-management purpose specifically is the Measure function, which gives structured suggestions for how to actually quantify and monitor AI risk once you've mapped where it sits. Most small teams that reference NIST borrow Measure's categories rather than adopting all four functions formally." },
+      { h: "Option two: ISO 42001 and ISO 23894", p: "[ISO/IEC 42001](/blog/iso-42001-guide) is the certifiable AI management-system standard; risk assessment sits inside its Annex A controls rather than standing alone. [ISO/IEC 23894](/blog/iso-23894-ai-risk-guidance), published in 2023, is the more specific companion - AI risk-management guidance meant to sit alongside the general-purpose [ISO 31000](https://www.iso.org/standard/65694.html) risk standard, giving AI-specific categories (data quality, third-party AI components, automation bias) that ISO 31000 doesn't name directly. Together they're the route to take if a customer contract, an insurer or a regulator specifically asks for a certifiable standard rather than a documented internal process. Certification realistically takes months and a real budget, so it's worth confirming someone is actually asking before committing to it." },
+      { h: "Option three: a lightweight in-house register", p: "For a team under roughly 100 people with no certification requirement on the table, a spreadsheet with five columns does most of the job: risk category, a concrete example, likelihood (1-5), impact (1-5), and the agreed treatment. Populate it from your existing [AI Tool Risk Directory](/tools) lookups rather than starting from a blank page - each tool's data-training default and retention window map directly onto the 'data privacy' row. The table below shows what a minimal version looks like for five common categories; most teams can build their first draft in an afternoon and refine it as real tools get added." },
+      { h: "Why this is showing up on more procurement checklists now", p: "This isn't a theoretical exercise. IBM's Institute for Business Value surveyed 2,000 CIOs and CTOs across 33 countries between January and April 2026 and found that 77% report AI adoption is outpacing their organisation's ability to govern it, with the average organisation logging 54 AI-agent-related incidents in the past year (see [IBM's June 2026 study](https://newsroom.ibm.com/2026-06-08-new-ibm-study-finds-cios-and-ctos-face-growing-ai-control-gap-as-enterprise-deployment-scales)). Separately, Grant Thornton's 2026 AI Impact Survey of 950 business leaders, run between 23 February and 18 March 2026, found 78% lack strong confidence they could pass an independent AI governance audit within ninety days (see [Grant Thornton's 2026 AI Impact Survey](https://www.grantthornton.com/services/advisory-services/artificial-intelligence/2026-ai-impact-survey)). Neither statistic is about large enterprises alone - both surveys reflect a gap that shows up just as often when a small vendor is asked, mid-sales-process, how it manages AI risk." },
+      { h: "Which one should a small or mid-sized team pick?", p: "Use the trigger, not the ambition, to decide. If nobody has asked for a specific framework, build the lightweight register first - it's the fastest way to have a genuine answer ready. If an enterprise customer's security questionnaire specifically references NIST, borrow its Measure categories and language so your answers map cleanly onto their questions. If a contract, insurer or regulator asks for a certifiable standard by name, that's the trigger for ISO 42001, and even then the risk-register habit you've already built makes the Annex A risk-assessment clause far faster to satisfy, since you're formalising something that already exists rather than starting from zero." },
+      { h: "A worked example", p: "A 40-person fintech startup was asked, mid-way through a partnership deal, to describe its 'AI risk management framework' in writing. Nobody there had built one, but the team had already been keeping an informal list of the AI tools it used for customer support drafting and internal reporting. Over two days, they turned that list into the five-column register above, scored each tool, and mapped two entries against NIST's Measure categories because the partner's own questionnaire quoted NIST language directly. That register, not a purchased framework or a consultant's report, was what satisfied the partner's review - proof that the risk had been thought through, not proof of a specific brand name on the document." },
+      { h: "Keeping it alive", p: "A risk register that's accurate on the day it's written and stale six months later is worse than useless, because it creates false confidence. Put a specific date in the calendar - quarterly is realistic for most teams - to re-score every row and add anything new. Tie the review to whoever already owns your [AI usage policy](/ai-usage-policy-generator), rather than creating a separate role, since the two documents should move together: a newly approved tool belongs in both the registry and the risk register on the same day, not weeks apart." },
+    ],
+    table: {
+      caption: "A minimal AI risk register",
+      headers: ["Risk category", "Example", "Typical treatment"],
+      rows: [
+        ["Data privacy", "Customer data entered into a free-tier chatbot", "Restrict to business tiers with no training on inputs"],
+        ["Accuracy / bias", "AI-drafted content or scores used without review", "Require human sign-off before anything customer-facing ships"],
+        ["Security", "Browser extension with broad account access", "Vet permissions before approval; revoke if unused"],
+        ["Regulatory", "EU-facing use with no AI-literacy record", "Log training and acknowledgement under the AI usage policy"],
+        ["Reputational", "Vendor changes data-training defaults without notice", "Quarterly check of vendor terms via the tool register"],
+      ],
+    },
+    quote: {
+      text: "Better manage risks to individuals, organizations, and society associated with artificial intelligence.",
+      attribution: "NIST AI Risk Management Framework 1.0",
+    },
+    faqs: [
+      { q: "Is an AI risk management framework the same as an AI governance framework?", a: "No. A governance framework is the organisation-wide programme - policy, tool registry, approval process, attestation. A risk management framework is the narrower scoring method that feeds risk ratings into that programme, particularly the registry and each tool's risk assessment." },
+      { q: "Do we need ISO 42001 to have a working AI risk management framework?", a: "No. ISO 42001 is one certifiable route among several. A documented risk register with categories, scoring and a review cadence satisfies most audit and procurement questions without pursuing certification." },
+      { q: "How often should an AI risk register be reviewed?", a: "Quarterly for most teams, plus immediately whenever a new AI tool is approved or an existing vendor changes its data-handling or training terms." },
+      { q: "What's the difference between NIST AI RMF and ISO/IEC 23894?", a: "NIST AI RMF is voluntary US-originated guidance built around four broad functions and isn't certifiable. ISO/IEC 23894, published in 2023, gives more specific AI risk categories meant to sit alongside the general ISO 31000 risk standard and ISO 42001 certification." },
+      { q: "Can one person run an AI risk management framework without a dedicated risk team?", a: "Yes, if it's kept lightweight. A five-column spreadsheet, a quarterly review date, and one named owner covers what most small and mid-sized teams are actually asked to demonstrate." },
+    ],
+  },
 ];
 
 const POST_IMAGES: Record<string, PostImage> = {
@@ -3239,6 +3289,12 @@ const POST_IMAGES: Record<string, PostImage> = {
     alt: "Compass on grass symbolising a roadmap for implementing the NIST AI RMF playbook",
     author: "Jordan Madrid",
     authorUrl: "https://unsplash.com/@jordanmadrid",
+  },
+  "ai-risk-management-framework-guide": {
+    src: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    alt: "Team reviewing a risk register during an AI risk management framework meeting",
+    author: "Dylan Gillis",
+    authorUrl: "https://unsplash.com/@mainermedia",
   },
 };
 

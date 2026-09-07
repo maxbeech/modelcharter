@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 >
                   {p.image.author}
                 </a>{" "}
-                / Pexels
+                / {p.image.src.includes("unsplash.com") ? "Unsplash" : "Pexels"}
               </p>
             </div>
           )}
