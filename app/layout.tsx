@@ -6,6 +6,7 @@ import { SITE, NAV } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
 import { organizationLd, websiteLd } from "@/lib/seo";
 import { LogoLink, SignalMark } from "@/components/brand";
+import { OpenHelmAnalytics } from "../lib/openhelm-analytics";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const fraunces = Fraunces({
@@ -101,6 +102,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main>{children}</main>
         <Footer />
+        <OpenHelmAnalytics />
       </body>
     </html>
   );
