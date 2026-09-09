@@ -52,7 +52,7 @@ export const LEGAL: Record<string, LegalDoc> = {
       { h: "Liability", p: [
         "The service is provided \"as is\". To the extent permitted by law, ModelCharter is not liable for indirect or consequential damages arising from your use of it.",
       ] },
-      { h: "Contact", p: ["Questions? Email hello@modelcharter.com."] },
+      { h: "Contact", p: ["Questions? Email hello@mail.modelcharter.com."] },
     ],
   },
   security: {

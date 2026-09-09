@@ -10,7 +10,7 @@ export const SITE = {
     "ModelCharter helps small and mid-sized teams govern AI. Generate an AI usage policy quickly, see which AI tools are safe to use, and check your team has read the rules.",
   description:
     "ModelCharter is the AI governance tool for companies without a compliance team. Build a tailored AI usage policy with the free generator, look up how 60+ popular AI tools handle your data in the AI Tool Risk Directory, map your obligations under the EU AI Act, NIST AI RMF, ISO 42001 and SOC 2, and keep a register of which tools your team is approved to use.",
-  email: "hello@modelcharter.com",
+  email: "hello@mail.modelcharter.com",
   // Stable last-updated date for sitemap lastmod. Bump this when a
   // site-wide content push ships (new posts, catalog changes), not on
   // every commit; last bumped for the 2026-07-27 blog/citation update.
