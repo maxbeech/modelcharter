@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased (2026-09-28): Sentry backlog, unknown Server Action noise
+
+Fixes MODELCHARTER_WEB-2 (`Failed to find Server Action` on `POST /page`).
+Not an application bug: the home page renders no Server Action (the actions in
+`app/auth-actions.ts`, `app/dashboard/actions.ts` and `app/attest/[token]/actions.ts`
+are only wired to the login/signup, dashboard and attestation
+forms, each of which POSTs to its own page URL). The 6 events were one
+2-second burst to `/index` (not a URL any ModelCharter link produces) from a single
+Ashburn/us-east-1 datacenter address with a spoofed browser UA, 0 users. That is
+a scanner replaying a garbage `Next-Action` id; Next rejects it with this exact
+message before any app code runs. The same message is also what a genuinely
+stale browser tab produces after a deploy, so it is now dropped via
+`ignoreErrors` (`lib/sentry-filters.ts`, wired into `sentry.server.config.ts`
+and `sentry.edge.config.ts`) instead of sitting in the backlog. Trade-off: real
+skew is no longer visible in Sentry either. **Manual follow-up**: enable Vercel
+Skew Protection for this project (Settings, Advanced, Skew Protection; needs a
+Pro/Enterprise plan and a redeploy) to cover the genuine-skew case; Next.js 16
+needs no `next.config` change for it.
+
 ## 2026-08-27: Production observability
 
 - Added Sentry error, log, App Router request-failure and user-feedback monitoring.
