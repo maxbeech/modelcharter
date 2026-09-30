@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased (2026-09-30): hosting moves from Vercel to Helm7
+
+- Hosting is Helm7 (self-hosted, Supabase unchanged). `vercel.json` is gone; the
+  daily alerts schedule (`0 6 * * *`) is now a Helm7 cron service that calls
+  `/api/cron/sync-alerts` from inside the web service with
+  `Authorization: Bearer $CRON_SECRET`.
+- `npm start` honours `$PORT`. `automaticVercelMonitors` dropped from the Sentry
+  build config (it registers Vercel cron monitors, which no longer exist).
+- The alerts cron compares its bearer token in constant time
+  (`lib/cron-auth.ts`) and stays fail-closed: 503 with no `CRON_SECRET`, 401 on a
+  wrong token.
+- Privacy and Security pages name Helm7 as the host instead of Vercel.
+- `test/no-vercel.test.mts` keeps Vercel packages, scripts, `vercel.json`,
+  `maxDuration` and any mention of Vercel out of application code.
+- The Skew Protection follow-up below no longer applies.
+
 ## Unreleased (2026-09-28): Sentry backlog, unknown Server Action noise
 
 Fixes MODELCHARTER_WEB-2 (`Failed to find Server Action` on `POST /page`).

@@ -2,21 +2,20 @@ import { NextResponse } from "next/server";
 import { TOOLS } from "@/lib/ai-tools";
 import { factSignature, diffFactSignatures, describeFactChanges } from "@/lib/fact-signature";
 import { createAdminSupabase } from "@/lib/supabase/admin";
+import { checkCronAuth } from "@/lib/cron-auth";
 
 // Daily cron: snapshot every tool's watched facts, diff against the last
 // snapshot, and raise a change alert for any team tracking a tool whose facts
 // moved. Fail-closed: refuses to run unless CRON_SECRET is set and matches, so
-// the endpoint can never be triggered anonymously. Vercel injects the
-// Authorization: Bearer <CRON_SECRET> header on scheduled invocations.
+// the endpoint can never be triggered anonymously. The Helm7 cron service sends
+// Authorization: Bearer <CRON_SECRET> on scheduled invocations.
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  const secret = process.env.CRON_SECRET;
-  if (!secret) return NextResponse.json({ ok: false, reason: "unconfigured" }, { status: 503 });
-  if (request.headers.get("authorization") !== `Bearer ${secret}`) {
-    return NextResponse.json({ ok: false, reason: "unauthorized" }, { status: 401 });
-  }
+  const auth = checkCronAuth(request.headers.get("authorization"), process.env.CRON_SECRET);
+  if (auth === "unconfigured") return NextResponse.json({ ok: false, reason: "unconfigured" }, { status: 503 });
+  if (auth === "unauthorized") return NextResponse.json({ ok: false, reason: "unauthorized" }, { status: 401 });
   const admin = createAdminSupabase();
   if (!admin) return NextResponse.json({ ok: false, reason: "no service role key" }, { status: 503 });
 

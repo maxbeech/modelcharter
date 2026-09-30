@@ -24,7 +24,7 @@ table is scoped to the caller's org by RLS, not by hand-written filters.
    provider configured in Supabase).
 4. Copy the keys from **Project Settings -> API** into the env vars below.
 
-Env vars (set in Vercel and, for local dev, `.env.local`):
+Env vars (set as Helm7 variables and, for local dev, `.env.local`):
 
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (publishable, safe
   in the browser; RLS is what protects the data).
@@ -39,11 +39,11 @@ The Supabase clients live in `lib/supabase/` (`server`, `client`, `admin`,
 
 `app/api/cron/sync-alerts` snapshots every tool's watched facts daily, diffs them
 against the last snapshot, and raises an alert for any team watching a tool whose
-facts changed. It is scheduled in `vercel.json` (`0 6 * * *`).
+facts changed. It runs as a Helm7 cron service (`0 6 * * *`).
 
-- Set `CRON_SECRET` in Vercel. The route **fails closed**: it returns 503 unless
+- `CRON_SECRET` is a Helm7 variable. The route **fails closed**: it returns 503 unless
   `CRON_SECRET` is set and the request carries `Authorization: Bearer <CRON_SECRET>`.
-  Vercel injects that header on scheduled runs automatically.
+  The Helm7 cron service sends that header on scheduled runs.
 - The first run just establishes the baseline snapshot (no alerts).
 
 ## Billing: Stripe
@@ -69,4 +69,3 @@ npm test                     # unit tests
 npm run build                # production build
 ```
 
-`vercel env pull` can populate `.env.local` from the Vercel project instead.

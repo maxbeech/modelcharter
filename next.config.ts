@@ -23,5 +23,5 @@ export default withSentryConfig(nextConfig, {
   project: "modelcharter_web",
   silent: true,
   widenClientFileUpload: true,
-  webpack: { treeshake: { removeDebugLogging: true }, automaticVercelMonitors: true },
+  webpack: { treeshake: { removeDebugLogging: true } },
 });

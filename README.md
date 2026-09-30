@@ -20,10 +20,10 @@ track that your team has read the rules.
 
 ## Stack
 
-Next.js 16 (App Router, TS) + Tailwind 4 on Vercel. The public site is fully
+Next.js 16 (App Router, TS) + Tailwind 4 on Helm7. The public site is fully
 static/ISR (no backend). The account layer runs on **Supabase** (Postgres + Auth
 + Row Level Security) with email+password auth via `@supabase/ssr`, and **Stripe**
-for billing. A daily Vercel **cron** (`/api/cron/sync-alerts`) snapshots the tool
+for billing. A daily Helm7 **cron** (`/api/cron/sync-alerts`) snapshots the tool
 facts and raises change alerts. See [SETUP.md](./SETUP.md).
 
 Stripe remains the billing source of truth: the signed-in Checkout return verifies

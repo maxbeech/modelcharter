@@ -14,8 +14,8 @@
  * first-party form and not real deployment skew, and Next answers it with this
  * exact message before any of our code runs. The same message is also what a
  * genuinely stale browser tab produces after a deploy; that case is not
- * actionable from code either (the fix is Vercel Skew Protection, a project
- * setting), so the message is dropped either way instead of sitting in the
+ * actionable from code either (the fix would be pinning users to one
+ * deployment, which is a platform setting), so the message is dropped either way instead of sitting in the
  * backlog as an unactionable ghost.
  *
  * Wired into `ignoreErrors` in sentry.server.config.ts / sentry.edge.config.ts.

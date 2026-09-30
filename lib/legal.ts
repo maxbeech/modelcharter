@@ -23,7 +23,7 @@ export const LEGAL: Record<string, LegalDoc> = {
         "We do not sell your data. We do not use your workspace content to train AI models. We do not share your data with advertisers.",
       ] },
       { h: "Sub-processors", p: [
-        "We use Vercel (hosting), Neon (database) and Stripe (payments) as data processors. Each is bound by its own data-processing terms.",
+        "We use Helm7 (hosting), Neon (database) and Stripe (payments) as data processors. Each is bound by its own data-processing terms.",
       ] },
       { h: "Your rights", p: [
         "You can access, export or delete your account data at any time by emailing us. We delete account data within 30 days of an account being closed.",
@@ -68,7 +68,7 @@ export const LEGAL: Record<string, LegalDoc> = {
         "Each workspace's data is isolated and scoped to its members. Sessions use signed, httpOnly cookies. We follow the principle of least privilege for internal access.",
       ] },
       { h: "Infrastructure", p: [
-        "We build on Vercel, Neon and Stripe, providers with their own SOC 2 and ISO programmes. Payment card data is handled entirely by Stripe; we never see or store card numbers.",
+        "We host on Helm7 and build on Neon and Stripe. Neon and Stripe have their own SOC 2 and ISO programmes; Helm7 does not hold one yet. Payment card data is handled entirely by Stripe; we never see or store card numbers.",
       ] },
       { h: "Responsible disclosure", p: [
         "Found a vulnerability? Please email security@modelcharter.com. We'll acknowledge promptly and won't pursue researchers acting in good faith.",
