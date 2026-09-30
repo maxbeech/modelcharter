@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { generatePolicy, policyToMarkdown, type PolicyInput, type Stance } from "@/lib/policy";
+import { analyticsEvents, reportAction, trackEvent, trackFailure, type ActionResult } from "@/lib/analytics-events";
 
 const INDUSTRIES = ["General business", "Software / SaaS", "Healthcare", "Finance", "Legal", "Education", "Marketing / agency", "E-commerce / retail", "Government / public sector", "Non-profit"];
 const REGS = ["EU AI Act", "GDPR", "HIPAA", "SOC 2", "ISO 42001"];
@@ -25,7 +26,7 @@ function Toggle({ label, hint, value, onChange }: { label: string; hint?: string
 const chip = (active: boolean) => `rounded-full border px-3 py-1 text-xs transition-colors ${active ? "border-brand-500 bg-brand-50 text-brand-800" : "border-line text-ink-soft hover:border-ink-faint"}`;
 const inputClass = "w-full rounded-lg border border-line-strong bg-white px-3 py-2 text-sm focus:border-brand-500 focus:outline-none";
 
-export function PolicyGenerator({ today: todayProp, toolNames, saveAction }: { today: string; toolNames: string[]; saveAction?: (fd: FormData) => void | Promise<void> }) {
+export function PolicyGenerator({ today: todayProp, toolNames, saveAction }: { today: string; toolNames: string[]; saveAction?: (fd: FormData) => Promise<ActionResult> }) {
   // Seed from the server value (no hydration mismatch), then correct to the
   // real current date after mount so a long-cached page still dates correctly.
   const [today, setToday] = useState(todayProp);
@@ -59,8 +60,22 @@ export function PolicyGenerator({ today: todayProp, toolNames, saveAction }: { t
     const a = document.createElement("a");
     a.href = url; a.download = `${(companyName || "ai-usage").toLowerCase().replace(/[^a-z0-9]+/g, "-")}-ai-usage-policy.md`;
     a.click(); URL.revokeObjectURL(url);
+    trackEvent(analyticsEvents.policyExported, { method: "download" });
   }
-  async function copy() { await navigator.clipboard.writeText(markdown); setCopied(true); setTimeout(() => setCopied(false), 1500); }
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(markdown);
+    } catch (error) {
+      trackFailure(analyticsEvents.policyExportFailed, "clipboard_denied", { method: "copy" });
+      throw error;
+    }
+    trackEvent(analyticsEvents.policyExported, { method: "copy" });
+    setCopied(true); setTimeout(() => setCopied(false), 1500);
+  }
+  function print() {
+    trackEvent(analyticsEvents.policyExported, { method: "print" });
+    window.print();
+  }
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,380px)_1fr]">
@@ -117,9 +132,13 @@ export function PolicyGenerator({ today: todayProp, toolNames, saveAction }: { t
           <div className="flex flex-wrap gap-2">
             <button onClick={copy} className="rounded-full border border-line-strong px-3.5 py-1.5 text-sm font-medium text-ink transition-colors hover:border-ink-faint hover:bg-paper">{copied ? "Copied!" : "Copy Markdown"}</button>
             <button onClick={download} className="rounded-full border border-line-strong px-3.5 py-1.5 text-sm font-medium text-ink transition-colors hover:border-ink-faint hover:bg-paper">Download .md</button>
-            <button onClick={() => window.print()} className="rounded-full bg-brand-700 px-3.5 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-brand-800">Save as PDF</button>
+            <button onClick={print} className="rounded-full bg-brand-700 px-3.5 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-brand-800">Save as PDF</button>
             {saveAction && (
-              <form action={saveAction}>
+              <form action={(fd) => reportAction(
+                () => saveAction(fd),
+                { ok: analyticsEvents.policySaved, failed: analyticsEvents.policySaveFailed },
+                (r) => ({ version: r.version }),
+              ).then(() => undefined)}>
                 <input type="hidden" name="content_md" value={markdown} />
                 <input type="hidden" name="input_json" value={JSON.stringify(input)} />
                 <button type="submit" className="rounded-full bg-ink px-3.5 py-1.5 text-sm font-semibold text-white transition-opacity hover:opacity-90">Save version to workspace</button>

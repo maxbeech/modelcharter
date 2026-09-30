@@ -1,6 +1,7 @@
 import { ensureOrg } from "@/lib/workspace";
 import { isStripeConfigured, planAvailable } from "@/lib/stripe";
 import { PLANS } from "@/lib/site";
+import { CheckoutForm } from "@/components/CheckoutForm";
 
 export default async function BillingPage() {
   const org = await ensureOrg();
@@ -38,12 +39,7 @@ export default async function BillingPage() {
               <h3 className="font-display text-lg font-semibold text-ink">{p.name}</h3>
               <p className="mt-1 font-display text-3xl font-semibold text-ink">${p.price}<span className="text-sm font-normal text-ink-faint"> / {p.cadence}</span></p>
               <ul className="mt-4 space-y-1.5 text-sm text-ink-soft">{p.features.slice(0, 4).map((f) => <li key={f} className="flex gap-2"><span className="text-brand-600">·</span>{f}</li>)}</ul>
-              <form action="/api/stripe/checkout" method="post" className="mt-5">
-                <input type="hidden" name="plan" value={p.id} />
-                <button type="submit" disabled={!available || current} className="w-full rounded-full bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-50">
-                  {current ? "Current plan" : `Upgrade to ${p.name}`}
-                </button>
-              </form>
+              <CheckoutForm plan={p.id} label={current ? "Current plan" : `Upgrade to ${p.name}`} disabled={!available || current} />
               {!available && !current && <p className="mt-2 text-center text-xs text-ink-faint">Not available on this deployment yet.</p>}
             </div>
           );

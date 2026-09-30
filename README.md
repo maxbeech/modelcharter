@@ -18,6 +18,15 @@ track that your team has read the rules.
   attestation tracking, and **change alerts** (watch a tool, get told when its
   data-handling facts change).
 
+## Analytics
+
+GA4 through `lib/openhelm-analytics.tsx` (a copy of the shared `openhelm-analytics` service; unset
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` means no script and no events). Journey events, failure reasons and
+the `oh_user_ref` / `oh_plan` user properties are defined in `lib/analytics-events.ts` and
+`lib/analytics-identity.ts`. To check a change, open GA DebugView on a build with the id set and walk
+sign up, triage a tool, save a policy, create an attestation link and upgrade; each step should show
+its event and no `*_failed` sibling.
+
 ## Stack
 
 Next.js 16 (App Router, TS) + Tailwind 4 on Helm7. The public site is fully

@@ -1,7 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import type { AuthState } from "@/app/auth-actions";
+import { identify } from "@/lib/openhelm-analytics";
+import { analyticsEvents, trackEvent, trackFailure } from "@/lib/analytics-events";
 
 // Email + password form for login/signup. Uses useActionState so server-side
 // validation errors render inline without losing the page.
@@ -13,6 +15,21 @@ export function AuthForm({
   action: (prev: AuthState, fd: FormData) => Promise<AuthState>;
 }) {
   const [state, formAction, pending] = useActionState(action, {});
+
+  // A successful sign-in or sign-up redirects to the dashboard, which sends
+  // `login` / `sign_up` there. The results that stay on this page are the
+  // "confirm your email" notice (a new account, so `sign_up` and identity) and
+  // the failures.
+  useEffect(() => {
+    const failed = mode === "signup" ? analyticsEvents.signUpFailed : analyticsEvents.loginFailed;
+    if (state.notice && state.analytics) {
+      identify(state.analytics);
+      trackEvent(analyticsEvents.signUp, { method: "email" });
+    } else if (state.error) {
+      trackFailure(failed, state.reason, { method: "email" });
+    }
+  }, [state, mode]);
+
   return (
     <form action={formAction} className="space-y-4">
       <div>

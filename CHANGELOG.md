@@ -1,5 +1,32 @@
 # Changelog
 
+## Unreleased (2026-09-30): user journeys for OpenHelm
+
+Refreshed `lib/openhelm-analytics*` from the shared service (adds `identify()` and
+fixes the dataLayer shape: gtag.js ignores plain arrays, so commands are pushed as
+`arguments`) and added the GA4 events OpenHelm reads. Nothing is sent unless
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` is set. All names live in `lib/analytics-events.ts`.
+
+- **Acquisition:** `first_visit` (automatic), `sign_up`, `purchase`.
+- **Set up governance:** `tool_triaged`, `policy_saved`, `attestation_link_created`.
+- **Upgrade:** `begin_checkout`, `purchase`, `checkout_cancelled`.
+- **Free tool:** `policy_exported` (copy, download, print) on the policy generator.
+- **Return use:** `login`.
+- **Failures:** `sign_up_failed`, `login_failed`, `tool_triage_failed`, `policy_save_failed`,
+  `attestation_link_failed`, `checkout_failed`, `purchase_confirmation_failed`,
+  `policy_export_failed`, each with a short `reason` code (never free text).
+- **Who and which plan:** every event carries `oh_user_ref` (first 16 hex of SHA-256 of the
+  Supabase user id, hashed on the server) and `oh_plan` (`free` or `paid`). `paid` means the
+  workspace is on Team or Business (`orgs.plan`), which includes the 14-day trial.
+- **`purchase`** is sent from the dashboard after the Checkout return has been verified with Stripe
+  for this workspace, not on the redirect alone. Its value is what Checkout charged (0 during the
+  trial, with `trial: true`). ModelCharter had no server-side `purchase` event, so none was moved.
+- The Checkout route now redirects to `/pricing?checkout=failed&reason=...` instead of answering
+  503 JSON when it cannot start a session, and Stripe's cancel URL is `/pricing?checkout=cancelled`.
+  After a confirmed return the dashboard redirects to `/dashboard?upgraded=1&confirmed=<session>`.
+- Dashboard server actions for the tool register, policy save and attestation links now return a
+  result (`ActionResult`) instead of nothing, so failures can be reported.
+
 ## Unreleased (2026-09-30): hosting moves from Vercel to Helm7
 
 - Hosting is Helm7 (self-hosted, Supabase unchanged). `vercel.json` is gone; the

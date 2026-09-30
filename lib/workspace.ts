@@ -62,13 +62,15 @@ export async function getRegister(orgId: string): Promise<RegisterRow[]> {
   return (data as RegisterRow[]) ?? [];
 }
 
-export async function setToolStatus(orgId: string, slug: string, name: string, status: string): Promise<void> {
-  if (!REGISTER_STATUSES.includes(status)) return;
+// Returns whether the status was saved, so the caller can report a failure.
+export async function setToolStatus(orgId: string, slug: string, name: string, status: string): Promise<boolean> {
+  if (!REGISTER_STATUSES.includes(status)) return false;
   const supabase = await createServerSupabase();
-  await supabase.from("tool_register").upsert(
+  const { error } = await supabase.from("tool_register").upsert(
     { org_id: orgId, tool_slug: slug, name, status, updated_at: new Date().toISOString() },
     { onConflict: "org_id,tool_slug" },
   );
+  return !error;
 }
 
 export async function getPolicies(orgId: string): Promise<PolicyRow[]> {
@@ -78,12 +80,14 @@ export async function getPolicies(orgId: string): Promise<PolicyRow[]> {
   return (data as PolicyRow[]) ?? [];
 }
 
-export async function savePolicy(orgId: string, contentMd: string, inputJson: unknown): Promise<void> {
+// Returns the saved version number, or null when the insert failed.
+export async function savePolicy(orgId: string, contentMd: string, inputJson: unknown): Promise<number | null> {
   const supabase = await createServerSupabase();
   const { data: latest } = await supabase
     .from("policies").select("version").eq("org_id", orgId).order("version", { ascending: false }).limit(1);
   const version = ((latest?.[0]?.version as number) ?? 0) + 1;
-  await supabase.from("policies").insert({ org_id: orgId, version, content_md: contentMd, input_json: inputJson ?? null });
+  const { error } = await supabase.from("policies").insert({ org_id: orgId, version, content_md: contentMd, input_json: inputJson ?? null });
+  return error ? null : version;
 }
 
 export async function getAttestations(orgId: string): Promise<AttestationRow[]> {
