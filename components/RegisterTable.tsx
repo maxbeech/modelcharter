@@ -2,6 +2,7 @@
 
 import type { Band } from "@/lib/risk";
 import { RiskPill } from "@/components/ui";
+import { analyticsEvents, reportAction, type ActionResult } from "@/lib/analytics-events";
 
 export interface RegisterItem { slug: string; name: string; status: string; band: Band; score: number; tracked: boolean }
 
@@ -13,7 +14,7 @@ const STATUS_CLASS: Record<string, string> = {
   prohibited: "border-red-300 bg-red-50 text-red-800",
 };
 
-export function RegisterTable({ items, action, trackAction }: { items: RegisterItem[]; action: (fd: FormData) => void; trackAction: (fd: FormData) => void }) {
+export function RegisterTable({ items, action, trackAction }: { items: RegisterItem[]; action: (fd: FormData) => Promise<ActionResult>; trackAction: (fd: FormData) => void }) {
   return (
     <div className="divide-y divide-line rounded-2xl border border-line bg-white">
       {items.map((it) => (
@@ -35,7 +36,11 @@ export function RegisterTable({ items, action, trackAction }: { items: RegisterI
                 {it.tracked ? "Watching" : "Watch"}
               </button>
             </form>
-            <form action={action}>
+            <form action={(fd) => reportAction(
+              () => action(fd),
+              { ok: analyticsEvents.toolTriaged, failed: analyticsEvents.toolTriageFailed },
+              () => ({ status: String(fd.get("status")) }),
+            ).then(() => undefined)}>
               <input type="hidden" name="slug" value={it.slug} />
               <input type="hidden" name="name" value={it.name} />
               <select

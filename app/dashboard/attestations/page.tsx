@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ensureOrg, getAttestations, getPolicies } from "@/lib/workspace";
 import { SITE, isPaidPlan } from "@/lib/site";
 import { CopyLink } from "@/components/CopyLink";
+import { NewAttestationButton } from "@/components/NewAttestationButton";
 import { actionCreateAttestation } from "../actions";
 
 export default async function AttestationsPage() {
@@ -28,11 +29,7 @@ export default async function AttestationsPage() {
           <h2 className="font-display text-lg font-semibold text-ink">Attestations</h2>
           <p className="mt-1 text-sm text-ink-soft">Create a link for each person who must acknowledge the policy. You will see exactly when each person signed.</p>
         </div>
-        <form action={actionCreateAttestation}>
-          <button type="submit" disabled={!hasPolicy} className="rounded-full bg-brand-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-50">
-            + New attestation link
-          </button>
-        </form>
+        <NewAttestationButton action={actionCreateAttestation} disabled={!hasPolicy} />
       </div>
       {!hasPolicy && <p className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-inset ring-amber-100">Save a policy version first, then create attestation links against it.</p>}
 

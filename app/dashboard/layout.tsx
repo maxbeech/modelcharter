@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { isDbConfigured, getSession } from "@/lib/auth";
 import { ensureOrg } from "@/lib/workspace";
 import { SetupPending } from "@/components/SetupPending";
 import { Section, Pill } from "@/components/ui";
 import { DashTabs } from "@/components/dash-tabs";
+import { DashboardAnalytics } from "@/components/DashboardAnalytics";
+import { buildAnalyticsIdentity } from "@/lib/analytics-identity";
 import { logoutAction } from "../auth-actions";
 
 export const metadata: Metadata = { title: "Dashboard", robots: { index: false } };
@@ -15,8 +18,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
   if (!user) redirect("/login");
   const org = await ensureOrg();
 
+  // A one-way ref and the plan; the raw user id never leaves the server.
+  const identity = buildAnalyticsIdentity(user.id, org?.plan);
+
   return (
     <Section className="py-10">
+      <Suspense fallback={null}>
+        <DashboardAnalytics identity={identity} />
+      </Suspense>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2.5">

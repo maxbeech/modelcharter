@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { PLANS } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
 import { Section } from "@/components/ui";
 import { PageHero, FaqSection } from "@/components/page";
+import { CheckoutReturnTracker } from "@/components/CheckoutReturnTracker";
 import { pageMeta, faqLd, breadcrumbLd } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
@@ -22,6 +24,9 @@ const FAQS = [
 export default function Page() {
   return (
     <>
+      <Suspense fallback={null}>
+        <CheckoutReturnTracker />
+      </Suspense>
       <JsonLd data={faqLd(FAQS)} />
       <JsonLd data={breadcrumbLd([{ name: "Home", path: "/" }, { name: "Pricing", path: "/pricing" }])} />
 

@@ -1,15 +1,31 @@
 import Link from "next/link";
 import { ensureOrg, getRegister, getPolicies, getAttestations } from "@/lib/workspace";
 import { getAlerts } from "@/lib/alerts";
-import { reconcileCheckoutSession } from "@/lib/billing/entitlements";
+import { confirmCheckoutSession, reconcileCheckoutSession } from "@/lib/billing/entitlements";
+import { getSession } from "@/lib/auth";
+import { analyticsUserRef } from "@/lib/analytics-ref";
+import { PurchaseTracker, type PurchaseOutcome } from "@/components/PurchaseTracker";
 import { redirect } from "next/navigation";
 import { actionMarkAlertsRead } from "./actions";
 
-export default async function DashboardHome({ searchParams }: { searchParams: Promise<{ upgraded?: string; session_id?: string }> }) {
+export default async function DashboardHome({ searchParams }: { searchParams: Promise<{ upgraded?: string; session_id?: string; confirmed?: string }> }) {
   const org = await ensureOrg();
   if (!org) return null;
-  const { session_id: sessionId } = await searchParams;
-  if (sessionId && await reconcileCheckoutSession(sessionId, org.id)) redirect("/dashboard?upgraded=1");
+  const { session_id: sessionId, confirmed: confirmedId } = await searchParams;
+  let purchase: PurchaseOutcome | null = null;
+  if (sessionId) {
+    // Stripe's return. Grant the plan, then reload the page so the header shows
+    // it, carrying the session id as `confirmed` so the purchase is reported
+    // once, from a session Stripe has verified for this workspace.
+    const result = await reconcileCheckoutSession(sessionId, org.id);
+    if (result.ok) redirect(`/dashboard?upgraded=1&confirmed=${encodeURIComponent(sessionId)}`);
+    purchase = { kind: "failed", reason: result.reason };
+  } else if (confirmedId) {
+    const [result, user] = await Promise.all([confirmCheckoutSession(confirmedId, org.id), getSession()]);
+    purchase = result.ok && user
+      ? { kind: "confirmed", purchase: result.purchase, identity: { userRef: analyticsUserRef(user.id), plan: "paid" } }
+      : { kind: "failed", reason: result.ok ? "unauthorized" : result.reason };
+  }
   const [register, policies, attestations, alerts] = await Promise.all([
     getRegister(org.id), getPolicies(org.id), getAttestations(org.id), getAlerts(org.id, 8),
   ]);
@@ -26,6 +42,7 @@ export default async function DashboardHome({ searchParams }: { searchParams: Pr
 
   return (
     <div>
+      {purchase && <PurchaseTracker outcome={purchase} />}
       <div className="grid gap-4 sm:grid-cols-3">
         {stats.map((s) => (
           <Link key={s.label} href={s.href} className="rounded-2xl border border-line bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md">
