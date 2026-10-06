@@ -5,6 +5,7 @@
 
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getSession } from "@/lib/auth";
+import { captureServerError } from "@/lib/observability";
 import { TOOLS } from "@/lib/ai-tools";
 
 export interface Org { id: string; name: string; plan: string; stripe_customer_id: string | null }
@@ -70,6 +71,7 @@ export async function setToolStatus(orgId: string, slug: string, name: string, s
     { org_id: orgId, tool_slug: slug, name, status, updated_at: new Date().toISOString() },
     { onConflict: "org_id,tool_slug" },
   );
+  if (error) captureServerError(error, { scope: "workspace", stage: "set_tool_status", orgId, toolSlug: slug, code: error.code });
   return !error;
 }
 
@@ -87,6 +89,7 @@ export async function savePolicy(orgId: string, contentMd: string, inputJson: un
     .from("policies").select("version").eq("org_id", orgId).order("version", { ascending: false }).limit(1);
   const version = ((latest?.[0]?.version as number) ?? 0) + 1;
   const { error } = await supabase.from("policies").insert({ org_id: orgId, version, content_md: contentMd, input_json: inputJson ?? null });
+  if (error) captureServerError(error, { scope: "workspace", stage: "save_policy", orgId, code: error.code });
   return error ? null : version;
 }
 

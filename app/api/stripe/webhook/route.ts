@@ -3,6 +3,7 @@ import { getStripe } from "@/lib/stripe";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import type Stripe from "stripe";
 import { checkoutSessionIsFunded, planForSubscription } from "@/lib/stripe-events";
+import { captureServerError } from "@/lib/observability";
 import { guardStripeEvent } from "../../../../lib/gate";
 
 // Stripe webhook: updates the org's plan. Verifies the signature and writes with
@@ -19,7 +20,10 @@ export async function POST(request: NextRequest) {
   try {
     event = stripe.webhooks.constructEvent(body, sig, secret);
   } catch (err) {
-    return NextResponse.json({ error: `signature: ${(err as Error).message}` }, { status: 400 });
+    // A bad signature is usually a probe, but a sudden run of them means the
+    // webhook secret is wrong and payments are being dropped, so it is visible.
+    captureServerError(err, { scope: "stripe-webhook", stage: "signature" });
+    return NextResponse.json({ error: "invalid signature" }, { status: 400 });
   }
 
   // A Stripe webhook endpoint is registered on an ACCOUNT, so on a shared
@@ -57,7 +61,7 @@ export async function POST(request: NextRequest) {
     }
   }
   } catch (error) {
-    console.error("[stripe] webhook entitlement update failed:", error);
+    captureServerError(error, { scope: "stripe-webhook", stage: "entitlement", eventType: event.type, eventId: event.id });
     return NextResponse.json({ error: "entitlement update failed" }, { status: 500 });
   }
   return NextResponse.json({ received: true });

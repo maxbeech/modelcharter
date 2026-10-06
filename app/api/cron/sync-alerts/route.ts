@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { TOOLS } from "@/lib/ai-tools";
 import { factSignature, diffFactSignatures, describeFactChanges } from "@/lib/fact-signature";
 import { createAdminSupabase } from "@/lib/supabase/admin";
+import { captureServerError } from "@/lib/observability";
 import { checkCronAuth } from "@/lib/cron-auth";
 
 // Daily cron: snapshot every tool's watched facts, diff against the last
@@ -19,7 +20,11 @@ export async function GET(request: Request) {
   const admin = createAdminSupabase();
   if (!admin) return NextResponse.json({ ok: false, reason: "no service role key" }, { status: 503 });
 
-  const { data: snaps } = await admin.from("tool_fact_snapshots").select("tool_slug, signature");
+  const { data: snaps, error: snapsError } = await admin.from("tool_fact_snapshots").select("tool_slug, signature");
+  if (snapsError) {
+    captureServerError(snapsError, { scope: "cron-sync-alerts", stage: "read_snapshots", code: snapsError.code });
+    return NextResponse.json({ ok: false, reason: "snapshot_read_failed" }, { status: 500 });
+  }
   const prior = new Map((snaps ?? []).map((s) => [s.tool_slug as string, s.signature]));
 
   const now = new Date().toISOString();
@@ -38,7 +43,8 @@ export async function GET(request: Request) {
 
   let alertsCreated = 0;
   for (const c of changed) {
-    const { data: tracked } = await admin.from("tracked_tools").select("org_id").eq("tool_slug", c.slug);
+    const { data: tracked, error: trackedError } = await admin.from("tracked_tools").select("org_id").eq("tool_slug", c.slug);
+    if (trackedError) captureServerError(trackedError, { scope: "cron-sync-alerts", stage: "read_tracked", toolSlug: c.slug, code: trackedError.code });
     const rows = (tracked ?? []).map((t) => ({
       org_id: t.org_id as string,
       tool_slug: c.slug,
@@ -47,14 +53,19 @@ export async function GET(request: Request) {
       detail: c.detail,
     }));
     if (rows.length) {
-      await admin.from("tool_alerts").insert(rows);
-      alertsCreated += rows.length;
+      const { error: insertError } = await admin.from("tool_alerts").insert(rows);
+      if (insertError) captureServerError(insertError, { scope: "cron-sync-alerts", stage: "insert_alerts", toolSlug: c.slug, count: rows.length, code: insertError.code });
+      else alertsCreated += rows.length;
     }
   }
 
   // Upsert all snapshots in one call. First run just establishes the baseline
   // (prior is empty, so nothing is flagged as changed).
-  await admin.from("tool_fact_snapshots").upsert(snapshotRows, { onConflict: "tool_slug" });
+  const { error: upsertError } = await admin.from("tool_fact_snapshots").upsert(snapshotRows, { onConflict: "tool_slug" });
+  if (upsertError) {
+    captureServerError(upsertError, { scope: "cron-sync-alerts", stage: "write_snapshots", count: snapshotRows.length, code: upsertError.code });
+    return NextResponse.json({ ok: false, reason: "snapshot_write_failed" }, { status: 500 });
+  }
 
   return NextResponse.json({ ok: true, tools: TOOLS.length, changed: changed.length, alertsCreated });
 }

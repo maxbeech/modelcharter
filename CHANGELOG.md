@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased (2026-10-06): Sentry standard
+
+Errors, logs and user feedback now go to the `modelcharter_web` Sentry project.
+
+- **Scrubbing:** one shared scrubber (`lib/scrub.ts`) covers events, logs, breadcrumbs and
+  transactions. It redacts emails, phone numbers, tokens, API keys and secret fields, strips
+  query strings, caps strings at 10k characters before matching, uses linear-time patterns and
+  drops the item if scrubbing ever throws. Feedback keeps the name and email people give us.
+- **Logs:** console output is forwarded as Sentry logs from the browser, server and edge.
+- **Errors as Issues:** `lib/observability.ts` (`captureServerError`, ids and codes only) is now
+  called from the Stripe webhook, checkout, billing portal, checkout reconciliation, the alerts
+  cron and the workspace writes, which used to log to the console and carry on. The webhook no
+  longer echoes the raw signature error back to the caller.
+- **Feedback:** a "Send feedback" button in the dashboard header (name and email prefilled) and
+  in the site footer, opening Sentry's feedback form through a randomised tunnel route.
+- Tests: `test/scrub.test.mts`, `test/feedback-button.test.mts`.
+
 ## Unreleased (2026-09-30): user journeys for OpenHelm
 
 Refreshed `lib/openhelm-analytics*` from the shared service (adds `identify()` and

@@ -5,6 +5,7 @@ import { isDbConfigured, getSession } from "@/lib/auth";
 import { ensureOrg } from "@/lib/workspace";
 import { SetupPending } from "@/components/SetupPending";
 import { Section, Pill } from "@/components/ui";
+import { FeedbackButton } from "@/components/FeedbackButton";
 import { DashTabs } from "@/components/dash-tabs";
 import { DashboardAnalytics } from "@/components/DashboardAnalytics";
 import { buildAnalyticsIdentity } from "@/lib/analytics-identity";
@@ -34,9 +35,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
           </div>
           <p className="mt-1 text-sm text-ink-faint">{user.email}</p>
         </div>
+        <div className="flex items-center gap-2">
+        <FeedbackButton variant="pill" user={{ email: user.email, name: org?.name }} />
         <form action={logoutAction}>
           <button type="submit" className="rounded-full border border-line-strong px-4 py-2 text-sm font-medium text-ink-soft transition-colors hover:border-ink-faint hover:bg-paper">Log out</button>
         </form>
+        </div>
       </div>
       <DashTabs />
       <div className="py-7">{children}</div>

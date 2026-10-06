@@ -1,3 +1,4 @@
+import { FeedbackButton } from "@/components/FeedbackButton";
 import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import Link from "next/link";
@@ -73,6 +74,7 @@ function Footer() {
             <Link href="/privacy" className="transition-colors hover:text-ink">Privacy</Link>
             <Link href="/terms" className="transition-colors hover:text-ink">Terms</Link>
             <Link href="/security" className="transition-colors hover:text-ink">Security</Link>
+            <FeedbackButton />
           </span>
         </div>
       </div>

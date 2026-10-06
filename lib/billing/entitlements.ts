@@ -2,6 +2,7 @@ import "server-only";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { createAdminSupabase } from "@/lib/supabase/admin";
+import { captureServerError } from "@/lib/observability";
 import { planForSubscription } from "@/lib/stripe-events";
 import { checkoutPlanId, checkoutSessionProblem, purchaseFromSession, type PurchasePayload } from "./purchase";
 
@@ -22,7 +23,7 @@ export async function confirmCheckoutSession(sessionId: string, orgId: string): 
     const subscription = typeof session.subscription === "object" && session.subscription !== null ? session.subscription : null;
     return { ok: true, purchase: purchaseFromSession(session, subscription?.status), subscription, session };
   } catch (error) {
-    console.error(`[stripe] checkout confirmation failed for ${sessionId}:`, error instanceof Error ? error.message : error);
+    captureServerError(error, { scope: "stripe-checkout", stage: "confirm", sessionId, orgId });
     return { ok: false, reason: "confirmation_unavailable" };
   }
 }
@@ -43,7 +44,7 @@ export async function reconcileCheckoutSession(sessionId: string, orgId: string)
     if (error) throw error;
     return confirmed;
   } catch (error) {
-    console.error(`[stripe] checkout reconciliation failed for ${sessionId}:`, error instanceof Error ? error.message : error);
+    captureServerError(error, { scope: "stripe-checkout", stage: "reconcile", sessionId, orgId });
     return { ok: false, reason: "plan_update_failed" };
   }
 }

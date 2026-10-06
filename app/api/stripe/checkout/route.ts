@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getStripe, priceForPlan } from "@/lib/stripe";
 import { getSession } from "@/lib/auth";
 import { ensureOrg } from "@/lib/workspace";
+import { captureServerError } from "@/lib/observability";
 import { SITE } from "@/lib/site";
 
 // A checkout that cannot start sends the user to /pricing with a short reason,
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
     }, { idempotencyKey: `checkout:${org.id}:${plan}` });
     url = session.url;
   } catch (error) {
-    console.error("[stripe] checkout session creation failed:", error instanceof Error ? error.message : error);
+    captureServerError(error, { scope: "stripe-checkout", stage: "create_session", plan, orgId: org.id });
     return failedCheckout("stripe_error");
   }
   if (!url) return failedCheckout("missing_checkout_url");

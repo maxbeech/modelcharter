@@ -2,7 +2,7 @@
 
 ## Observability
 
-Sentry records production errors, logs, request failures and optional user feedback when `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` are configured. Known non-actionable noise (unknown Server Action requests from scanners or stale tabs) is filtered in `lib/sentry-filters.ts`.
+Sentry records production errors, logs, request failures and optional user feedback when `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` are configured. Known non-actionable noise (unknown Server Action requests from scanners or stale tabs) is filtered in `lib/sentry-filters.ts`. Every event, log and breadcrumb passes through `lib/scrub.ts` first (fail-closed), server code reports failures with `captureServerError` in `lib/observability.ts`, and the "Send feedback" button (`components/FeedbackButton.tsx`) files User Feedback into the same project.
 
 **Charter your AI at work.** AI governance for teams without a compliance
 department: generate an AI usage policy, see which AI tools are safe to use, and
