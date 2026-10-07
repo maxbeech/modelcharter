@@ -59,6 +59,15 @@ vendor's official privacy policy, DPA and trust centre, with source links and a
 confidence flag. Unverifiable facts are marked `null` / "Unverified" rather than
 guessed. Risk scoring is transparent and deterministic (`lib/risk.ts`).
 
+## Search visibility
+
+`lib/site.ts` is the canonical source for the public origin. The sitemap, robots
+file, metadata and structured data all use `https://www.modelcharter.com`; Helm7
+permanently redirects the apex host to it. Tool profiles and their focused
+compliance answers are statically generated and revalidated weekly. Each answer
+shows the vendor-backed evidence used for the decision, with unknowns labelled
+unverified rather than filled with assumptions.
+
 ## Develop
 
 ```bash

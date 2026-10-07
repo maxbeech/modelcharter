@@ -1,5 +1,5 @@
 import { TOOLS, getTool } from "../lib/ai-tools.ts";
-import { allQuestions, getQuestion, QUESTION_SLUGS } from "../lib/registry-questions.ts";
+import { allQuestions, evidenceForQuestion, getQuestion, QUESTION_SLUGS } from "../lib/registry-questions.ts";
 import { HUBS, HUB_BY_SLUG, USE_CASES } from "../lib/registry-frameworks.ts";
 import { assessRisk } from "../lib/risk-assessment.ts";
 import { parsePair, popularComparePairs, PAIR_DELIMITER } from "../lib/compare.ts";
@@ -27,6 +27,9 @@ for (const t of TOOLS) {
     ok(a.length > 0, `${t.slug}/${q.slug}: answer non-empty`);
     ok(!a.includes("—") && !a.includes("–"), `${t.slug}/${q.slug}: answer has no em/en dash`);
     ok([true, false, null].includes(q.passes(t)), `${t.slug}/${q.slug}: passes() is tri-state`);
+    const evidence = evidenceForQuestion(t, q.slug);
+    ok(evidence.length >= 3, `${t.slug}/${q.slug}: has substantive evidence items`);
+    ok(evidence.every((item) => item.label && item.value && item.explanation), `${t.slug}/${q.slug}: evidence items are complete`);
   }
 }
 

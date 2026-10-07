@@ -10,6 +10,8 @@ import { RiskGauge } from "@/components/marketing";
 import { pageMeta, faqLd, breadcrumbLd, softwareAppLd } from "@/lib/seo";
 
 export const dynamicParams = false;
+// Vendor records are static but reviewed on a predictable weekly ISR cadence.
+export const revalidate = 604800;
 export function generateStaticParams() {
   return TOOLS.map((t) => ({ slug: t.slug }));
 }

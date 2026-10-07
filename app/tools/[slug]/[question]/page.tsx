@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TOOLS, getTool, CATEGORY_LABELS } from "@/lib/ai-tools";
 import { scoreTool } from "@/lib/risk";
-import { QUESTION_SLUGS, getQuestion, allQuestions } from "@/lib/registry-questions";
+import { QUESTION_SLUGS, getQuestion, allQuestions, evidenceForQuestion } from "@/lib/registry-questions";
 import { JsonLd } from "@/components/JsonLd";
 import { RiskPill, Section } from "@/components/ui";
 import { pageMeta, faqLd, breadcrumbLd } from "@/lib/seo";
@@ -13,6 +13,8 @@ import { pageMeta, faqLd, breadcrumbLd } from "@/lib/seo";
 // sourced facts as the tool profile. This is the flagship GEO/citation surface.
 
 export const dynamicParams = false;
+// Keep question pages fresh without spending origin work on every request.
+export const revalidate = 604800;
 export function generateStaticParams() {
   return TOOLS.flatMap((t) => QUESTION_SLUGS.map((q) => ({ slug: t.slug, question: q })));
 }
@@ -46,6 +48,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   const pass = q.passes(t);
   const badge = pass === null ? PASS_LABEL.unverified : pass ? PASS_LABEL.yes : PASS_LABEL.no;
   const others = allQuestions().filter((x) => x.slug !== q.slug);
+  const evidence = evidenceForQuestion(t, q.slug);
 
   const faqs = [{ q: q.ask(t.name), a: q.answer(t) }];
 
@@ -74,7 +77,34 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       <Section className="py-10 sm:py-12">
         <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,300px)]">
           <div>
-            <h2 className="font-display text-xl font-semibold text-ink">More on {t.name}</h2>
+            <h2 className="font-display text-xl font-semibold text-ink">What we checked</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">
+              This assessment separates the consumer product from any business plan. It uses the vendor documents linked below; an unverified item is not a pass.
+            </p>
+            <dl className="mt-4 divide-y divide-line rounded-2xl border border-line bg-white">
+              {evidence.map((item) => (
+                <div key={item.label} className="px-4 py-3.5">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <dt className="text-sm font-semibold text-ink">{item.label}</dt>
+                    <dd className="text-sm font-medium text-brand-700">{item.value}</dd>
+                  </div>
+                  <dd className="mt-1 text-sm leading-relaxed text-ink-soft">{item.explanation}</dd>
+                </div>
+              ))}
+            </dl>
+
+            {t.notableRisk && (
+              <div className="mt-5 rounded-xl bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-950 ring-1 ring-inset ring-amber-100">
+                <span className="font-semibold">Practical risk:</span> {t.notableRisk}
+              </div>
+            )}
+
+            <h2 className="mt-8 font-display text-xl font-semibold text-ink">How to make a decision</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">
+              Check the precise account tier, written contract and intended data before approving {t.name}. A security certification, DPA or setting can apply to only part of a vendor's service. Keep the source links with your supplier review and revisit them when the vendor changes its terms.
+            </p>
+
+            <h2 className="mt-8 font-display text-xl font-semibold text-ink">More on {t.name}</h2>
             <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
               {others.map((o) => (
                 <Link key={o.slug} href={`/tools/${t.slug}/${o.slug}`} className="rounded-xl border border-line bg-white px-4 py-3 text-sm transition-colors hover:border-brand-300">
@@ -93,7 +123,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <RiskPill band={r.band} score={r.score} />
               </div>
               <p className="mt-2 text-sm text-ink-soft">For default at-work use, sourced from {t.vendor}'s own policies.</p>
-              {t.sources[0] && <a href={t.sources[0].url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm text-brand-700 hover:underline">View source ↗</a>}
+              {t.sources.length > 0 && (
+                <ul className="mt-3 space-y-2 text-sm">
+                  {t.sources.slice(0, 3).map((source) => (
+                    <li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer" className="text-brand-700 hover:underline">{source.claim || "Vendor source"} ↗</a></li>
+                  ))}
+                </ul>
+              )}
             </div>
             <div className="rounded-2xl bg-brand-800 p-5 text-white">
               <h3 className="font-semibold">Approve it properly</h3>

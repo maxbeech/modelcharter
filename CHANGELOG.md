@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-07: Search Console indexability remediation
+
+- **Canonical origin.** Confirmed `https://www.modelcharter.com` as the single source for sitemap, robots, metadata, Open Graph and JSON-LD URLs. The Helm7/Caddy apex redirect remains a permanent redirect to that host, so duplicate host variants correctly stay out of Google's index.
+- **Tool-question pages.** Expanded every generated tool-and-compliance answer with the underlying vendor-record facts, plain-language decision guidance, practical risks and up to three primary vendor sources. Unknown claims remain explicitly unverified.
+- **Freshness and coverage.** Tool pages now use weekly ISR (`revalidate = 604800`); the sitemap content date is 7 October 2026 and regression tests protect the `www` origin, sitemap samples and evidence blocks.
+
 ## 2026-10-07: October blog publication campaign
 
 - Refreshed the 15-post Academy, News and Reviews campaign to the 1-7 October publication window, added six semantic supporting keywords to every post and tightened three titles to the editorial length limit.

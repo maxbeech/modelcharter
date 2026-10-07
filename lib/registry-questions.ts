@@ -20,6 +20,12 @@ export interface QuestionDef {
   keywords: (name: string) => string[];
 }
 
+export type QuestionEvidence = {
+  label: string;
+  value: string;
+  explanation: string;
+};
+
 const DEFS: Record<QuestionSlug, QuestionDef> = {
   hipaa: {
     slug: "hipaa",
@@ -100,4 +106,59 @@ export function getQuestion(slug: string): QuestionDef | undefined {
 }
 export function allQuestions(): QuestionDef[] {
   return QUESTION_SLUGS.map((s) => DEFS[s]);
+}
+
+function verdict(value: AiTool["soc2"]): string {
+  return value === "yes" ? "Confirmed" : value === "no" ? "Not offered" : "Not verified";
+}
+
+/**
+ * The facts that explain an answer, kept alongside the answer definitions so
+ * every tool-question route is generated from the same vendor-sourced record.
+ * This makes a question page useful on its own instead of a thin duplicate of
+ * its parent tool profile.
+ */
+export function evidenceForQuestion(t: AiTool, question: QuestionSlug): QuestionEvidence[] {
+  const common: QuestionEvidence[] = [
+    {
+      label: "Default data training",
+      value: t.trainsOnPersonalData === null ? "Not verified" : t.trainsOnPersonalData === "no" ? "No by default" : t.trainsOnPersonalData === "opt-out" ? "Opt-out required" : "Yes by default",
+      explanation: t.trainsPersonalNote || `ModelCharter could not confirm a more specific public training statement from ${t.vendor}.`,
+    },
+    {
+      label: "Business-tier training",
+      value: t.trainsOnBusinessData === null ? "Not verified" : t.trainsOnBusinessData === "no" ? "No by default" : t.trainsOnBusinessData === "opt-out" ? "Opt-out required" : "Yes by default",
+      explanation: t.trainsBusinessNote || (t.enterprisePlan ? `${t.enterprisePlan} is the business tier recorded for this profile.` : `No separate business tier was confirmed for this profile.`),
+    },
+  ];
+
+  const byQuestion: Record<QuestionSlug, QuestionEvidence[]> = {
+    hipaa: [
+      { label: "Business Associate Agreement", value: verdict(t.hipaaBaa), explanation: t.hipaaBaa === "yes" ? `${t.vendor} publishes a BAA option. Confirm the exact plan and service are covered before sending PHI.` : t.hipaaBaa === "no" ? `No BAA was found in ${t.vendor}'s published materials for this service.` : `No public BAA was confirmed. Treat PHI use as blocked until ${t.vendor} provides written terms.` },
+      { label: "Enterprise route", value: t.enterprisePlan || "Not confirmed", explanation: t.enterprisePlan ? `For regulated use, validate the BAA, configured service and users under the ${t.enterprisePlan} contract.` : `Do not infer a regulated-use tier from consumer product marketing.` },
+      ...common,
+    ],
+    gdpr: [
+      { label: "Data Processing Agreement", value: verdict(t.gdprDpa), explanation: t.gdprDpa === "yes" ? `${t.vendor} publishes a DPA. A DPA is necessary but does not replace your own lawful-basis, DPIA and transfer assessment.` : t.gdprDpa === "no" ? `No DPA was found in ${t.vendor}'s published materials for this service.` : `No public DPA was confirmed. Do not process EU personal data until the vendor supplies suitable processor terms.` },
+      { label: "EU data residency", value: verdict(t.dataRegionEu), explanation: t.dataRegionEu === "yes" ? `${t.vendor} documents an EU data-residency option; confirm it is enabled for the account and workload in scope.` : `No EU-residency option was confirmed in the sources reviewed for this profile.` },
+      ...common,
+    ],
+    soc2: [
+      { label: "SOC 2 report", value: verdict(t.soc2), explanation: t.soc2 === "yes" ? `${t.vendor} reports a SOC 2 attestation. Request the current report and relevant bridge letter during procurement.` : t.soc2 === "no" ? `No SOC 2 report was found in ${t.vendor}'s public materials for this service.` : `No public SOC 2 report was confirmed. Ask ${t.vendor} for current assurance evidence before approving sensitive use.` },
+      { label: "ISO 27001", value: verdict(t.iso27001), explanation: t.iso27001 === "yes" ? `${t.vendor} also reports ISO/IEC 27001 certification.` : `No ISO/IEC 27001 certification was confirmed in the sources reviewed for this profile.` },
+      ...common,
+    ],
+    iso27001: [
+      { label: "ISO/IEC 27001", value: verdict(t.iso27001), explanation: t.iso27001 === "yes" ? `${t.vendor} reports ISO/IEC 27001 certification. Ask for scope and current certificate dates before treating it as supplier assurance.` : t.iso27001 === "no" ? `No ISO/IEC 27001 certification was found in ${t.vendor}'s public materials for this service.` : `No public ISO/IEC 27001 certification was confirmed. Request evidence from ${t.vendor} if this is a procurement requirement.` },
+      { label: "SOC 2", value: verdict(t.soc2), explanation: t.soc2 === "yes" ? `${t.vendor} also reports a SOC 2 attestation, which can complement but does not replace ISO scope evidence.` : `No SOC 2 report was confirmed in the sources reviewed for this profile.` },
+      ...common,
+    ],
+    training: [
+      common[0],
+      common[1],
+      { label: "Training control", value: verdict(t.trainingOptout), explanation: t.trainingOptout === "yes" ? `${t.vendor} documents a training control. Confirm whether it is enabled centrally or must be set by each user.` : `No reliable training opt-out was confirmed in the sources reviewed for this profile.` },
+    ],
+  };
+
+  return byQuestion[question];
 }
