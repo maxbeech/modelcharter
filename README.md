@@ -4,6 +4,8 @@
 
 Sentry records production errors, logs, request failures and optional user feedback when `SENTRY_DSN` and `NEXT_PUBLIC_SENTRY_DSN` are configured. Known non-actionable noise (unknown Server Action requests from scanners or stale tabs) is filtered in `lib/sentry-filters.ts`. Every event, log and breadcrumb passes through `lib/scrub.ts` first (fail-closed), server code reports failures with `captureServerError` in `lib/observability.ts`, and the "Send feedback" button (`components/FeedbackButton.tsx`) files User Feedback into the same project.
 
+The Sentry scrubber (`lib/scrub.ts`) redacts secrets of any length, backs up to a clean boundary when it truncates, and fails closed; its regression tests are in `test/scrub-hardening.test.mts`.
+
 **Charter your AI at work.** AI governance for teams without a compliance
 department: generate an AI usage policy, see which AI tools are safe to use, and
 track that your team has read the rules.
@@ -68,3 +70,11 @@ npm run build    # production build
 
 _Guidance only, not legal advice. Verify vendor facts against their official
 sources before relying on them._
+
+## Editorial publishing
+
+Blog posts are maintained in `lib/posts.ts`, the single registry that supplies
+the blog index, static article routes and sitemap. The October 2026 campaign is
+explicitly identified there and covered by `test/blog-publication.test.mts` so
+publication dates, category mix, word count, metadata, FAQs, structured content
+and credited featured images cannot silently regress.

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -p ${PORT:-3000}",
     "lint": "eslint",
-    "test": "tsx test/policy.test.mts && tsx test/risk.test.mts && tsx test/tools.test.mts && tsx test/seo.test.mts && tsx test/frameworks.test.mts && tsx test/site.test.mts && tsx test/registry.test.mts && tsx test/fact-signature.test.mts && tsx test/llms-txt.test.mts && tsx test/no-em-dash.test.mts && tsx test/stripe-events.test.mts && tsx test/sentry-filters.test.mts && tsx test/no-vercel.test.mts && tsx test/cron-auth.test.mts && tsx test/analytics.test.mts"
+    "test": "tsx test/policy.test.mts && tsx test/risk.test.mts && tsx test/tools.test.mts && tsx test/seo.test.mts && tsx test/frameworks.test.mts && tsx test/site.test.mts && tsx test/registry.test.mts && tsx test/fact-signature.test.mts && tsx test/llms-txt.test.mts && tsx test/no-em-dash.test.mts && tsx test/stripe-events.test.mts && tsx test/sentry-filters.test.mts && tsx test/no-vercel.test.mts && tsx test/cron-auth.test.mts && tsx test/analytics.test.mts && tsx test/scrub-hardening.test.mts && tsx test/blog-publication.test.mts"
   },
   "dependencies": {
     "@sentry/nextjs": "10.71.0",

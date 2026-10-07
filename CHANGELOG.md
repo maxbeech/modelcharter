@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-07: October blog publication campaign
+
+- Refreshed the 15-post Academy, News and Reviews campaign to the 1-7 October publication window, added six semantic supporting keywords to every post and tightened three titles to the editorial length limit.
+- Blog structured data now uses `BlogPosting` and carries the post author; the same content registry continues to drive routes, metadata, images and the sitemap with one-week ISR.
+- Added a publication-contract test covering campaign membership, category mix, dates, metadata, 1,200-word depth, FAQs, tables, quotes and credited images.
+
+## 2026-10-07: Sentry scrubber security pass
+
+- **Long secrets.** JWTs, bearer tokens, vendor keys (`sk_`, `whsec_`, `hlm_sk_`, `sntrys_`) and `key=value` secrets of any length are now redacted whole. The old bounded patterns left the tail of anything longer than their limit.
+- **Truncation.** The 10k cut backs up to the previous delimiter, so half a secret can never survive at the boundary.
+- **Encodings, URLs and key names.** URL queries and fragments (OAuth and magic-link tokens), percent-encoded emails, `Bearer%20...`, `token%3D...`, escaped JSON, `Authorization: Basic ...`, connection-string credentials and keys such as `passwd`, `pwd`, `jwt` and `Set-Cookie` are covered at any depth.
+- **Fail closed, no bypass.** Events, transactions, breadcrumbs and logs are dropped if scrubbing throws. A second deep pass scrubs stack-frame vars, spans, contexts and tags, feedback events included (only the reporter's own `contexts.feedback` and user are kept).
+- **Tests.** `test/scrub-hardening.test.mts` covers long JWTs, varied key lengths, secrets straddling the truncation boundary, hostile 20k strings, key variants and fail-closed behaviour.
+
 ## Unreleased (2026-10-06): Sentry standard
 
 Errors, logs and user feedback now go to the `modelcharter_web` Sentry project.
