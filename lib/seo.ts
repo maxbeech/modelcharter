@@ -90,16 +90,16 @@ export function breadcrumbLd(trail: { name: string; path: string }[]) {
   };
 }
 
-export function articleLd(opts: { title: string; description: string; path: string; date: string }) {
+export function articleLd(opts: { title: string; description: string; path: string; date: string; author?: string }) {
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: opts.title,
     description: opts.description,
     datePublished: opts.date,
     dateModified: opts.date,
     url: `${SITE.url}${opts.path}`,
-    author: { "@type": "Organization", name: SITE.name },
+    author: { "@type": "Organization", name: opts.author || SITE.name },
     publisher: { "@type": "Organization", name: SITE.name },
   };
 }

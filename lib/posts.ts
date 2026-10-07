@@ -21,6 +21,8 @@ export interface Post {
   date: string;
   description: string;
   keyword: string;
+  /** Semantic variants used by the editorial workflow and SEO QA. */
+  supportingKeywords?: string[];
   category?: "Academy" | "News" | "Reviews";
   author?: string;
   tldr?: string[];
@@ -2170,10 +2172,11 @@ export const POSTS: Post[] = [
   },
   {
     slug: "iso-23894-ai-risk-guidance",
-    title: "ISO/IEC 23894 Explained: AI Risk Guidance Compared to ISO 42001",
-    date: "2026-07-13",
+    title: "ISO/IEC 23894: AI Risk Guidance vs ISO 42001",
+    date: "2026-10-01",
     description: "ISO/IEC 23894 is the standard for AI risk guidance, distinct from ISO 42001's management system. What it covers and whether your team needs it.",
     keyword: "iso iec 23894",
+    supportingKeywords: ["ISO 23894", "AI risk guidance", "ISO 42001", "ISO 31000", "AI risk assessment", "AI risk management standard"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2222,9 +2225,10 @@ export const POSTS: Post[] = [
   {
     slug: "how-to-mitigate-ai-risk",
     title: "How to Mitigate AI Risk: A Step-by-Step Framework",
-    date: "2026-07-13",
+    date: "2026-10-01",
     description: "Practical steps to mitigate AI risk at a small or mid-sized business: what to fix first, what to monitor, and how to avoid over-engineering it.",
     keyword: "ai risk mitigation",
+    supportingKeywords: ["AI risk management", "mitigate AI risks", "AI risk controls", "AI risk assessment", "AI governance", "AI risk register"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2273,10 +2277,11 @@ export const POSTS: Post[] = [
   },
   {
     slug: "ai-and-data-protection-case-study",
-    title: "AI and Data Protection: A GDPR-Compliant Rollout, Case Study",
-    date: "2026-07-14",
+    title: "AI and Data Protection: A GDPR Rollout Case Study",
+    date: "2026-10-02",
     description: "How a 40-person UK firm rolled out AI tools while staying GDPR-compliant. What they got right, what they nearly missed, and what to copy.",
     keyword: "ai and data protection",
+    supportingKeywords: ["AI and GDPR", "AI data protection", "GDPR AI tools", "personal data and AI", "AI privacy", "data protection impact assessment"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2324,10 +2329,11 @@ export const POSTS: Post[] = [
   },
   {
     slug: "responsible-ai-practices-checklist",
-    title: "10 Responsible AI Practices Every Small Business Should Adopt",
-    date: "2026-07-14",
+    title: "10 Responsible AI Practices for Small Businesses",
+    date: "2026-10-02",
     description: "Ten responsible AI practices small businesses can adopt without a compliance team, from data rules to human review and vendor checks.",
     keyword: "responsible ai practices",
+    supportingKeywords: ["responsible AI", "ethical AI", "AI governance", "AI policy", "AI risk management", "trustworthy AI"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2380,9 +2386,10 @@ export const POSTS: Post[] = [
   {
     slug: "ai-trism-explained",
     title: "AI TRiSM Explained: Gartner's Framework for Small Teams",
-    date: "2026-07-15",
+    date: "2026-10-03",
     description: "AI TRiSM is Gartner's trust, risk and security framework for AI. What its four layers mean and what's realistic for a team without a security function.",
     keyword: "ai trust risk and security management",
+    supportingKeywords: ["AI TRiSM", "Gartner AI TRiSM", "AI governance", "AI security", "AI privacy", "responsible AI"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2430,9 +2437,10 @@ export const POSTS: Post[] = [
   {
     slug: "eu-ai-act-risk-categories-explained",
     title: "EU AI Act Risk Categories Explained",
-    date: "2026-07-15",
+    date: "2026-10-03",
     description: "The EU AI Act sorts AI systems into four risk tiers. What unacceptable, high, limited and minimal risk actually mean for a small business.",
     keyword: "eu ai act risk categories",
+    supportingKeywords: ["EU AI Act", "AI risk classification", "high-risk AI", "prohibited AI practices", "AI compliance", "AI Act obligations"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2481,9 +2489,10 @@ export const POSTS: Post[] = [
   {
     slug: "eu-ai-act-august-2026-deadline",
     title: "The EU AI Act's August 2026 Deadline: What SMBs Should Know",
-    date: "2026-07-16",
+    date: "2026-10-04",
     description: "High-risk EU AI Act obligations apply from 2 August 2026. What's changing, what the Omnibus proposal delayed, and what SMBs actually need to check.",
     keyword: "eu ai policy",
+    supportingKeywords: ["EU AI Act deadline", "AI Act compliance", "high-risk AI systems", "AI governance", "AI Act enforcement", "AI compliance checklist"],
     category: "News",
     author: "ModelCharter Team",
     tldr: [
@@ -2531,9 +2540,10 @@ export const POSTS: Post[] = [
   {
     slug: "ai-ethics-and-governance-2026",
     title: "AI Ethics and Governance: Why the Two Are Converging",
-    date: "2026-07-16",
+    date: "2026-10-04",
     description: "AI ethics and AI governance used to be separate conversations. Why regulation is now merging them, and what that means for how teams document AI use.",
     keyword: "ai ethics and governance",
+    supportingKeywords: ["responsible AI", "AI ethics policy", "AI governance framework", "ethical AI", "AI accountability", "trustworthy AI"],
     category: "News",
     author: "ModelCharter Team",
     tldr: [
@@ -2581,9 +2591,10 @@ export const POSTS: Post[] = [
   {
     slug: "ai-personal-data-gdpr-2026",
     title: "Does AI Use Your Personal Data? What GDPR Says in 2026",
-    date: "2026-07-17",
+    date: "2026-10-05",
     description: "New ICO guidance on AI and automated decisions is landing in 2026. What UK employers need to know about AI and personal data right now.",
     keyword: "ai and personal data",
+    supportingKeywords: ["GDPR AI tools", "AI data protection", "personal data and AI", "AI privacy", "data processing agreement", "AI lawful basis"],
     category: "News",
     author: "ModelCharter Team",
     tldr: [
@@ -2630,9 +2641,10 @@ export const POSTS: Post[] = [
   {
     slug: "claude-for-business-review",
     title: "Claude for Business Review: Is It Safe for Company Data?",
-    date: "2026-07-17",
+    date: "2026-10-05",
     description: "An honest review of Claude for Business and Enterprise for company data safety: training defaults, retention, HIPAA and GDPR fit, and pricing tiers.",
     keyword: "claude ai business",
+    supportingKeywords: ["Claude for business", "Claude data privacy", "Claude enterprise", "AI tool review", "AI data security", "business AI tools"],
     category: "Reviews",
     author: "ModelCharter Team",
     tldr: [
@@ -2681,9 +2693,10 @@ export const POSTS: Post[] = [
   {
     slug: "best-ai-marketing-tools-for-small-business",
     title: "Best AI Marketing Tools for Small Business in 2026",
-    date: "2026-07-18",
+    date: "2026-10-06",
     description: "The best AI marketing tools for small business, reviewed for what they're actually good at and how they handle your customer data.",
     keyword: "best ai marketing tools",
+    supportingKeywords: ["AI marketing tools", "small business AI tools", "AI content tools", "AI marketing software", "generative AI marketing", "AI tool risk assessment"],
     category: "Reviews",
     author: "ModelCharter Team",
     tldr: [
@@ -2731,9 +2744,10 @@ export const POSTS: Post[] = [
   {
     slug: "ai-risk-management-software-compared",
     title: "5 AI Risk Management Tools Compared for Small Teams",
-    date: "2026-07-18",
+    date: "2026-10-06",
     description: "AI risk management software compared: Credo AI, OneTrust, Holistic AI, Vanta and a lightweight in-house alternative, for teams without a GRC budget.",
     keyword: "ai risk management software",
+    supportingKeywords: ["AI governance tools", "AI compliance software", "AI risk assessment software", "AI tool register", "AI governance platform", "AI policy management"],
     category: "Reviews",
     author: "ModelCharter Team",
     tldr: [
@@ -2784,9 +2798,10 @@ export const POSTS: Post[] = [
   {
     slug: "ai-usage-policy-that-works",
     title: "How to Write an AI Usage Policy Staff Actually Follow",
-    date: "2026-07-19",
+    date: "2026-10-07",
     description: "Most AI usage policies get written, circulated, and forgotten. Here's how to write one that staff actually read, remember, and follow day to day.",
     keyword: "ai usage policy",
+    supportingKeywords: ["AI policy for employees", "AI acceptable use policy", "generative AI policy", "AI policy template", "AI governance policy", "employee AI rules"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2835,9 +2850,10 @@ export const POSTS: Post[] = [
   {
     slug: "nist-ai-rmf-playbook-implementation",
     title: "The NIST AI RMF Playbook: A Practical Implementation Guide",
-    date: "2026-07-19",
+    date: "2026-10-07",
     description: "The NIST AI RMF Playbook turns Govern, Map, Measure and Manage into suggested actions. How to actually use it, without adopting all of it.",
     keyword: "nist ai rmf",
+    supportingKeywords: ["NIST AI RMF Playbook", "NIST AI risk management framework", "Govern Map Measure Manage", "AI risk management", "AI governance framework", "trustworthy AI"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2886,9 +2902,10 @@ export const POSTS: Post[] = [
   {
     slug: "ai-risk-management-framework-guide",
     title: "AI Risk Management Framework: How to Choose (and Build) One",
-    date: "2026-09-07",
+    date: "2026-10-07",
     description: "Compare NIST AI RMF, ISO 42001/23894 and a lightweight in-house risk register, then build the one your team can actually run.",
     keyword: "ai risk management framework",
+    supportingKeywords: ["AI risk management", "NIST AI RMF", "ISO 42001", "ISO IEC 23894", "AI risk register", "AI governance framework"],
     category: "Academy",
     author: "ModelCharter Team",
     tldr: [
@@ -2934,6 +2951,26 @@ export const POSTS: Post[] = [
     ],
   },
 ];
+
+// This campaign list is deliberately explicit: it drives QA without relying on
+// array order, while POSTS remains the sole route, index and sitemap registry.
+export const OCTOBER_2026_CAMPAIGN_SLUGS = [
+  "iso-23894-ai-risk-guidance",
+  "how-to-mitigate-ai-risk",
+  "ai-and-data-protection-case-study",
+  "responsible-ai-practices-checklist",
+  "ai-trism-explained",
+  "eu-ai-act-risk-categories-explained",
+  "eu-ai-act-august-2026-deadline",
+  "ai-ethics-and-governance-2026",
+  "ai-personal-data-gdpr-2026",
+  "claude-for-business-review",
+  "best-ai-marketing-tools-for-small-business",
+  "ai-risk-management-software-compared",
+  "ai-usage-policy-that-works",
+  "nist-ai-rmf-playbook-implementation",
+  "ai-risk-management-framework-guide",
+] as const;
 
 const POST_IMAGES: Record<string, PostImage> = {
   "what-is-ai-governance": {
@@ -3305,4 +3342,3 @@ POSTS.forEach((p) => {
 export function getPost(slug: string): Post | undefined {
   return POSTS.find((p) => p.slug === slug);
 }
-

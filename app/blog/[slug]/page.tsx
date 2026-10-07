@@ -59,7 +59,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   if (!p) notFound();
   return (
     <>
-      <JsonLd data={articleLd({ title: p.title, description: p.description, path: `/blog/${p.slug}`, date: p.date })} />
+      <JsonLd data={articleLd({ title: p.title, description: p.description, path: `/blog/${p.slug}`, date: p.date, author: p.author })} />
       <JsonLd data={breadcrumbLd([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }, { name: p.title, path: `/blog/${p.slug}` }])} />
       {p.faqs && p.faqs.length > 0 && <JsonLd data={faqLd(p.faqs)} />}
       <Section className="py-10 sm:py-14">

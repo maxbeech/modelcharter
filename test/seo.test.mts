@@ -30,7 +30,7 @@ ok(ds.measurementTechnique.includes("22"), "datasetLd notes the count");
 
 // Other builders return the right @type.
 eq((softwareAppLd("n", "d", "/") as any)["@type"], "SoftwareApplication", "softwareAppLd type");
-eq((articleLd({ title: "t", description: "d", path: "/blog/x", date: "2026-06-18" }) as any)["@type"], "Article", "articleLd type");
+eq((articleLd({ title: "t", description: "d", path: "/blog/x", date: "2026-06-18" }) as any)["@type"], "BlogPosting", "articleLd type");
 eq((organizationLd() as any)["@type"], "Organization", "organizationLd type");
 
 // websiteLd identifies the site itself (distinct from Organization) for GEO.
