@@ -2950,6 +2950,53 @@ export const POSTS: Post[] = [
       { q: "Can one person run an AI risk management framework without a dedicated risk team?", a: "Yes, if it's kept lightweight. A five-column spreadsheet, a quarterly review date, and one named owner covers what most small and mid-sized teams are actually asked to demonstrate." },
     ],
   },
+  {
+    slug: "responsible-use-of-ai",
+    title: "Responsible Use of AI: Rules Your Staff Can Actually Follow",
+    date: "2026-10-08",
+    description: "What responsible use of AI means day to day for employees, the four rules that make it workable, and how to turn them into a policy people follow.",
+    keyword: "responsible use of ai",
+    supportingKeywords: ["responsible AI", "responsible AI use", "employee AI use", "acceptable AI use", "AI usage policy", "human review of AI output", "AI disclosure at work"],
+    category: "Academy",
+    author: "ModelCharter Team",
+    tldr: [
+      "Responsible use of AI is what staff do day to day: which tools they open, what they type in, and whether they check the output.",
+      "Four checkable rules cover most of it: approved tools only, no confidential data in consumer accounts, human review of consequential output, and disclosure where it matters.",
+      "Rules work when they name real tools and real data types, not general principles about fairness.",
+      "Responsible use sits under your wider responsible AI approach; it is the part staff can act on this week.",
+    ],
+    body: [
+      { p: "Responsible use of AI is what your staff actually do with AI tools on an ordinary working day. It covers which tools they open, what information they type into them, whether they check what comes back, and whether they say so when AI shaped the work. Most businesses already hold a view on responsible AI in principle. The gap is that principles rarely tell a marketing lead whether a customer brief can go into a free chatbot. This guide turns the idea into a short set of rules people can follow, shows how they connect to the wider [responsible AI approach](/blog/responsible-ai-guide), and explains how to write them into a policy staff will read. If you want the broader case first, our [AI governance guide](/blog/what-is-ai-governance) covers the basics." },
+      { h: "What responsible use means in practice", p: "In practice, responsible use is a set of behaviours rather than a philosophy. An employee using AI responsibly knows which tools the company has approved and what they may be used for. They keep confidential, personal and regulated information out of any tool whose terms let the provider train on it or keep it longer than the company accepts. They treat AI output as a draft, not a fact, and check anything that will affect a customer, a hiring decision, a financial figure or a legal position. And they are honest about it: if AI shaped a report, proposal or piece of code, the people relying on that work can know. None of this requires technical skill. It requires a clear list and the habit of checking it. The EU AI Act's [AI-literacy duty](https://artificialintelligenceact.eu/article/4/) points the same way, expecting staff to understand the systems they use well enough to use them sensibly." },
+      { h: "The four rules that cover most of it", p: "A workable set of rules for a small or mid-sized team is short. First, use only approved AI tools for company work, and keep a register so the list stays current. Second, never put confidential, personal or regulated data into a consumer account, and check each tool's data terms before approving it. Third, have a named person review any AI output that is consequential: anything that reaches a customer, informs a decision about a person, or carries a figure or legal claim. Fourth, disclose AI use where the people relying on the work would expect to know. Each rule can be checked, which is what separates it from a value statement. A rule that says staff should use AI ethically tells nobody what to do. A rule that says no client files go into a free chatbot tells them exactly what to avoid." },
+      { h: "Why general principles fail on the ground", p: "Responsible AI frameworks are useful for setting direction, but they answer questions staff rarely ask. The question an employee actually has is narrower: can I use this tool for this task with this file? A principle about fairness or transparency does not answer that. A concrete rule does, because it names the tool, the data type and the task. The same logic applies to the policy itself. A document that names the approved assistant, lists the data that stays out of it and gives one example of acceptable use will be followed far more often than one that restates the company's values in polished language." },
+      { h: "Turning the rules into a policy people read", p: "Write the rules into a short AI usage policy of two or three pages, not a manual. Include the approved tools, the data that must never enter them, the review requirement for consequential output, and the disclosure expectation. Add one worked example per rule, drawn from your own business. Then ask every employee to acknowledge the policy in writing and keep those acknowledgements. The [AI usage policy generator](/ai-usage-policy-generator) gives you a starting draft, and our [guide to writing an AI usage policy](/blog/how-to-write-an-ai-usage-policy) explains the sections teams most often miss, such as the named owner and the review date." },
+      { h: "Where responsible use goes wrong", p: "The most common failure is rarely a bad decision by a senior person. It is a reasonable employee using a tool they had no reason to think was off limits. Staff adopt AI quietly because it saves time, and the first sign of trouble is often a client asking where their data went. The fix is to make the approved route easier than the unapproved one. If the company provides a managed tool with sensible settings, fewer people reach for a personal account. The [shadow AI guide](/blog/what-is-shadow-ai) explains how to find out what is already in use before writing rules that assume a clean slate." },
+      { h: "Checking that the rules are working", p: "Responsible use is only real if someone checks it. Review the approved-tools list every quarter, and whenever a vendor changes its data or training terms. Each month, sample a few consequential outputs and confirm that a human reviewed them, rather than trusting that they were. Ask the team what they are unsure about, because the questions reveal gaps faster than any audit. If the same question comes up twice, the policy needs a clearer answer. Keep a short record of these checks, since it is exactly what a customer or auditor will ask to see." },
+      { h: "Where to start this week", p: "Pick the three AI tools your team uses most, confirm whether each one is approved and what data it may hold, and write those answers down. Draft the four rules, circulate them and collect acknowledgements. You can compare candidate tools in the [tool risk directory](/tools) before approving them. That is enough to move from good intentions to a responsible-use position you can show someone else." },
+    ],
+    table: {
+      caption: "Responsible use rules at a glance",
+      headers: ["Rule", "What staff do", "What it prevents", "How to check it"],
+      rows: [
+        ["Approved tools only", "Use the company's listed AI tools for work", "Shadow AI on personal accounts", "Quarterly review of the tool register"],
+        ["No confidential data in consumer accounts", "Keep client, personal and regulated data out of unapproved tools", "Data used for training or retained by a vendor", "Check each tool's data terms before approval"],
+        ["Human review of consequential output", "Check anything that reaches a customer or informs a decision", "Wrong answers acted on as fact", "Monthly sample of reviewed outputs"],
+        ["Disclose AI use where it matters", "Say when AI shaped a report, proposal or code", "Hidden reliance on AI-generated work", "Spot checks of deliverables for a disclosure note"],
+      ],
+    },
+    quote: {
+      text: "Responsible AI use is not a philosophy staff have to interpret. It is a short list of rules they can follow on an ordinary working day.",
+      attribution: "ModelCharter's compliance team",
+    },
+    faqs: [
+      { q: "Is responsible use of AI the same as responsible AI?", a: "They are related but not identical. Responsible AI usually describes how an organisation builds or buys AI and the principles it commits to. Responsible use describes what individual staff do with those tools day to day. A business needs both, but staff can only act on the second." },
+      { q: "Do we need a written policy before staff can use AI responsibly?", a: "A written policy is the most reliable way to set expectations, because it makes the rules checkable and provable. Without one, responsible use depends on each person's judgement, which varies from one person to the next." },
+      { q: "Should we ban AI tools for sensitive work?", a: "Not as a blanket rule. A ban usually pushes use into personal accounts, which is worse. A better approach is an approved tool with suitable data terms, plus clear rules about which data may never enter any AI tool." },
+      { q: "How do we know whether staff are following the rules?", a: "Combine three things: signed acknowledgements of the policy, a periodic sample of consequential outputs checked for human review, and a short regular conversation with the team about what they are unsure of. None of these needs specialist software." },
+      { q: "Do the rules matter for a small team?", a: "Yes. The rules are short and cheap to follow. The risk depends on the data a team handles rather than its headcount, so a five-person team handling client records needs the same clarity as a larger one." },
+    ],
+  },
 ];
 
 // This campaign list is deliberately explicit: it drives QA without relying on
