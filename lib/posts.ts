@@ -1321,20 +1321,20 @@ export const POSTS: Post[] = [
   {
     slug: "what-is-ai-attestation",
     title: "What Is AI Attestation and Why Your Team Needs It?",
-    date: "2026-06-25",
+    date: "2026-10-16",
     description: "AI attestation proves staff have read and accepted your AI policy. Why it matters for the EU AI Act and SOC 2, and how to automate it.",
     keyword: "ai attestation",
     author: "ModelCharter Team",
     tldr: [
       "AI attestation is the record that proves each employee has read, understood and accepted your AI usage policy - not just that a policy exists.",
-      "It's the most direct way to evidence the EU AI Act's Article 4 AI-literacy duty, in force since 2 February 2025.",
+      "It's the most direct way to evidence the EU AI Act's Article 4 AI-literacy duty, which has applied since 2 February 2025 and was amended in July 2026 without being removed.",
       "SOC 2 auditors and enterprise security questionnaires increasingly ask for attestation records, not just a copy of the policy.",
       "A good attestation record has four fields: employee name, date, policy version, and acceptance status.",
       "New joiners should attest before they get access to company AI tools, and everyone should re-attest at least annually or after a material policy change.",
     ],
     body: [
       { p: "AI attestation is the process of confirming that every relevant member of your team has read, understood and accepted your AI usage policy. It's the bridge between having a policy and being able to prove it. Regulators, auditors and enterprise customers are increasingly asking not just \"do you have an AI policy?\" but \"can you show your staff have read it?\" Attestation is the answer to that second question, and without it, a policy is just a document sitting in a shared drive that nobody can prove anyone opened. Most teams that write a policy stop there, then get caught out the first time someone actually asks for the evidence behind it." },
-      { h: "Why attestation matters for the EU AI Act", p: "The [EU AI Act's AI-literacy obligation under Article 4](https://artificialintelligenceact.eu/article/4/), in force since 2 February 2025, requires organisations to ensure staff have a sufficient level of AI literacy for their role. A policy distributed and acknowledged through attestation is the most direct way to evidence that duty. Without attestation records, you have a policy document but no proof anyone read it - thin evidence if a regulator ever asks how you assure literacy in practice. The obligation applies whether you're a five-person startup or a large enterprise; the Act doesn't set a headcount floor below which literacy stops mattering." },
+      { h: "Why attestation matters for the EU AI Act", p: "The [EU AI Act's AI-literacy obligation under Article 4](https://artificialintelligenceact.eu/article/4/) has applied since 2 February 2025. The July 2026 Digital Omnibus on AI amendment ([Regulation (EU) 2026/1744](https://eur-lex.europa.eu/eli/reg/2026/1744/oj)) kept that duty but dropped the original promise that organisations ensure a sufficient level of literacy for each person. Organisations now take measures to support AI literacy among their staff without guaranteeing any particular level for any individual, so you still need to show what you did and who it reached. A policy distributed and acknowledged through attestation is the most direct way to evidence that duty. Without attestation records, you have a policy document but no proof anyone read it - thin evidence if a regulator ever asks how you assure literacy in practice. The obligation applies whether you're a five-person startup or a large enterprise; the Act doesn't set a headcount floor below which literacy stops mattering." },
       { h: "Does attestation apply to contractors and freelancers too?", p: "If they use company AI tools or touch company data through AI, yes. The Article 4 duty and most internal risk logic don't distinguish between employment status - they care about who's actually operating the tools. A support lead at a Series A startup learned this the hard way when a contractor's unvetted use of a transcription tool surfaced during a customer security review; the fix was simple once attestation was extended to anyone with system access, not just payroll staff. It took an afternoon to close, and it closed the same gap for every future contractor automatically." },
       { h: "Why attestation matters for SOC 2 and customer audits", p: "SOC 2 auditors and enterprise security questionnaires ask whether your AI policy has been communicated to staff, a question that traces back to the vendor and personnel management expectations in the [AICPA's Trust Services Criteria](https://www.aicpa-cima.com/resources/download/2017-trust-services-criteria-with-revised-points-of-focus-2022). \"Yes, we emailed it\" is a weak answer if you can't show who received it and when. A timestamped attestation record for each employee, with a date and the policy version they accepted, is the audit-grade evidence that satisfies those questions without a follow-up call. See our [SOC 2 and AI](/blog/soc-2-ai-guide) guide for how this fits into a wider audit." },
       { h: "What happens if someone never acknowledges the policy?", p: "Chase it. An unacknowledged policy is a gap you're carrying, not a technicality. Set a follow-up window, seven to fourteen days is typical, and escalate to a manager if it's still outstanding after that. For anyone who genuinely won't engage, restricting their access to approved AI tools until they do is a reasonable, defensible position - far better than discovering the gap during an audit or after an incident traced back to that exact person." },
@@ -1357,7 +1357,7 @@ export const POSTS: Post[] = [
     },
     quote: {
       text: "Providers and deployers of AI systems shall take measures to ensure, to their best extent, a sufficient level of AI literacy of their staff.",
-      attribution: "EU AI Act, Article 4",
+      attribution: "EU AI Act, Article 4 (original 2024 wording, before the July 2026 amendment)",
     },
     faqs: [
       { q: "What is AI attestation?", a: "It's the recorded confirmation that a specific employee has read, understood and accepted your AI usage policy, including the date and the policy version they agreed to - not just that the policy was sent out." },

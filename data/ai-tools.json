@@ -1130,7 +1130,7 @@
       "trains_on_personal_data": "opt-out",
       "trains_on_personal_data_note": "Content training is on by default for Starter and Professional teams; admins can toggle 'Content training' in Settings. Content is de-identified and Education and Government data is excluded.",
       "trains_on_business_data": "no",
-      "trains_on_business_data_note": "Content training is off by default on Organization and Enterprise plans.",
+      "trains_on_business_data_note": "Content training is off by default on Organization and Enterprise plans, and Figma's help article says it is locked off on those plans and cannot currently be toggled on. Content training took effect on 15 August 2024.",
       "training_optout": "yes",
       "retention": "No fixed window for AI inputs and outputs (third-party model providers store data temporarily or not at all); customer content deleted or returned within 30 days of contract termination.",
       "soc2": "yes",
@@ -1144,7 +1144,7 @@
       "notable_risk": "Figma holds SOC 2 Type II and ISO 27001, and content training defaults off on Organization and Enterprise (on for Starter and Professional unless an admin turns it off). The gap is HIPAA: the AUP bars PHI and no BAA is offered.",
       "sources": [
         {
-          "claim": "Content training defaults by tier and admin toggle",
+          "claim": "Content training defaults by tier (on for Starter and Professional with an admin toggle; off and locked for Organization and Enterprise); Education and Government accounts excluded; effective 15 August 2024 (fetched 2026-10-16)",
           "url": "https://help.figma.com/hc/en-us/articles/17725942479127-Manage-AI-settings-and-content-training-for-your-team-or-organization"
         },
         {
@@ -1966,10 +1966,10 @@
       "trust_url": "https://asana.com/trust",
       "subprocessors_url": "https://asana.com/terms/subprocessors",
       "trains_on_personal_data": "no",
-      "trains_on_personal_data_note": "Neither Asana nor its AI partners use customer data to train AI models; partner LLMs are contractually barred from training and must delete inputs and outputs after each query.",
+      "trains_on_personal_data_note": "Asana's product-specific terms state that neither Asana nor its third-party AI partners may use Customer Data to train the generative AI models behind Asana AI. Customer Data includes AI inputs and outputs, which the customer retains rights to.",
       "trains_on_business_data": "no",
       "training_optout": null,
-      "retention": "AI partners promptly delete input and output data after completing the relevant query and response.",
+      "retention": "Not stated in Asana's product-specific terms. They say Asana AI use complies with third-party AI partner terms, which are incorporated by reference but not reproduced, so partner retention and deletion periods are unverified.",
       "soc2": "yes",
       "iso27001": "yes",
       "iso42001": null,
@@ -1978,10 +1978,14 @@
       "data_region_eu": "yes",
       "sso_saml": "yes",
       "enterprise_plan": "Business or Enterprise (DPA, HIPAA, SSO and EU residency are gated above Free)",
-      "notable_risk": "Asana states neither it nor its AI partners train on customer data, and partner LLMs must delete inputs and outputs after each query; it holds SOC 2 Type II and ISO 27001 with a HIPAA BAA, DPA, EU residency and SSO reserved for paid plans.",
+      "notable_risk": "Asana's product-specific terms say neither it nor its AI partners may train generative models on customer data, and that the customer retains its AI inputs and outputs. How long AI partners keep that data is left to partner terms we could not verify. Asana holds SOC 2 Type II and ISO 27001 with a HIPAA BAA, DPA, EU residency and SSO reserved for paid plans.",
       "sources": [
         {
-          "claim": "No training, HIPAA BAA, retention",
+          "claim": "No training on customer data for Asana AI; AI inputs and outputs are Customer Data (product-specific terms, fetched 2026-10-16)",
+          "url": "https://asana.com/terms/asana-product-specific-terms-071026.md"
+        },
+        {
+          "claim": "HIPAA BAA governed by Asana's Business Associate Addendum",
           "url": "https://asana.com/privacy"
         },
         {
@@ -1997,7 +2001,7 @@
           "url": "https://asana.com/terms/subprocessors"
         }
       ],
-      "confidence": "high"
+      "confidence": "medium"
     },
     {
       "slug": "monday-ai",

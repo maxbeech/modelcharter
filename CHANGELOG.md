@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-16: Content refresh from Search Console verdicts
+
+- **AI attestation guide.** Corrected the EU AI Act Article 4 wording to the July 2026 Digital Omnibus amendment (Regulation (EU) 2026/1744). The duty still applies since 2 February 2025, but the "sufficient level of literacy for each person" guarantee was dropped. The block quote is now labelled as the original 2024 wording. Post date moved to 16 October 2026.
+- **Asana AI record.** Training claim now cites Asana's product-specific terms, which say Asana and its AI partners may not train generative models on Customer Data. The "partners delete inputs and outputs after each query" retention claim was not supported by any source we could read, so it is now marked unverified. Confidence lowered to medium.
+- **Figma AI record.** Added the effective date (15 August 2024) and the fact that Organization and Enterprise content training is locked off, with sources fetched on 16 October 2026.
+
 ## 2026-10-07: Search Console indexability remediation
 
 - **Canonical origin.** Confirmed `https://www.modelcharter.com` as the single source for sitemap, robots, metadata, Open Graph and JSON-LD URLs. The Helm7/Caddy apex redirect remains a permanent redirect to that host, so duplicate host variants correctly stay out of Google's index.
