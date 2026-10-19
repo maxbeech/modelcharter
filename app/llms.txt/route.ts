@@ -28,6 +28,9 @@ export function GET() {
   lines.push(`- Comparisons: ${SITE.url}/compare/{tool-a}-vs-{tool-b}`);
   lines.push(`- Glossary (definitions of HIPAA BAA, SOC 2, GDPR DPA, subprocessors and more): ${SITE.url}/glossary`, "");
 
+  lines.push("## Articles");
+  lines.push(`- Blog (AI governance, shadow AI, AI usage policies, EU AI Act and AI tool safety guides): ${SITE.url}/blog`, "");
+
   lines.push("## Plans");
   lines.push(`- Pricing: ${SITE.url}/pricing`);
   for (const plan of PLANS) {

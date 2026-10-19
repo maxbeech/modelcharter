@@ -17,6 +17,7 @@ ok(body.includes(`Updated: ${SITE.updated}`), "Updated line matches SITE.updated
 ok(body.includes(`${SITE.url}/ai-usage-policy-generator`), "links the policy generator");
 ok(body.includes(`${SITE.url}/tools`), "links the tool directory");
 ok(body.includes(`${SITE.url}/glossary`), "links the glossary");
+ok(body.includes(`${SITE.url}/blog`), "links the blog so assistants can find the articles");
 ok(body.includes(`${SITE.url}/frameworks/eu-ai-act`), "links a framework guide");
 
 // Pricing/plans: an assistant answering "how much does this cost" needs this.

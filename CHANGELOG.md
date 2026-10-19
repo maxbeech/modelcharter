@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-19: llms.txt blog link
+
+- **llms.txt articles.** `/llms.txt` now has an Articles section linking `/blog`, the site's long-form content, which assistants could not previously discover from the file. A regression assertion in the llms-txt test guards the link. Fixes the weakest GEO surface (llms.txt, partial 70).
+
 ## 2026-10-16: Content refresh from Search Console verdicts
 
 - **AI attestation guide.** Corrected the EU AI Act Article 4 wording to the July 2026 Digital Omnibus amendment (Regulation (EU) 2026/1744). The duty still applies since 2 February 2025, but the "sufficient level of literacy for each person" guarantee was dropped. The block quote is now labelled as the original 2024 wording. Post date moved to 16 October 2026.
