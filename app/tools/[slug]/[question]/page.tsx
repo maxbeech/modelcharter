@@ -6,6 +6,7 @@ import { scoreTool } from "@/lib/risk";
 import { QUESTION_SLUGS, getQuestion, allQuestions, evidenceForQuestion } from "@/lib/registry-questions";
 import { JsonLd } from "@/components/JsonLd";
 import { RiskPill, Section } from "@/components/ui";
+import { HUB_BY_SLUG } from "@/lib/registry-frameworks";
 import { pageMeta, faqLd, breadcrumbLd } from "@/lib/seo";
 
 // Head-term registry pages: "Is ChatGPT HIPAA compliant?", "Does Claude train
@@ -49,6 +50,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   const badge = pass === null ? PASS_LABEL.unverified : pass ? PASS_LABEL.yes : PASS_LABEL.no;
   const others = allQuestions().filter((x) => x.slug !== q.slug);
   const evidence = evidenceForQuestion(t, q.slug);
+  const hub = HUB_BY_SLUG[q.framework];
+  const peers = TOOLS.filter((x) => x.category === t.category && x.slug !== t.slug).slice(0, 6);
 
   const faqs = [{ q: q.ask(t.name), a: q.answer(t) }];
 
@@ -112,6 +115,23 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 </Link>
               ))}
             </div>
+            {peers.length > 0 && (
+              <>
+                <h2 className="mt-8 font-display text-xl font-semibold text-ink">{q.label} for other {CATEGORY_LABELS[t.category].toLowerCase()}</h2>
+                <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
+                  {peers.map((x) => (
+                    <Link key={x.slug} href={`/tools/${x.slug}/${q.slug}`} className="rounded-xl border border-line bg-white px-4 py-3 text-sm transition-colors hover:border-brand-300">
+                      <span className="font-medium text-ink">{q.ask(x.name)}</span>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            )}
+            {hub && (
+              <p className="mt-6 text-sm text-ink-soft">
+                Compare every rated tool on <Link href={`/compliance/${hub.slug}`} className="text-brand-700 hover:underline">{q.label} compliance</Link>.
+              </p>
+            )}
             <p className="mt-6 text-sm text-ink-soft">
               See the full <Link href={`/tools/${t.slug}`} className="text-brand-700 hover:underline">{t.name} risk profile</Link>, with every data-handling fact and its source, or browse all <Link href="/tools" className="text-brand-700 hover:underline">rated AI tools</Link>.
             </p>
