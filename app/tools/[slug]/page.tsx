@@ -7,6 +7,7 @@ import { allQuestions } from "@/lib/registry-questions";
 import { JsonLd } from "@/components/JsonLd";
 import { RiskPill, VerdictTag, Section } from "@/components/ui";
 import { RiskGauge } from "@/components/marketing";
+import { HUBS } from "@/lib/registry-frameworks";
 import { pageMeta, faqLd, breadcrumbLd, softwareAppLd } from "@/lib/seo";
 
 export const dynamicParams = false;
@@ -141,6 +142,20 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               </Link>
             ))}
           </div>
+        </div>
+
+        <div className="mt-12">
+          <h2 className="font-display text-xl font-semibold text-ink">Compare {t.name} with other tools</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">
+            See how {t.name} sits among every rated tool on a single requirement:{" "}
+            {HUBS.map((h, i) => (
+              <span key={h.slug}>
+                {i > 0 && (i === HUBS.length - 1 ? ", or " : ", ")}
+                <Link href={`/compliance/${h.slug}`} className="text-brand-700 hover:underline">{h.label}</Link>
+              </span>
+            ))}
+            . To decide whether to approve it, follow our guide to <Link href="/blog/ai-risk-assessment-guide" className="text-brand-700 hover:underline">running an AI risk assessment</Link>, then record the decision in an <Link href="/blog/how-to-write-an-ai-usage-policy" className="text-brand-700 hover:underline">AI usage policy</Link>.
+          </p>
         </div>
 
         {related.length > 0 && (

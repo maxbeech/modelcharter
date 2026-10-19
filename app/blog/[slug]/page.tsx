@@ -57,6 +57,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { slug } = await params;
   const p = getPost(slug);
   if (!p) notFound();
+  const more = POSTS.filter((x) => x.slug !== p.slug && x.category === p.category).slice(0, 3);
   return (
     <>
       <JsonLd data={articleLd({ title: p.title, description: p.description, path: `/blog/${p.slug}`, date: p.date, author: p.author })} />
@@ -145,6 +146,19 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               “{p.quote.text}”
               <footer className="mt-2 text-sm not-italic font-medium text-ink-faint">{p.quote.attribution}</footer>
             </blockquote>
+          )}
+          {more.length > 0 && (
+            <div className="mt-10 border-t border-line pt-6">
+              <h2 className="font-display text-xl font-semibold text-ink">Related guides</h2>
+              <ul className="mt-3 space-y-2 text-[15px]">
+                {more.map((x) => (
+                  <li key={x.slug}><Link href={`/blog/${x.slug}`} className="text-brand-700 underline underline-offset-2 hover:text-brand-800">{x.title}</Link></li>
+                ))}
+              </ul>
+              <p className="mt-4 text-sm text-ink-soft">
+                Check a specific tool in the <Link href="/tools" className="text-brand-700 hover:underline">AI Tool Risk Directory</Link>.
+              </p>
+            </div>
           )}
         </article>
       </Section>
