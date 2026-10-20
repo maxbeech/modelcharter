@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { ensureOrg, getAttestations, getPolicies } from "@/lib/workspace";
 import { SITE, isPaidPlan } from "@/lib/site";
 import { CopyLink } from "@/components/CopyLink";
 import { NewAttestationButton } from "@/components/NewAttestationButton";
+import { KitUpsell } from "@/components/KitUpsell";
 import { actionCreateAttestation } from "../actions";
 
 export default async function AttestationsPage() {
@@ -13,28 +13,22 @@ export default async function AttestationsPage() {
   const paid = isPaidPlan(org.plan);
 
   if (!paid) {
-    return (
-      <div className="rounded-2xl border border-brand-200 bg-brand-50 p-8 text-center">
-        <h2 className="font-display text-lg font-semibold text-ink">Collect attestations on the Team plan</h2>
-        <p className="mx-auto mt-2 max-w-md text-sm text-ink-soft">Send each colleague a link to read and acknowledge your AI policy, and get a dated record of who signed: the evidence auditors ask for.</p>
-        <Link href="/dashboard/billing" className="mt-5 inline-flex rounded-full bg-brand-700 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-800">Upgrade to Team</Link>
-      </div>
-    );
+    return <KitUpsell title="Get every staff member to sign off" body="Send each person a link to read your AI policy and confirm it. You get a dated record of who signed, and who hasn't yet." />;
   }
 
   return (
     <div>
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="font-display text-lg font-semibold text-ink">Attestations</h2>
-          <p className="mt-1 text-sm text-ink-soft">Create a link for each person who must acknowledge the policy. You will see exactly when each person signed.</p>
+          <h2 className="font-display text-lg font-semibold text-ink">Staff sign-off</h2>
+          <p className="mt-1 text-sm text-ink-soft">Make a link for each person, then send it to them. You&apos;ll see when each one signs.</p>
         </div>
         <NewAttestationButton action={actionCreateAttestation} disabled={!hasPolicy} />
       </div>
-      {!hasPolicy && <p className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-inset ring-amber-100">Save a policy version first, then create attestation links against it.</p>}
+      {!hasPolicy && <p className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-inset ring-amber-100">Save a policy version first, then make sign-off links for it.</p>}
 
       {rows.length === 0 ? (
-        <p className="mt-4 text-sm text-ink-faint">No attestation links yet.</p>
+        <p className="mt-4 text-sm text-ink-faint">No sign-off links yet.</p>
       ) : (
         <div className="mt-4 divide-y divide-line rounded-2xl border border-line bg-white">
           {rows.map((a) => {
@@ -42,12 +36,12 @@ export default async function AttestationsPage() {
             return (
               <div key={a.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm">
                 <div>
-                  <span className="font-mono text-xs text-ink-faint">/attest/{a.token.slice(0, 8)}…</span>
+                  <span className="font-medium text-ink">{a.name || <span className="font-mono text-xs text-ink-faint">/attest/{a.token.slice(0, 8)}…</span>}</span>
                   <div className="mt-1">
                     {a.acknowledged_at
                       ? <span className="inline-flex items-center gap-1.5 font-medium text-emerald-700">
                           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden><path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                          Signed by {a.name || a.email} · {a.acknowledged_at.slice(0, 10)}
+                          Signed {a.acknowledged_at.slice(0, 10)}{a.email ? ` · ${a.email}` : ""}
                         </span>
                       : <span className="text-ink-faint">Awaiting signature</span>}
                   </div>

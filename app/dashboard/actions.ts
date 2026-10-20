@@ -1,9 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { ensureOrg, setToolStatus, savePolicy, createAttestationLink } from "@/lib/workspace";
+import { ensureOrg, setToolStatus, savePolicy, createAttestationLink, renameOrg } from "@/lib/workspace";
 import { markAlertsRead, setTracked } from "@/lib/alerts";
 import type { ActionResult } from "@/lib/analytics-events";
+import { isPaidPlan } from "@/lib/site";
 
 // All actions re-derive the org server-side (never trust a client-supplied id),
 // and the workspace helpers verify org membership on every query. Each action
@@ -30,10 +31,12 @@ export async function actionSavePolicy(formData: FormData): Promise<ActionResult
   return version === null ? { ok: false, reason: "save_failed" } : { ok: true, version };
 }
 
-export async function actionCreateAttestation(): Promise<ActionResult> {
+export async function actionCreateAttestation(formData?: FormData): Promise<ActionResult> {
   const org = await ensureOrg();
   if (!org) return { ok: false, reason: "no_workspace" };
-  const token = await createAttestationLink(org.id);
+  // Enforced here, not just by hiding the button: a server action is callable directly.
+  if (!isPaidPlan(org.plan)) return { ok: false, reason: "needs_kit" };
+  const token = await createAttestationLink(org.id, String(formData?.get("name") ?? ""));
   revalidatePath("/dashboard/attestations");
   return token ? { ok: true } : { ok: false, reason: "not_created" };
 }
@@ -50,4 +53,11 @@ export async function actionMarkAlertsRead() {
   if (!org) return;
   await markAlertsRead(org.id);
   revalidatePath("/dashboard");
+}
+
+export async function actionRenameOrg(formData: FormData) {
+  const org = await ensureOrg();
+  if (!org) return;
+  await renameOrg(org.id, String(formData.get("name") ?? ""));
+  revalidatePath("/dashboard", "layout");
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { TOOLS } from "@/lib/ai-tools";
-import { PolicyGenerator } from "@/components/PolicyGenerator";
+import { Suspense } from "react";
+import { PolicyGenerator, PolicyGeneratorFromUrl } from "@/components/PolicyGenerator";
 import { JsonLd } from "@/components/JsonLd";
 import { Section } from "@/components/ui";
 import { PageHero, FaqSection } from "@/components/page";
@@ -11,7 +12,7 @@ export const metadata: Metadata = pageMeta({
   description:
     "Generate a tailored AI usage policy for your company. Free, no signup. Covers approved tools, data rules, disclosure and the EU AI Act, NIST AI RMF, ISO 42001 and SOC 2. Download as Markdown or PDF.",
   path: "/ai-usage-policy-generator",
-  keywords: ["ai usage policy", "ai usage policy template", "ai acceptable use policy", "ai policy generator", "employee ai policy"],
+  keywords: ["ai usage policy", "ai usage policy template", "ai acceptable use policy", "ai policy generator", "employee ai policy", "hipaa ai policy", "ai policy for healthcare"],
 });
 
 const FAQS = [
@@ -23,6 +24,7 @@ const FAQS = [
 export default function Page() {
   const today = new Date().toISOString().slice(0, 10);
   const toolNames = TOOLS.map((t) => t.name);
+  const baaToolNames = TOOLS.filter((t) => t.hipaaBaa === "yes").map((t) => t.name);
   return (
     <>
       <JsonLd data={softwareAppLd("AI Usage Policy Generator", metadata.description as string, "/ai-usage-policy-generator")} />
@@ -36,7 +38,9 @@ export default function Page() {
       />
 
       <Section className="py-10 sm:py-14">
-        <PolicyGenerator today={today} toolNames={toolNames} />
+        <Suspense fallback={<PolicyGenerator today={today} toolNames={toolNames} baaToolNames={baaToolNames} />}>
+          <PolicyGeneratorFromUrl today={today} toolNames={toolNames} baaToolNames={baaToolNames} />
+        </Suspense>
       </Section>
 
       <FaqSection title="AI usage policy questions, answered" faqs={FAQS} />

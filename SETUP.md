@@ -15,8 +15,10 @@ table is scoped to the caller's org by RLS, not by hand-written filters.
 1. Create a project at https://supabase.com.
 2. Apply the migrations in `supabase/migrations/` in order:
    `0001_init.sql` (orgs, members, tool register, policies, attestations, RLS,
-   and the new-user trigger) then `0002_change_tracking.sql` (fact snapshots,
-   watchlist, alerts). Run them in the SQL editor, or with the CLI:
+   and the new-user trigger), `0002_change_tracking.sql` (fact snapshots,
+   watchlist, alerts), `20260710111604_harden_handle_new_user.sql`, then
+   `20261020120000_lock_billing_columns.sql` (only the server can write
+   `orgs.plan` and `stripe_*`; sign-off links need a paid org). Run them in the SQL editor, or with the CLI:
    `supabase db push` (after `supabase link`).
 3. In **Authentication -> Providers -> Email**, decide on email confirmation.
    With "Confirm email" off, signup logs the user straight in. With it on, the
@@ -48,16 +50,28 @@ facts changed. It runs as a Helm7 cron service (`0 6 * * *`).
 
 ## Billing: Stripe
 
-Two recurring prices (Team $49, Business $149) and a webhook at
-`/api/stripe/webhook`. Env vars: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
-`NEXT_PUBLIC_STRIPE_PRICE_TEAM`, `NEXT_PUBLIC_STRIPE_PRICE_BUSINESS`. The webhook
-updates `orgs.plan` via the service-role client. Each upgrade button disables
-itself when its price is not configured, so it never dead-ends.
+One product is sold: the **HIPAA AI Kit**, a one-time $99 payment (Checkout
+`mode: "payment"`). Create a one-time price in Stripe and set
+`NEXT_PUBLIC_STRIPE_PRICE_HIPAA_KIT`. The webhook at `/api/stripe/webhook` needs
+`checkout.session.completed` (plus the `customer.subscription.*` events while
+legacy subscribers remain). A kit purchase sets `orgs.plan = 'hipaa_kit'`.
+
+Ownership on the shared Stripe account is decided by price id only. The
+generated gate (`lib/gate.ts`) reads prices from a subscription, which a
+one-off session doesn't have, so kit sessions are checked by their line items
+in `lib/billing/kit.ts` before anything is granted.
+
+Team ($49/mo) and Business ($149/mo) are legacy: no longer sold, still honoured.
+Keep `NEXT_PUBLIC_STRIPE_PRICE_TEAM` / `_BUSINESS` set while anyone is subscribed.
 
 Checkout returns to the signed-in dashboard with its session ID. The dashboard
-checks the session belongs to that organisation and is funded before reconciling
-the plan from Stripe, covering delayed webhook delivery. Unfunded sessions never
-grant access, and a failed entitlement write returns 5xx to Stripe for retry.
+checks the session belongs to that organisation, is funded and (for the kit) is
+this product's price before granting access, covering delayed webhook delivery.
+A failed entitlement write returns 5xx to Stripe for retry.
+
+Buy intent survives signup: `/signup?plan=hipaa_kit` (and `/login?plan=`) lands
+on `/dashboard?buy=hipaa_kit`, which sends `begin_checkout` and continues to
+Checkout.
 
 ## Local dev
 
@@ -66,6 +80,8 @@ npm install
 cp .env.example .env.local   # fill in Supabase (+ optionally Stripe, CRON_SECRET)
 npm run dev                  # http://localhost:3000
 npm test                     # unit tests
+# RLS/migration test against a disposable Postgres (skipped without RLS_TEST_PG):
+# RLS_TEST_PG="-h /tmp/pgsock -p 54329 -U postgres" npx tsx test/rls.test.mts
 npm run build                # production build
 ```
 

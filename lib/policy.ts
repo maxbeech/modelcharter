@@ -22,7 +22,43 @@ export interface PolicyInput {
   regulations: string[]; // e.g. ["EU AI Act", "GDPR", "HIPAA", "SOC 2"]
   ownerRole: string; // who owns AI governance, e.g. "Head of Operations"
   effectiveDate: string; // ISO date
+  baaTools?: string[]; // names of tools whose vendor offers a HIPAA BAA (from the directory)
 }
+
+// Starting answers for a type of organisation. Applied by the generator when
+// the page is opened with ?preset=<id>. Only answers change; the wording still
+// comes from generatePolicy, so a preset can never drift from the clauses.
+export const POLICY_PRESETS = {
+  healthcare: {
+    industry: "Healthcare",
+    stance: "strict" as Stance,
+    ownerRole: "Practice Manager (HIPAA Privacy Officer)",
+    allowCustomerData: false,
+    allowPersonalData: false,
+    allowCodeGen: false,
+    requireDisclosure: true,
+    regulations: ["HIPAA"],
+  },
+} as const;
+
+export type PresetId = keyof typeof POLICY_PRESETS;
+
+/** The editable answers, read back from a saved version's input_json. Unknown or mistyped fields are dropped. */
+export type SavedAnswers = Partial<Pick<PolicyInput, "companyName" | "industry" | "stance" | "ownerRole" | "allowCustomerData" | "allowPersonalData" | "allowCodeGen" | "requireDisclosure" | "regulations">>;
+
+export function savedAnswers(raw: unknown): SavedAnswers {
+  if (!raw || typeof raw !== "object") return {};
+  const r = raw as Record<string, unknown>;
+  const out: SavedAnswers = {};
+  for (const k of ["companyName", "industry", "ownerRole"] as const) if (typeof r[k] === "string") out[k] = r[k] as string;
+  for (const k of ["allowCustomerData", "allowPersonalData", "allowCodeGen", "requireDisclosure"] as const) if (typeof r[k] === "boolean") out[k] = r[k] as boolean;
+  if (r.stance === "permissive" || r.stance === "balanced" || r.stance === "strict") out.stance = r.stance;
+  if (Array.isArray(r.regulations)) out.regulations = r.regulations.filter((x): x is string => typeof x === "string");
+  return out;
+}
+
+export const isPresetId = (v: string | null | undefined): v is PresetId =>
+  v != null && Object.prototype.hasOwnProperty.call(POLICY_PRESETS, v);
 
 export interface PolicySection { heading: string; body: (string | string[])[] }
 export interface Policy { title: string; intro: string[]; sections: PolicySection[] }
@@ -39,7 +75,10 @@ const STANCE_TONE: Record<Stance, string> = {
 const fill = (s: string, company: string) => s.replaceAll("{company}", company);
 
 export function generatePolicy(input: PolicyInput): Policy {
-  const c = input.companyName.trim() || "Our company";
+  // A healthcare policy talks about the practice and its patients.
+  const care = input.industry === "Healthcare";
+  const orgNoun = care ? "practice" : "company";
+  const c = input.companyName.trim() || (care ? "Our practice" : "Our company");
   const owner = input.ownerRole.trim() || "AI policy owner";
   const s: PolicySection[] = [];
 
@@ -66,8 +105,14 @@ export function generatePolicy(input: PolicyInput): Policy {
   const toolBody: (string | string[])[] = [
     `${c} keeps a register of AI tools and the status of each. Only use tools that are Approved for the data you are working with.`,
   ];
+  const hipaa = input.regulations.includes("HIPAA");
+  const baa = new Set(input.baaTools ?? []);
   if (input.approvedTools.length)
-    toolBody.push("Currently approved tools:", input.approvedTools.map((t) => `${t}: approved`));
+    toolBody.push("Currently approved tools:", input.approvedTools.map((t) => !hipaa
+      ? `${t}: approved`
+      : baa.has(t)
+        ? `${t}: approved. Patient information only through our business account, once a signed BAA covers it`
+        : `${t}: approved for work that contains no patient information`));
   else
     toolBody.push("The approved-tools list is maintained separately and shared with all staff. If a tool is not on it, treat it as not yet approved.");
   if (input.prohibitedTools.length)
@@ -76,18 +121,40 @@ export function generatePolicy(input: PolicyInput): Policy {
   s.push({ heading: "Approved tools", body: toolBody });
 
   const dataRules: string[] = [];
-  dataRules.push(input.allowCustomerData
+  const phiNote = input.regulations.includes("HIPAA") ? " The only exception is patient information handled exactly as the Patient information section below allows." : "";
+  if (care) dataRules.push(input.allowCustomerData
+    ? "Confidential practice information (finances, contracts, staff records) may only be used with tools approved for that purpose, and only where the vendor does not train its models on our data."
+    : `Never enter confidential practice information (finances, contracts, staff records) into an AI tool.`);
+  else dataRules.push(input.allowCustomerData
     ? "Customer or confidential business data may only be used with tools approved for that purpose, and only where the vendor does not train its models on our data."
     : "Never enter customer data, confidential business information, trade secrets or unreleased plans into any AI tool.");
   dataRules.push(input.allowPersonalData
-    ? "Personal data (information that identifies an individual) may be used only with an approved tool that offers a Data Processing Addendum, and only where strictly necessary."
-    : "Never enter personal data (names, emails, customer records or any information that identifies an individual) into an AI tool.");
+    ? `Personal data (information that identifies an individual) may be used only with an approved tool that offers a Data Processing Addendum, and only where strictly necessary.${phiNote}`
+    : `Never enter personal data (names, emails, ${care ? "patient" : "customer"} records or any information that identifies an individual) into an AI tool.${phiNote}`);
   dataRules.push("Never enter credentials, API keys, passwords or secrets.");
   dataRules.push("Assume anything you type into a consumer AI tool may be retained by the vendor and, on free tiers, used to train their models.");
   s.push({
     heading: "What you may and may not put into AI tools",
-    body: ["The single most important rule is controlling what data leaves the company.", dataRules],
+    body: [`The single most important rule is controlling what data leaves the ${orgNoun}.`, dataRules],
   });
+
+  if (hipaa) {
+    s.push({
+      heading: "Patient information (PHI)",
+      body: [
+        "Protected health information (PHI) is any health information that could identify a patient: names, dates, contact details, record numbers, photos, and anything else taken from a patient's record.",
+        [
+          `Only put PHI into a tool that ${c} has a signed Business Associate Agreement (BAA) for, and only through ${c}'s business account. Never a personal or free account.`,
+          "Use the minimum necessary. Leave out names, dates of birth and record numbers whenever the task works without them.",
+          "Removing a name alone does not make information safe. If a patient could still be identified, treat it as PHI.",
+          "Check every AI-drafted note, letter or summary before it goes into a record or to a patient. AI can get clinical details wrong.",
+          "AI can support clinical work but never makes a diagnosis or treatment decision on its own.",
+          "Ask the patient before recording a conversation with an AI scribe or note-taker, and follow your state's consent rules.",
+          `If PHI goes into a tool that isn't covered by a BAA, tell the ${owner} the same day. It may be a breach that has to be assessed and reported.`,
+        ],
+      ],
+    });
+  }
 
   if (input.allowCodeGen) {
     s.push({

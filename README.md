@@ -6,9 +6,10 @@ Sentry records production errors, logs, request failures and optional user feedb
 
 The Sentry scrubber (`lib/scrub.ts`) redacts secrets of any length, backs up to a clean boundary when it truncates, and fails closed; its regression tests are in `test/scrub-hardening.test.mts`.
 
-**Charter your AI at work.** AI governance for teams without a compliance
-department: generate an AI usage policy, see which AI tools are safe to use, and
-track that your team has read the rules.
+**Charter your AI at work.** AI governance for small healthcare practices (and
+other teams without a compliance department): write an AI policy that protects
+patient data, see which AI tools will sign a BAA, and track that staff have read
+the rules.
 
 - **Free, no signup:** [AI Usage Policy Generator](/ai-usage-policy-generator) ·
   [AI Tool Risk Directory](/tools) (60+ tools rated from their own policies) ·
@@ -16,9 +17,14 @@ track that your team has read the rules.
   [compliance hubs](/compliance) (HIPAA / GDPR / SOC 2 / ISO 27001 / no-training) ·
   per-tool answer pages ("Is X HIPAA compliant?"), comparisons, a glossary ·
   framework guides (EU AI Act, NIST AI RMF, ISO 42001, SOC 2) · blog.
-- **Paid (Team/Business):** shared AI tool register, versioned policy, employee
-  attestation tracking, and **change alerts** (watch a tool, get told when its
-  data-handling facts change).
+- **Free with an account:** tool register with a BAA column, saved policy
+  versions (the healthcare preset at `/ai-usage-policy-generator?preset=healthcare`),
+  and change alerts when we update a watched tool's facts.
+- **Paid, one-off ($99): the [HIPAA AI Kit](/hipaa-ai-kit).** Staff sign-off
+  links with a dated record, and a printable evidence pack
+  (`/dashboard/evidence`): policy, tool decisions with BAA status, sign-offs.
+  Team/Business subscriptions are legacy and only honoured, not sold.
+  Why: see [docs/monetisation_plan.md](docs/monetisation_plan.md).
 
 ## Analytics
 
@@ -75,7 +81,7 @@ unverified rather than filled with assumptions.
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm test         # unit tests (policy, risk, tools, seo, frameworks, site, registry, fact-signature, llms-txt, no-em-dash)
+npm test         # unit tests (policy, risk, tools, seo, site, registry, analytics, kit, no-em-dash, ...; rls skips without RLS_TEST_PG)
 npm run build    # production build
 ```
 

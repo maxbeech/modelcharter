@@ -9,7 +9,7 @@ const { analyticsPlanFor, buildAnalyticsIdentity, isTestUserMetadata } = await i
 const { analyticsEvents, failureReason, isAnalyticsIdentity, beginCheckoutParams, reportAction,
   identifyJourney, identifyAnonymousVisitor, captureJourneyFailure } = await import("../lib/analytics-events.ts");
 const { analyticsConsentGranted, hasSupabaseSessionCookie } = await import("../lib/analytics-consent.ts");
-const { checkoutSessionProblem, purchaseFromSession } = await import("../lib/billing/purchase.ts");
+const { checkoutSessionProblem, purchaseFromSession, checkoutPlanId, lineItemPriceIds } = await import("../lib/billing/purchase.ts");
 const { userRefFor } = await import("../lib/openhelm-analytics-mp.ts");
 
 const isArguments = (v: unknown) => Object.prototype.toString.call(v) === "[object Arguments]";
@@ -84,7 +84,28 @@ eq(purchaseFromSession({ ...(session as object), amount_total: 4900, metadata: {
 eq(checkoutSessionProblem(session, "org-1"), null, "a funded session for this org is reportable");
 eq(checkoutSessionProblem(session, "org-2"), "session_not_yours", "another org's session is refused");
 eq(checkoutSessionProblem({ ...(session as object), payment_status: "unpaid" } as never, "org-1"), "payment_not_confirmed", "unpaid is refused");
-eq(checkoutSessionProblem({ ...(session as object), mode: "payment" } as never, "org-1"), "not_a_subscription", "one-off payment is refused");
+eq(checkoutSessionProblem({ ...(session as object), mode: "payment" } as never, "org-1"), "not_a_kit_purchase", "a one-off payment that is not the kit is refused");
+eq(checkoutSessionProblem({ ...(session as object), mode: "setup" } as never, "org-1"), "unsupported_mode", "a setup session is refused");
+
+// The one-off HIPAA AI Kit.
+eq(beginCheckoutParams("hipaa_kit"), {
+  currency: "USD", value: 99,
+  items: [{ item_id: "hipaa_kit", item_name: "HIPAA AI Kit", price: 99, quantity: 1 }],
+}, "begin_checkout carries the kit's one-off price");
+const kitSession = {
+  id: "cs_test_kit", mode: "payment", status: "complete", payment_status: "paid",
+  amount_total: 9900, currency: "usd", client_reference_id: "org-1", metadata: { org_id: "org-1", plan: "hipaa_kit" },
+} as never;
+eq(checkoutSessionProblem(kitSession, "org-1"), null, "a paid kit session for this org is reportable");
+eq(checkoutSessionProblem({ ...(kitSession as object), payment_status: "unpaid" } as never, "org-1"), "payment_not_confirmed", "an unpaid kit session is refused");
+eq(checkoutPlanId(kitSession), "hipaa_kit", "a one-off payment grants the kit");
+eq(checkoutPlanId({ mode: "subscription", metadata: { plan: "hipaa_kit" } } as never), "team", "a subscription can never grant the kit by metadata alone");
+eq(purchaseFromSession(kitSession, null), {
+  transaction_id: "cs_test_kit", currency: "USD", value: 99,
+  items: [{ item_id: "hipaa_kit", item_name: "HIPAA AI Kit", price: 99, quantity: 1 }], trial: false,
+}, "a kit purchase reports its real charge and is not a trial");
+eq(lineItemPriceIds({ data: [{ price: { id: "price_kit" } }, { price: null }] }), ["price_kit", null], "line item prices are read for the ownership check");
+eq(lineItemPriceIds(null), [], "no line items means no prices");
 
 // -- the dataLayer: gtag.js only acts on `arguments` objects, never arrays -------
 const win: { dataLayer: unknown[]; location: { href: string } } = { dataLayer: [], location: { href: "https://modelcharter.test/" } };

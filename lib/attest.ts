@@ -5,13 +5,13 @@ import { createAdminSupabase } from "@/lib/supabase/admin";
 // through the service-role client (server only) so the public sign page can read
 // and write a single attestation row by token without an anon RLS policy.
 
-export interface AttestView { orgName: string; version: number | null; contentMd: string | null; acknowledged: boolean }
+export interface AttestView { orgName: string; version: number | null; contentMd: string | null; acknowledged: boolean; name: string | null }
 
 export async function getAttestation(token: string): Promise<AttestView | null> {
   const admin = createAdminSupabase();
   if (!admin || !token) return null;
   const { data: a } = await admin
-    .from("attestations").select("org_id, policy_id, acknowledged_at").eq("token", token).maybeSingle();
+    .from("attestations").select("org_id, policy_id, acknowledged_at, name").eq("token", token).maybeSingle();
   if (!a) return null;
   const { data: o } = await admin.from("orgs").select("name").eq("id", a.org_id).maybeSingle();
   let version: number | null = null;
@@ -21,7 +21,7 @@ export async function getAttestation(token: string): Promise<AttestView | null> 
     version = (p?.version as number) ?? null;
     contentMd = (p?.content_md as string) ?? null;
   }
-  return { orgName: (o?.name as string) ?? "", version, contentMd, acknowledged: Boolean(a.acknowledged_at) };
+  return { orgName: (o?.name as string) ?? "", version, contentMd, acknowledged: Boolean(a.acknowledged_at), name: (a.name as string) ?? null };
 }
 
 export async function signAttestation(token: string, name: string, email: string): Promise<boolean> {

@@ -6,12 +6,13 @@ import { eq, ok, done } from "./_assert.mts";
 eq(isPaidPlan("free"), false, "free is not paid");
 eq(isPaidPlan("team"), true, "team is paid");
 eq(isPaidPlan("business"), true, "business is paid");
+eq(isPaidPlan("hipaa_kit"), true, "the one-off kit is paid");
 eq(isPaidPlan(null), false, "null is not paid");
 eq(isPaidPlan(undefined), false, "undefined is not paid");
 eq(isPaidPlan("enterprise-typo"), false, "unknown plan is not paid");
 
 // Plans are coherent.
-ok(PLANS.length === 3, "three plans");
+ok(PLANS.length === 2, "two listed plans: Free and the kit");
 ok(PLANS[0].id === "free" && PLANS[0].price === 0, "free plan is $0");
 for (const p of PLANS) { ok(p.features.length > 0, `${p.id} has features`); ok(!!p.href, `${p.id} has CTA href`); }
 ok(NAV.every((n) => n.href.startsWith("/")), "nav links are internal paths");

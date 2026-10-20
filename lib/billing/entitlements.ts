@@ -5,6 +5,7 @@ import { createAdminSupabase } from "@/lib/supabase/admin";
 import { captureServerError } from "@/lib/observability";
 import { planForSubscription } from "@/lib/stripe-events";
 import { checkoutPlanId, checkoutSessionProblem, purchaseFromSession, type PurchasePayload } from "./purchase";
+import { grantKit, isOwnKitSession } from "./kit";
 
 /** A verified Checkout return: the purchase to report, or a short code for why not. */
 export type CheckoutConfirmation =
@@ -20,6 +21,7 @@ export async function confirmCheckoutSession(sessionId: string, orgId: string): 
     const session = await stripe.checkout.sessions.retrieve(sessionId, { expand: ["subscription"] });
     const problem = checkoutSessionProblem(session, orgId);
     if (problem) return { ok: false, reason: problem };
+    if (session.mode === "payment" && !(await isOwnKitSession(stripe, session.id))) return { ok: false, reason: "not_our_price" };
     const subscription = typeof session.subscription === "object" && session.subscription !== null ? session.subscription : null;
     return { ok: true, purchase: purchaseFromSession(session, subscription?.status), subscription, session };
   } catch (error) {
@@ -36,6 +38,10 @@ export async function reconcileCheckoutSession(sessionId: string, orgId: string)
   if (!admin) return { ok: false, reason: "billing_not_configured" };
   const { session, subscription } = confirmed;
   try {
+    if (session.mode === "payment") {
+      await grantKit(admin, orgId, typeof session.customer === "string" ? session.customer : null);
+      return confirmed;
+    }
     const { error } = await admin.from("orgs").update({
       plan: planForSubscription(subscription?.status ?? "active", checkoutPlanId(session)),
       stripe_customer_id: typeof session.customer === "string" ? session.customer : null,

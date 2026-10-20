@@ -64,6 +64,15 @@ export async function getRegister(orgId: string): Promise<RegisterRow[]> {
 }
 
 // Returns whether the status was saved, so the caller can report a failure.
+export async function renameOrg(orgId: string, name: string): Promise<boolean> {
+  const clean = name.trim().slice(0, 80);
+  if (!clean) return false;
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.from("orgs").update({ name: clean }).eq("id", orgId);
+  if (error) captureServerError(error, { scope: "workspace", stage: "rename_org", orgId, code: error.code });
+  return !error;
+}
+
 export async function setToolStatus(orgId: string, slug: string, name: string, status: string): Promise<boolean> {
   if (!REGISTER_STATUSES.includes(status)) return false;
   const supabase = await createServerSupabase();
@@ -80,6 +89,16 @@ export async function getPolicies(orgId: string): Promise<PolicyRow[]> {
   const { data } = await supabase
     .from("policies").select("id, version, content_md, created_at").eq("org_id", orgId).order("version", { ascending: false });
   return (data as PolicyRow[]) ?? [];
+}
+
+// The answers behind the latest saved version, so the editor reopens where
+// the practice left off. Null when nothing is saved or the row predates them.
+export async function getLatestPolicyInput(orgId: string): Promise<Record<string, unknown> | null> {
+  const supabase = await createServerSupabase();
+  const { data } = await supabase
+    .from("policies").select("input_json").eq("org_id", orgId).order("version", { ascending: false }).limit(1);
+  const input = data?.[0]?.input_json;
+  return input && typeof input === "object" ? (input as Record<string, unknown>) : null;
 }
 
 // Returns the saved version number, or null when the insert failed.
@@ -100,13 +119,15 @@ export async function getAttestations(orgId: string): Promise<AttestationRow[]> 
   return (data as AttestationRow[]) ?? [];
 }
 
-export async function createAttestationLink(orgId: string): Promise<string | null> {
+// `name` is who the link is for, so the evidence pack can list who has not
+// signed yet. The signer confirms or corrects it when they sign.
+export async function createAttestationLink(orgId: string, name?: string): Promise<string | null> {
   const supabase = await createServerSupabase();
   const { data: pol } = await supabase
     .from("policies").select("id").eq("org_id", orgId).order("version", { ascending: false }).limit(1);
   if (!pol?.length) return null;
   const { data, error } = await supabase
-    .from("attestations").insert({ org_id: orgId, policy_id: pol[0].id }).select("token").single();
+    .from("attestations").insert({ org_id: orgId, policy_id: pol[0].id, name: name?.trim().slice(0, 120) || null }).select("token").single();
   if (error) captureServerError(error, { scope: "workspace", stage: "create_attestation", orgId, code: error.code });
   return (data?.token as string) ?? null;
 }

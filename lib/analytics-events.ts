@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { identify, track, type AnalyticsPlan } from "./openhelm-analytics";
 import { analyticsConsentGranted, currentCookieHeader, hasSupabaseSessionCookie } from "./analytics-consent";
-import { PLANS } from "./site";
+import { PLAN_LABELS, PLAN_PRICES, type PlanId } from "./site";
 
 /**
  * Every GA4 event ModelCharter sends for OpenHelm's user journeys, in one
@@ -95,14 +95,14 @@ export function trackFailure(
   return track(name, { ...params, reason: failureReason(reason) });
 }
 
-/** The GA `items` entry for a paid plan, from the same table the pricing page shows. */
+/** The GA `items` entry for a paid plan, from the same price table the pricing page shows. */
 export function planItem(planId: string): { item_id: string; item_name: string; price: number; quantity: 1 } | null {
-  const plan = PLANS.find((p) => p.id === planId);
-  if (!plan || plan.id === "free") return null;
-  return { item_id: plan.id, item_name: plan.name, price: plan.price, quantity: 1 };
+  if (!(planId in PLAN_PRICES) || planId === "free") return null;
+  const id = planId as PlanId;
+  return { item_id: id, item_name: PLAN_LABELS[id], price: PLAN_PRICES[id], quantity: 1 };
 }
 
-/** Params for `begin_checkout`: the plan's listed monthly price, not a charge. */
+/** Params for `begin_checkout`: the plan's listed price, not a charge. */
 export function beginCheckoutParams(planId: string): Record<string, unknown> {
   const item = planItem(planId);
   return item ? { currency: "USD", value: item.price, items: [item] } : { currency: "USD" };

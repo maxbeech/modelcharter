@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-10-20: HIPAA AI Kit, healthcare repositioning and billing lock
+
+Why: about 270 visitors and 57 Google clicks in 90 days, a $49/mo subscription aimed at a generic audience, and healthcare questions ("is ChatGPT HIPAA compliant", "hipaa compliant ai") far out-searching "AI policy". Full reasoning in `docs/monetisation_plan.md`.
+
+- **Security: billing columns locked.** `orgs_update` let any member write `orgs.plan` with the anon key, so anyone could unlock paid features for free. Migration `20261020120000_lock_billing_columns.sql` limits members to renaming the org (column grants), stops users joining orgs they didn't create, lets a creator see their own new org (fixes the `ensureOrg` fallback), and only lets paid orgs insert sign-off links. `test/rls.test.mts` applies every migration to a throwaway Postgres and proves the hole is closed (it fails without the migration).
+- **One product: the HIPAA AI Kit, $99 once.** `KIT` in `lib/site.ts` is the single source for its name, price and features. Checkout runs in `mode: "payment"`. Kit sessions are matched to this product by line-item price id (`lib/billing/kit.ts`), never by metadata, because the generated gate only reads subscription prices. Team and Business are legacy: still honoured, no longer sold.
+- **Honest pricing.** Removed features that were never built from the plan copy: PDF report, SSO, audit log, control mapping, member caps and priority support. A test fails if any of them come back.
+- **Buy intent survives signup.** `/signup?plan=hipaa_kit` and `/login?plan=` now continue to Checkout (`/dashboard?buy=` sends `begin_checkout`, then hands off). Before this the chosen plan was dropped.
+- **Server-side gate.** `actionCreateAttestation` checks the plan instead of relying on the hidden button.
+- **Evidence pack** (`/dashboard/evidence`): a printable record of the policy (rendered, not raw Markdown), every tool decision with its BAA status, sign-offs signed and pending, and a warning for allowed tools with no confirmed BAA. Built by the pure `lib/evidence.ts`.
+- **BAA everywhere.**
+  - `lib/hipaa.ts` turns the directory's `hipaa_baa` fact into a chip and a sentence. Unknown stays "BAA unverified".
+  - The chip shows in the tool register and on the kit page.
+  - A tool you allow that has no confirmed BAA is flagged "No PHI in this tool".
+- **Healthcare policy preset** (`?preset=healthcare`).
+  - The preset sets strict mode, HIPAA, and "Practice Manager (HIPAA Privacy Officer)" as the policy owner.
+  - It adds a dedicated "Patient information (PHI)" section covering minimum necessary, de-identification, BAA-only tools, human review, scribe consent and incident reporting.
+  - Approved tools are worded by their BAA status.
+  - Data rules defer to the PHI section, and the copy talks about the practice and patients.
+- **Dashboard.**
+  - The policy editor reopens the last saved answers and takes approved and prohibited tools from the register.
+  - The org can be renamed ("Name on this record").
+  - Sign-off links can carry the person's name, which is prefilled on the sign page.
+  - Copy link falls back to a selectable URL when clipboard access is denied.
+  - Four-step setup, an "Owned" state on billing, and `aria-pressed` on generator toggles.
+- **Repositioning.** New `/hipaa-ai-kit` page (static, weekly ISR, Product + FAQ JSON-LD, in the sitemap and llms.txt). The homepage, pricing page, site description and terms now target small healthcare practices and describe one-time billing.
+- **Lint.** Removed effect-driven state in the policy generator: the date comes from `useSyncExternalStore`, and the preset initialises state.
+
 ## 2026-10-19: Journey analytics identity, consent gate and failure capture
 
 - **Test-user marker.** `oh_is_test: "true"` is sent only for accounts whose Supabase `app_metadata.is_test` is `true` (the marker OpenHelm's test accounts carry). `user_metadata` and email addresses are never read. Ordinary users carry no `oh_is_test` at all.

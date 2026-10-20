@@ -1,4 +1,4 @@
-import { SITE, PLANS } from "@/lib/site";
+import { SITE, PLANS, KIT } from "@/lib/site";
 import { TOOLS } from "@/lib/ai-tools";
 import { scoreTool } from "@/lib/risk";
 import { FRAMEWORKS } from "@/lib/frameworks";
@@ -33,8 +33,9 @@ export function GET() {
 
   lines.push("## Plans");
   lines.push(`- Pricing: ${SITE.url}/pricing`);
+  lines.push(`- ${KIT.name} for small healthcare practices: ${SITE.url}${KIT.href}`);
   for (const plan of PLANS) {
-    const price = plan.price === 0 ? "free" : `$${plan.price}/mo`;
+    const price = plan.price === 0 ? "free" : `$${plan.price} ${plan.cadence}`;
     lines.push(`- ${plan.name} (${price}): ${plan.blurb}`);
   }
   lines.push("");

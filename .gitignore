@@ -10,3 +10,4 @@ next-env.d.ts
 data/ai-tools.research.json
 .env*
 supabase/.temp
+.claude/launch.json

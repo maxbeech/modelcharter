@@ -6,12 +6,18 @@ import { getSession } from "@/lib/auth";
 import { buildAnalyticsIdentity } from "@/lib/analytics-identity";
 import { PurchaseTracker, type PurchaseOutcome } from "@/components/PurchaseTracker";
 import { redirect } from "next/navigation";
+import { ContinueToCheckout } from "@/components/ContinueToCheckout";
+import { KIT, buyIntent, isPaidPlan } from "@/lib/site";
+import { planAvailable } from "@/lib/stripe";
 import { actionMarkAlertsRead } from "./actions";
 
-export default async function DashboardHome({ searchParams }: { searchParams: Promise<{ upgraded?: string; session_id?: string; confirmed?: string }> }) {
+export default async function DashboardHome({ searchParams }: { searchParams: Promise<{ upgraded?: string; session_id?: string; confirmed?: string; buy?: string }> }) {
   const org = await ensureOrg();
   if (!org) return null;
-  const { session_id: sessionId, confirmed: confirmedId } = await searchParams;
+  const { session_id: sessionId, confirmed: confirmedId, buy: buyParam, upgraded } = await searchParams;
+  // Came from a buy button: carry on to Checkout unless they already have access.
+  const buy = buyIntent(buyParam);
+  const continueToCheckout = buy && !isPaidPlan(org.plan) && planAvailable(buy);
   let purchase: PurchaseOutcome | null = null;
   if (sessionId) {
     // Stripe's return. Grant the plan, then reload the page so the header shows
@@ -38,12 +44,24 @@ export default async function DashboardHome({ searchParams }: { searchParams: Pr
   const stats = [
     { label: "Tools approved", value: String(approved), sub: `${review} awaiting review`, href: "/dashboard/tools" },
     { label: "Policy version", value: policies[0] ? `v${policies[0].version}` : "None", sub: policies.length ? `updated ${policies[0].created_at.slice(0, 10)}` : "not created yet", href: "/dashboard/policy" },
-    { label: "Attestations signed", value: String(signed), sub: `${attestations.length} sent`, href: "/dashboard/attestations" },
+    { label: "Staff signed off", value: String(signed), sub: `${attestations.length} links sent`, href: "/dashboard/attestations" },
   ];
 
   return (
     <div>
       {purchase && <PurchaseTracker outcome={purchase} />}
+      {upgraded && isPaidPlan(org.plan) && (
+        <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm text-emerald-900">
+          <p className="font-semibold">The {KIT.name} is yours.</p>
+          <p className="mt-0.5 text-emerald-800">Work through the four steps below. It takes most practices under an hour.</p>
+        </div>
+      )}
+      {continueToCheckout && <ContinueToCheckout plan={KIT.id} name={KIT.name} price={KIT.price} />}
+      {buy && !continueToCheckout && !isPaidPlan(org.plan) && (
+        <p className="mb-6 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-inset ring-amber-100">
+          Your account is ready. Checkout isn&apos;t switched on yet, so you won&apos;t be charged. Everything free is open to you now.
+        </p>
+      )}
       <div className="grid gap-4 sm:grid-cols-3">
         {stats.map((s) => (
           <Link key={s.label} href={s.href} className="rounded-2xl border border-line bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md">
@@ -83,11 +101,12 @@ export default async function DashboardHome({ searchParams }: { searchParams: Pr
       </div>
 
       <div className="mt-6 rounded-2xl border border-line bg-white p-6">
-        <h2 className="font-display text-lg font-semibold text-ink">Get set up in three steps</h2>
+        <h2 className="font-display text-lg font-semibold text-ink">Get your practice set up</h2>
         <ol className="mt-4 space-y-3 text-sm text-ink-soft">
-          <li className="flex gap-3"><Step n={1} /><span><Link href="/dashboard/tools" className="font-semibold text-brand-700 hover:text-brand-900">Triage your tool register</Link>: mark which AI tools are approved, restricted or prohibited.</span></li>
-          <li className="flex gap-3"><Step n={2} /><span><Link href="/dashboard/policy" className="font-semibold text-brand-700 hover:text-brand-900">Publish your AI usage policy</Link>: generate it and save a version.</span></li>
-          <li className="flex gap-3"><Step n={3} /><span><Link href="/dashboard/attestations" className="font-semibold text-brand-700 hover:text-brand-900">Collect attestations</Link>: share a link so staff acknowledge the policy.</span></li>
+          <li className="flex gap-3"><Step n={1} /><span><Link href="/dashboard/policy?preset=healthcare" className="font-semibold text-brand-700 hover:text-brand-900">Write your AI policy</Link>: start from the HIPAA preset and save a version.</span></li>
+          <li className="flex gap-3"><Step n={2} /><span><Link href="/dashboard/tools" className="font-semibold text-brand-700 hover:text-brand-900">Mark your AI tools</Link>: approve, restrict or prohibit each one. The BAA column tells you which can touch patient data.</span></li>
+          <li className="flex gap-3"><Step n={3} /><span><Link href="/dashboard/attestations" className="font-semibold text-brand-700 hover:text-brand-900">Get staff to sign off</Link>: send each person a link to read and confirm the policy.{!isPaidPlan(org.plan) && <span className="text-ink-faint"> Part of the {KIT.name}.</span>}</span></li>
+          <li className="flex gap-3"><Step n={4} /><span><Link href="/dashboard/evidence" className="font-semibold text-brand-700 hover:text-brand-900">Print your evidence pack</Link>: the record you show if anyone asks.{!isPaidPlan(org.plan) && <span className="text-ink-faint"> Part of the {KIT.name}.</span>}</span></li>
         </ol>
       </div>
     </div>

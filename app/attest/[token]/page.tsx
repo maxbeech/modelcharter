@@ -3,6 +3,7 @@ import { isDbConfigured } from "@/lib/auth";
 import { getAttestation } from "@/lib/attest";
 import { SetupPending } from "@/components/SetupPending";
 import { Section } from "@/components/ui";
+import { PolicyDocument } from "@/components/PolicyDocument";
 import { actionSign } from "./actions";
 
 export const metadata: Metadata = { title: "Acknowledge AI policy", robots: { index: false } };
@@ -28,7 +29,7 @@ export default async function Page({ params }: { params: Promise<{ token: string
       <h1 className="font-display text-2xl font-semibold text-ink sm:text-3xl">{att.orgName} AI Usage Policy</h1>
       <p className="mt-1 text-sm text-ink-faint">Please read and acknowledge this policy{att.version ? ` (version ${att.version})` : ""}.</p>
       {att.contentMd
-        ? <div className="mt-5 max-h-[50vh] overflow-y-auto whitespace-pre-wrap rounded-xl border border-line bg-white p-5 text-sm leading-relaxed text-ink-soft">{att.contentMd}</div>
+        ? <PolicyDocument markdown={att.contentMd} className="mt-5 max-h-[55vh] overflow-y-auto rounded-xl border border-line bg-white p-5 sm:p-6" />
         : <p className="mt-5 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900 ring-1 ring-inset ring-amber-100">No policy is attached to this link yet.</p>}
 
       {att.acknowledged ? (
@@ -41,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ token: string
       ) : (
         <form action={actionSign} className="mt-6 space-y-3">
           <input type="hidden" name="token" value={token} />
-          <input required name="name" placeholder="Your full name" className={inputClass} />
+          <input required name="name" defaultValue={att.name ?? ""} placeholder="Your full name" className={inputClass} />
           <input required name="email" type="email" placeholder="Your work email" className={inputClass} />
           <label className="flex items-start gap-2 text-sm text-ink-soft">
             <input required type="checkbox" className="mt-0.5" /> I have read and agree to follow this AI usage policy.

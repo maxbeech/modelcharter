@@ -5,6 +5,8 @@ import type Stripe from "stripe";
 import { checkoutSessionIsFunded, planForSubscription } from "@/lib/stripe-events";
 import { captureServerError } from "@/lib/observability";
 import { guardStripeEvent } from "../../../../lib/gate";
+import { grantKit, isOwnKitSession } from "@/lib/billing/kit";
+import { KIT } from "@/lib/site";
 
 // Stripe webhook: updates the org's plan. Verifies the signature and writes with
 // the service-role client (there is no user session in a webhook). Env-gated.
@@ -24,6 +26,27 @@ export async function POST(request: NextRequest) {
     // webhook secret is wrong and payments are being dropped, so it is visible.
     captureServerError(err, { scope: "stripe-webhook", stage: "signature" });
     return NextResponse.json({ error: "invalid signature" }, { status: 400 });
+  }
+
+  // One-off kit purchases carry no subscription, which is the only place the
+  // generated gate looks for a price, so they are checked by their own line
+  // items here (still by price id and nothing else) before the gate runs.
+  if (event.type === "checkout.session.completed" && (event.data.object as Stripe.Checkout.Session).mode === "payment") {
+    const s = event.data.object as Stripe.Checkout.Session;
+    try {
+      if (!(await isOwnKitSession(stripe, s.id))) {
+        console.log(`[stripe] ignoring ${event.type} ${event.id}: its line items are not this product's kit price.`);
+        return NextResponse.json({ received: true, ignored: "foreign" });
+      }
+      const orgId = s.client_reference_id ?? s.metadata?.org_id;
+      if (orgId && s.metadata?.plan === KIT.id && checkoutSessionIsFunded(s)) {
+        await grantKit(admin, orgId, typeof s.customer === "string" ? s.customer : null);
+      }
+    } catch (error) {
+      captureServerError(error, { scope: "stripe-webhook", stage: "kit_entitlement", eventType: event.type, eventId: event.id });
+      return NextResponse.json({ error: "entitlement update failed" }, { status: 500 });
+    }
+    return NextResponse.json({ received: true });
   }
 
   // A Stripe webhook endpoint is registered on an ACCOUNT, so on a shared

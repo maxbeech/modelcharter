@@ -34,11 +34,11 @@ export const LEGAL: Record<string, LegalDoc> = {
   terms: {
     slug: "terms",
     title: "Terms of Service",
-    updated: UPDATED,
+    updated: "2026-10-20",
     intro: "These terms govern your use of ModelCharter. By using the service you agree to them.",
     sections: [
       { h: "The service", p: [
-        "ModelCharter provides tools to help you govern the use of AI at work: an AI usage policy generator, an AI tool risk directory, framework guides, and (on paid plans) a team workspace with a tool register, versioned policy and attestation tracking.",
+        "ModelCharter provides tools to help you govern the use of AI at work: an AI usage policy generator, an AI tool risk directory, framework guides, a free workspace with a tool register and versioned policy, and (with the paid HIPAA AI Kit) staff sign-off tracking and a printable evidence pack.",
       ] },
       { h: "Not legal advice", p: [
         "ModelCharter provides information and document templates, not legal advice. The AI Tool Risk Directory is compiled from public vendor sources and may be incomplete or out of date, so always verify against the vendor's own policies. You are responsible for having qualified advisors review any policy before you adopt it.",
@@ -47,7 +47,8 @@ export const LEGAL: Record<string, LegalDoc> = {
         "You are responsible for activity under your account and for keeping your password secure. Don't misuse the service, attempt to break its security, or use it to violate the law.",
       ] },
       { h: "Plans & billing", p: [
-        "Paid plans are billed monthly via Stripe and include a 14-day trial. You can cancel at any time from the billing portal; cancellation takes effect at the end of the current period.",
+        "The HIPAA AI Kit is a one-time purchase, paid through Stripe. It is not a subscription and does not renew.",
+        "Team and Business subscriptions bought before 20 October 2026 continue to be billed monthly via Stripe. You can cancel at any time from the billing portal; cancellation takes effect at the end of the current period.",
       ] },
       { h: "Liability", p: [
         "The service is provided \"as is\". To the extent permitted by law, ModelCharter is not liable for indirect or consequential damages arising from your use of it.",

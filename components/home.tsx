@@ -3,6 +3,7 @@ import { TOOLS } from "@/lib/ai-tools";
 import { scoreTool, type Band } from "@/lib/risk";
 import { generatePolicy } from "@/lib/policy";
 import { Section, Pill, Eyebrow, btn } from "@/components/ui";
+import { KIT } from "@/lib/site";
 import { AppFrame } from "@/components/marketing";
 import { SignalConsole, type ConsoleStatus } from "@/components/console";
 import { PolicyDocMock, DirectoryMock, AttestMock, FeatureRow } from "@/components/mockups";
@@ -30,20 +31,20 @@ export function Hero() {
       <div className="bg-dotgrid">
         <Section className="grid items-center gap-12 py-16 lg:grid-cols-[1.04fr_0.96fr] lg:py-24">
           <div>
-            <Pill tone="brand"><span className="h-1.5 w-1.5 rounded-full bg-signal" />For teams without a compliance department</Pill>
+            <Pill tone="brand"><span className="h-1.5 w-1.5 rounded-full bg-signal" />For small healthcare practices</Pill>
             <h1 className="mt-6 font-display text-[2.7rem] font-semibold leading-[1.04] tracking-tight text-ink sm:text-[3.9rem]">
-              Give your team an <span className="text-brand-700">AI charter</span>.
+              Give your practice an <span className="text-brand-700">AI charter</span>.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink-soft">
-              Your team already runs on ChatGPT, Copilot and a dozen other AI tools. ModelCharter shows you which ones
-              are safe, writes the policy that covers them, and keeps a record that everyone has read it. No compliance
-              hire required.
+              Your staff already use ChatGPT, Copilot and AI note-takers. ModelCharter shows which tools will sign a BAA,
+              writes an AI policy that keeps patient data safe, and keeps a record that everyone has read it. No
+              compliance hire required.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link href="/ai-usage-policy-generator" className={btn("primary", "lg")}>Generate your free policy</Link>
-              <Link href="/tools" className={btn("secondary", "lg")}>Explore the tool directory</Link>
+              <Link href="/ai-usage-policy-generator?preset=healthcare" className={btn("primary", "lg")}>Write your free HIPAA AI policy</Link>
+              <Link href={KIT.href} className={btn("secondary", "lg")}>See the HIPAA AI Kit</Link>
             </div>
-            <p className="mt-5 text-sm text-ink-faint">No signup, no card. {TOOLS.length} AI tools rated from their own privacy policies.</p>
+            <p className="mt-5 text-sm text-ink-faint">No signup, no card. BAA status for {TOOLS.length} AI tools, from the vendors&apos; own terms.</p>
           </div>
 
           <div className="relative">
@@ -97,8 +98,8 @@ export function HowItWorks() {
       <FeatureRow
         eyebrow={<Eyebrow>Step 03 · Prove</Eyebrow>}
         title="Show that everyone has read the rules"
-        body="Share one link and watch acknowledgements come in. You get a dated record of who agreed to the policy and when, which is the proof auditors and customers look for when they ask how you govern AI."
-        cta={{ href: "/pricing", label: "See team plans" }}
+        body="Send each person a link and watch sign-offs come in. You get a dated record of who agreed to the policy and when, ready to print when an auditor, insurer or patient asks how you use AI."
+        cta={{ href: KIT.href, label: "See the HIPAA AI Kit" }}
       >
         <AttestMock rows={[
           { initials: "AM", team: "Engineering", signed: true },

@@ -9,6 +9,7 @@ import { FeedbackButton } from "@/components/FeedbackButton";
 import { DashTabs } from "@/components/dash-tabs";
 import { DashboardAnalytics } from "@/components/DashboardAnalytics";
 import { buildAnalyticsIdentity } from "@/lib/analytics-identity";
+import { isPaidPlan, planLabel } from "@/lib/site";
 import { logoutAction } from "../auth-actions";
 
 export const metadata: Metadata = { title: "Dashboard", robots: { index: false } };
@@ -27,11 +28,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <Suspense fallback={null}>
         <DashboardAnalytics identity={identity} />
       </Suspense>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="font-display text-2xl font-semibold text-ink">{org?.name ?? "Workspace"}</h1>
-            <Pill tone={org?.plan && org.plan !== "free" ? "brand" : "slate"}>{org?.plan ?? "free"} plan</Pill>
+            <Pill tone={isPaidPlan(org?.plan) ? "brand" : "slate"}>{planLabel(org?.plan)}</Pill>
           </div>
           <p className="mt-1 text-sm text-ink-faint">{user.email}</p>
         </div>
@@ -42,8 +43,8 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </form>
         </div>
       </div>
-      <DashTabs />
-      <div className="py-7">{children}</div>
+      <div className="print:hidden"><DashTabs /></div>
+      <div className="py-7 print:py-0">{children}</div>
     </Section>
   );
 }

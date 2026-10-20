@@ -1,5 +1,5 @@
 import { GET } from "../app/llms.txt/route.ts";
-import { SITE, PLANS } from "../lib/site.ts";
+import { SITE, PLANS, KIT } from "../lib/site.ts";
 import { ok, eq, done } from "./_assert.mts";
 
 // /llms.txt is the GEO summary for AI assistants. It must describe the
@@ -25,5 +25,7 @@ ok(body.includes(`${SITE.url}/pricing`), "links canonical pricing page");
 for (const plan of PLANS) {
   ok(body.includes(plan.name), `mentions the ${plan.name} plan`);
 }
+ok(body.includes(`${SITE.url}${KIT.href}`), "links the HIPAA AI Kit page");
+ok(!body.includes("$99/mo"), "the one-off kit is never described as monthly");
 
 done("llms-txt");
