@@ -9,7 +9,11 @@ import { SignalMark } from "@/components/brand";
 import { afterAuthPath, buyIntent } from "@/lib/site";
 import { loginAction } from "../auth-actions";
 
-export const metadata: Metadata = { title: "Log in", robots: { index: false } };
+export const metadata: Metadata = {
+  title: "Log in",
+  description: "Log in to ModelCharter to manage your AI usage policy, approved-tools register and staff sign-offs.",
+  robots: { index: false },
+};
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ plan?: string }> }) {
   if (!isDbConfigured()) return <SetupPending what="Accounts" />;

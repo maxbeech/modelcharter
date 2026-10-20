@@ -6,7 +6,11 @@ import { Section } from "@/components/ui";
 import { PolicyDocument } from "@/components/PolicyDocument";
 import { actionSign } from "./actions";
 
-export const metadata: Metadata = { title: "Acknowledge AI policy", robots: { index: false } };
+export const metadata: Metadata = {
+  title: "Acknowledge AI policy",
+  description: "Read your organisation's AI usage policy and record your acknowledgement of it.",
+  robots: { index: false },
+};
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ token: string }> }) {

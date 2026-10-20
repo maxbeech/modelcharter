@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-20: On-page SEO fixes
+
+Why: the on-page content audit found pages with no explicit title or meta description.
+
+- **Home page title.** `app/page.tsx` exports its own metadata (title and description) through `pageMeta` instead of relying on the root layout.
+- **Meta descriptions.** `/login`, `/signup` and `/attest/[token]` have a description. All three stay `noindex`.
+
 ## 2026-10-20: HIPAA AI Kit, healthcare repositioning and billing lock
 
 Why: about 270 visitors and 57 Google clicks in 90 days, a $49/mo subscription aimed at a generic audience, and healthcare questions ("is ChatGPT HIPAA compliant", "hipaa compliant ai") far out-searching "AI policy". Full reasoning in `docs/monetisation_plan.md`.

@@ -9,7 +9,11 @@ import { SignalMark } from "@/components/brand";
 import { KIT, afterAuthPath, buyIntent } from "@/lib/site";
 import { signupAction } from "../auth-actions";
 
-export const metadata: Metadata = { title: "Create your account", robots: { index: false } };
+export const metadata: Metadata = {
+  title: "Create your account",
+  description: "Create a free ModelCharter account to save your AI usage policy, keep a register of approved AI tools and track staff sign-offs.",
+  robots: { index: false },
+};
 
 export default async function Page({ searchParams }: { searchParams: Promise<{ plan?: string }> }) {
   if (!isDbConfigured()) return <SetupPending what="Accounts" />;
