@@ -5,7 +5,7 @@ import type Stripe from "stripe";
 import { checkoutSessionIsFunded, planForSubscription } from "@/lib/stripe-events";
 import { captureServerError } from "@/lib/observability";
 import { guardStripeEvent } from "../../../../lib/gate";
-import { grantKit, isOwnKitSession } from "@/lib/billing/kit";
+import { chargeRevokesKit, grantKit, isOwnKitSession, ownKitSessionForPaymentIntent, revokeKit } from "@/lib/billing/kit";
 import { KIT } from "@/lib/site";
 
 // Stripe webhook: updates the org's plan. Verifies the signature and writes with
@@ -44,6 +44,26 @@ export async function POST(request: NextRequest) {
       }
     } catch (error) {
       captureServerError(error, { scope: "stripe-webhook", stage: "kit_entitlement", eventType: event.type, eventId: event.id });
+      return NextResponse.json({ error: "entitlement update failed" }, { status: 500 });
+    }
+    return NextResponse.json({ received: true });
+  }
+
+  // A refund or dispute on a kit payment takes the kit back. Charges carry no
+  // price either, so ownership is again settled through the kit session's
+  // line items; a charge from any other product is acknowledged and ignored.
+  if (event.type === "charge.refunded" || event.type === "charge.dispute.created") {
+    try {
+      const charge = event.type === "charge.refunded"
+        ? (event.data.object as Stripe.Charge)
+        : await stripe.charges.retrieve(String((event.data.object as Stripe.Dispute).charge));
+      const pi = typeof charge.payment_intent === "string" ? charge.payment_intent : charge.payment_intent?.id;
+      const session = pi ? await ownKitSessionForPaymentIntent(stripe, pi) : null;
+      if (!session) return NextResponse.json({ received: true, ignored: "foreign" });
+      const orgId = session.client_reference_id ?? session.metadata?.org_id;
+      if (orgId && (event.type === "charge.dispute.created" || chargeRevokesKit(charge))) await revokeKit(admin, orgId);
+    } catch (error) {
+      captureServerError(error, { scope: "stripe-webhook", stage: "kit_revoke", eventType: event.type, eventId: event.id });
       return NextResponse.json({ error: "entitlement update failed" }, { status: 500 });
     }
     return NextResponse.json({ received: true });

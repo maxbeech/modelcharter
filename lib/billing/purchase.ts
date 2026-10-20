@@ -60,3 +60,8 @@ export function purchaseFromSession(
 export function lineItemPriceIds(lineItems: { data?: { price?: { id?: string | null } | null }[] } | null | undefined): (string | null)[] {
   return (lineItems?.data ?? []).map((li) => li.price?.id ?? null);
 }
+
+/** True when the money for a kit payment is no longer ours: fully refunded or disputed. */
+export function chargeRevokesKit(charge: Pick<Stripe.Charge, "refunded" | "disputed"> | null | undefined): boolean {
+  return Boolean(charge && (charge.refunded || charge.disputed));
+}

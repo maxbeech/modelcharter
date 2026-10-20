@@ -5,6 +5,7 @@ import { priceForPlan } from "@/lib/stripe";
 import { catalogueFromEnv } from "@/lib/gate";
 import { ownershipOfPrices } from "@/lib/stripe-guard";
 import { lineItemPriceIds } from "./purchase";
+export { chargeRevokesKit } from "./purchase";
 import type { createAdminSupabase } from "@/lib/supabase/admin";
 
 type Admin = NonNullable<ReturnType<typeof createAdminSupabase>>;
@@ -37,3 +38,22 @@ export async function grantKit(admin: Admin, orgId: string, customer: string | n
     .not("plan", "in", "(team,business)");
   if (error) throw error;
 }
+
+/**
+ * The kit Checkout Session behind a payment intent, if it is ours. Used when a
+ * charge is refunded or disputed: those events carry no price, so we walk back
+ * to the session and apply the same line-item price check as a purchase.
+ */
+export async function ownKitSessionForPaymentIntent(stripe: Stripe, paymentIntentId: string): Promise<Stripe.Checkout.Session | null> {
+  const { data } = await stripe.checkout.sessions.list({ payment_intent: paymentIntentId, limit: 1 });
+  const session = data[0];
+  if (!session || session.mode !== "payment" || session.metadata?.plan !== KIT.id) return null;
+  return (await isOwnKitSession(stripe, session.id)) ? session : null;
+}
+
+/** A refunded or disputed kit loses its access. Legacy subscribers are untouched. */
+export async function revokeKit(admin: Admin, orgId: string): Promise<void> {
+  const { error } = await admin.from("orgs").update({ plan: "free" }).eq("id", orgId).eq("plan", KIT.id);
+  if (error) throw error;
+}
+

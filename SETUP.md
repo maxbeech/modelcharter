@@ -53,8 +53,9 @@ facts changed. It runs as a Helm7 cron service (`0 6 * * *`).
 One product is sold: the **HIPAA AI Kit**, a one-time $99 payment (Checkout
 `mode: "payment"`). Create a one-time price in Stripe and set
 `NEXT_PUBLIC_STRIPE_PRICE_HIPAA_KIT`. The webhook at `/api/stripe/webhook` needs
-`checkout.session.completed` (plus the `customer.subscription.*` events while
-legacy subscribers remain). A kit purchase sets `orgs.plan = 'hipaa_kit'`.
+`checkout.session.completed`, `charge.refunded` and `charge.dispute.created`
+(a full refund or a dispute takes the kit back), plus the
+`customer.subscription.*` events while legacy subscribers remain. A kit purchase sets `orgs.plan = 'hipaa_kit'`.
 
 Ownership on the shared Stripe account is decided by price id only. The
 generated gate (`lib/gate.ts`) reads prices from a subscription, which a

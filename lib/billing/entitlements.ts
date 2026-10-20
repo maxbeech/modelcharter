@@ -5,7 +5,7 @@ import { createAdminSupabase } from "@/lib/supabase/admin";
 import { captureServerError } from "@/lib/observability";
 import { planForSubscription } from "@/lib/stripe-events";
 import { checkoutPlanId, checkoutSessionProblem, purchaseFromSession, type PurchasePayload } from "./purchase";
-import { grantKit, isOwnKitSession } from "./kit";
+import { chargeRevokesKit, grantKit, isOwnKitSession } from "./kit";
 
 /** A verified Checkout return: the purchase to report, or a short code for why not. */
 export type CheckoutConfirmation =
@@ -18,10 +18,16 @@ export async function confirmCheckoutSession(sessionId: string, orgId: string): 
   if (!stripe || !createAdminSupabase()) return { ok: false, reason: "billing_not_configured" };
   if (!sessionId || !orgId) return { ok: false, reason: "missing_session" };
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId, { expand: ["subscription"] });
+    const session = await stripe.checkout.sessions.retrieve(sessionId, { expand: ["subscription", "payment_intent.latest_charge"] });
     const problem = checkoutSessionProblem(session, orgId);
     if (problem) return { ok: false, reason: problem };
-    if (session.mode === "payment" && !(await isOwnKitSession(stripe, session.id))) return { ok: false, reason: "not_our_price" };
+    if (session.mode === "payment") {
+      if (!(await isOwnKitSession(stripe, session.id))) return { ok: false, reason: "not_our_price" };
+      // A refunded or disputed payment must not be re-granted by revisiting the return URL.
+      const pi = typeof session.payment_intent === "object" ? session.payment_intent : null;
+      const charge = pi && typeof pi.latest_charge === "object" ? pi.latest_charge : null;
+      if (chargeRevokesKit(charge)) return { ok: false, reason: "payment_reversed" };
+    }
     const subscription = typeof session.subscription === "object" && session.subscription !== null ? session.subscription : null;
     return { ok: true, purchase: purchaseFromSession(session, subscription?.status), subscription, session };
   } catch (error) {

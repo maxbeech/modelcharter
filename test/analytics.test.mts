@@ -9,7 +9,7 @@ const { analyticsPlanFor, buildAnalyticsIdentity, isTestUserMetadata } = await i
 const { analyticsEvents, failureReason, isAnalyticsIdentity, beginCheckoutParams, reportAction,
   identifyJourney, identifyAnonymousVisitor, captureJourneyFailure } = await import("../lib/analytics-events.ts");
 const { analyticsConsentGranted, hasSupabaseSessionCookie } = await import("../lib/analytics-consent.ts");
-const { checkoutSessionProblem, purchaseFromSession, checkoutPlanId, lineItemPriceIds } = await import("../lib/billing/purchase.ts");
+const { checkoutSessionProblem, purchaseFromSession, checkoutPlanId, lineItemPriceIds, chargeRevokesKit } = await import("../lib/billing/purchase.ts");
 const { userRefFor } = await import("../lib/openhelm-analytics-mp.ts");
 
 const isArguments = (v: unknown) => Object.prototype.toString.call(v) === "[object Arguments]";
@@ -106,6 +106,10 @@ eq(purchaseFromSession(kitSession, null), {
 }, "a kit purchase reports its real charge and is not a trial");
 eq(lineItemPriceIds({ data: [{ price: { id: "price_kit" } }, { price: null }] }), ["price_kit", null], "line item prices are read for the ownership check");
 eq(lineItemPriceIds(null), [], "no line items means no prices");
+eq(chargeRevokesKit({ refunded: true, disputed: false }), true, "a full refund takes the kit back");
+eq(chargeRevokesKit({ refunded: false, disputed: true }), true, "a dispute takes the kit back");
+eq(chargeRevokesKit({ refunded: false, disputed: false }), false, "a settled charge keeps the kit");
+eq(chargeRevokesKit(null), false, "no charge yet is not a reversal");
 
 // -- the dataLayer: gtag.js only acts on `arguments` objects, never arrays -------
 const win: { dataLayer: unknown[]; location: { href: string } } = { dataLayer: [], location: { href: "https://modelcharter.test/" } };
