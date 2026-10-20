@@ -44,6 +44,9 @@ for (const h of HUBS) {
 // no-training hub only includes tools that explicitly do not train
 const noTrain = HUBS.find((h) => h.slug === "no-training")!;
 ok(TOOLS.filter(noTrain.match).every((t) => t.trainsOnPersonalData === "no"), "no-training hub only lists non-training tools");
+// The no-training hub must carry the plan caveat and its own search description (2026-10-20 refresh)
+ok(/by default/.test(noTrain.blurb) && /plan/.test(noTrain.blurb), "no-training blurb states the default and the plan caveat");
+ok(typeof noTrain.metaDescription === "string" && noTrain.metaDescription.length > 40 && noTrain.metaDescription.length <= 160, `no-training metaDescription is search-length (${noTrain.metaDescription?.length})`);
 ok(USE_CASES.length >= 3, "use cases present");
 
 // --- compare ---

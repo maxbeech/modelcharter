@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-21: No-training hub refresh
+
+Why: the weekly content pass flagged `/compliance/no-training` (309 impressions, position 19.6) for a substantive refresh. Its copy was a generic one-liner and did not say that training defaults often differ by plan.
+
+- **Blurb rewritten.** `lib/registry-frameworks.ts` states that a tool is listed only where its own terms say it does not train on personal data by default, and points the reader at the plan their team will use. The list itself is unchanged: it is still computed from `trains_on_personal_data === "no"` in `data/ai-tools.json`.
+- **Search description.** The no-training hub now has its own `metaDescription` instead of falling back to the blurb.
+- **Test.** `test/registry.test.mts` asserts the plan caveat and the description length.
+
 ## 2026-10-20: On-page SEO fixes
 
 Why: the on-page content audit found pages with no explicit title or meta description.

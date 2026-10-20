@@ -64,8 +64,10 @@ export const HUBS: ComplianceHub[] = [
     label: "No training",
     title: "AI tools that do not train on your data",
     blurb:
-      "AI tools that do not train their models on your content by default. The single most important control for keeping confidential work out of a vendor's training set.",
+      "AI tools whose vendor says it does not train on your personal data by default. A tool is listed only where its own terms say no. Training defaults often differ by plan, so check the tier your team will actually use before you rely on the answer.",
     keyword: "ai tools that don't train on your data",
+    metaDescription:
+      "Which AI tools do not train on your data? Each tool listed says in its own terms that it does not train on personal data by default. Check your plan.",
     match: (t) => t.trainsOnPersonalData === "no",
   },
 ];
