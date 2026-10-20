@@ -38,6 +38,16 @@ export interface AiTool {
   iso42001: Verdict;
   gdprDpa: Verdict;
   hipaaBaa: Verdict;
+  /** Plans the vendor will sign a BAA for, in the vendor's own terms. */
+  baaPlans?: string;
+  /** Plans the vendor will not cover with a BAA. */
+  baaExcludes?: string;
+  /** One practical caveat a practice should know before sending PHI. */
+  baaNote?: string;
+  /** The vendor page the BAA fact was checked against. */
+  baaSource?: string;
+  /** ISO date the BAA fact was last checked against baaSource. */
+  baaVerified?: string;
   dataRegionEu: Verdict;
   ssoSaml: Verdict;
   enterprisePlan?: string;
@@ -85,6 +95,8 @@ function normalize(r: Record<string, unknown>): AiTool {
     retention: str(r.retention),
     soc2: v(r.soc2), iso27001: v(r.iso27001), iso42001: v(r.iso42001),
     gdprDpa: v(r.gdpr_dpa ?? r.gdprDpa), hipaaBaa: v(r.hipaa_baa ?? r.hipaaBaa),
+    baaPlans: str(r.hipaa_baa_plans), baaExcludes: str(r.hipaa_baa_excludes), baaNote: str(r.hipaa_baa_note),
+    baaSource: str(r.hipaa_baa_source), baaVerified: str(r.hipaa_baa_verified),
     dataRegionEu: v(r.data_region_eu ?? r.dataRegionEu), ssoSaml: v(r.sso_saml ?? r.ssoSaml),
     enterprisePlan: str(r.enterprise_plan ?? r.enterprisePlan),
     notableRisk: str(r.notable_risk ?? r.notableRisk),

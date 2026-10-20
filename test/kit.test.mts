@@ -14,6 +14,7 @@ eq(baaStatus({ name: "X", hipaaBaa: "n/a", enterprisePlan: undefined }).tone, "n
 const yes = baaStatus({ name: "Acme", hipaaBaa: "yes", enterprisePlan: "Acme Enterprise" });
 eq(yes.tone, "yes", "yes BAA is yes");
 ok(yes.detail.includes("Acme Enterprise"), "the BAA detail names the plan that carries it");
+ok(baaStatus({ name: "Acme", hipaaBaa: "yes", enterprisePlan: "Acme Enterprise", baaPlans: "Acme Health with the HIPAA add-on" }).detail.includes("Acme Health with the HIPAA add-on"), "a checked plan-specific BAA fact wins over the generic plan name");
 ok(isPhiRisk("approved", { name: "X", hipaaBaa: null, enterprisePlan: undefined }), "an approved tool with no confirmed BAA is a PHI risk");
 ok(!isPhiRisk("prohibited", { name: "X", hipaaBaa: "no", enterprisePlan: undefined }), "a prohibited tool is not a risk");
 ok(!isPhiRisk("approved", { name: "X", hipaaBaa: "yes", enterprisePlan: undefined }), "an approved tool with a BAA is not flagged");

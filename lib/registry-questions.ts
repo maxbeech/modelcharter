@@ -33,11 +33,17 @@ const DEFS: Record<QuestionSlug, QuestionDef> = {
     framework: "hipaa",
     ask: (n) => `Is ${n} HIPAA compliant?`,
     passes: (t) => (t.hipaaBaa === null ? null : t.hipaaBaa === "yes"),
+    // Direct answer first. When the dataset names the plans that carry a BAA
+    // (hipaa_baa_plans), the answer says exactly which ones, and which not.
     answer: (t) =>
       t.hipaaBaa === null
-        ? `Not verified. Check directly with ${t.vendor} before using ${t.name} with protected health information (PHI).`
+        ? t.baaNote
+          ? `Not verified. ${t.baaNote}`
+          : `Not verified. Check directly with ${t.vendor} before using ${t.name} with protected health information (PHI).`
         : t.hipaaBaa === "yes"
-          ? `Yes. ${t.vendor} will sign a Business Associate Agreement (BAA) for ${t.name}, usually on an enterprise plan, which is the baseline requirement for handling PHI.`
+          ? t.baaPlans
+            ? `Only on the right plan. ${t.vendor} will sign a Business Associate Agreement (BAA) for ${t.baaPlans}.${t.baaExcludes ? ` There is no BAA for ${t.baaExcludes}, so patient data must never go there.` : ""}`
+            : `Yes. ${t.vendor} will sign a Business Associate Agreement (BAA) for ${t.name}, usually on an enterprise plan, which is the baseline requirement for handling PHI.`
           : `No documented BAA. ${t.vendor} does not appear to offer one for ${t.name}, so treat it as unsuitable for PHI until confirmed otherwise.`,
     keywords: (n) => [`is ${n} hipaa compliant`, `${n} hipaa`, `${n} baa`, `${n} phi`],
   },
@@ -135,7 +141,9 @@ export function evidenceForQuestion(t: AiTool, question: QuestionSlug): Question
   const byQuestion: Record<QuestionSlug, QuestionEvidence[]> = {
     hipaa: [
       { label: "Business Associate Agreement", value: verdict(t.hipaaBaa), explanation: t.hipaaBaa === "yes" ? `${t.vendor} publishes a BAA option. Confirm the exact plan and service are covered before sending PHI.` : t.hipaaBaa === "no" ? `No BAA was found in ${t.vendor}'s published materials for this service.` : `No public BAA was confirmed. Treat PHI use as blocked until ${t.vendor} provides written terms.` },
-      { label: "Enterprise route", value: t.enterprisePlan || "Not confirmed", explanation: t.enterprisePlan ? `For regulated use, validate the BAA, configured service and users under the ${t.enterprisePlan} contract.` : `Do not infer a regulated-use tier from consumer product marketing.` },
+      t.baaPlans
+        ? { label: "Plans with a BAA", value: t.baaExcludes ? `Not ${t.baaExcludes}` : "Named plans only", explanation: `${t.baaPlans}.${t.baaNote ? ` ${t.baaNote}` : ""}` }
+        : { label: "Enterprise route", value: t.enterprisePlan || "Not confirmed", explanation: t.baaNote || (t.enterprisePlan ? `For regulated use, validate the BAA, configured service and users under the ${t.enterprisePlan} contract.` : `Do not infer a regulated-use tier from consumer product marketing.`) },
       ...common,
     ],
     gdpr: [

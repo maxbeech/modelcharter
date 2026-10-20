@@ -13,8 +13,8 @@ export const SITE = {
   email: "hello@mail.modelcharter.com",
   // Stable last-updated date for sitemap lastmod. Bump this when a
   // site-wide content push ships (new posts, catalog changes), not on
-  // every commit; last bumped for the 2026-10-07 Search Console content update.
-  updated: "2026-10-07",
+  // every commit; last bumped for the 2026-10-20 HIPAA content push.
+  updated: "2026-10-20",
   twitter: "@modelcharter",
   // The single primary keyword cluster this site targets.
   primaryKeyword: "ai governance",

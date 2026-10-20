@@ -28,4 +28,10 @@ for (const plan of PLANS) {
 ok(body.includes(`${SITE.url}${KIT.href}`), "links the HIPAA AI Kit page");
 ok(!body.includes("$99/mo"), "the one-off kit is never described as monthly");
 
+// HIPAA cluster: the hub, the per-tool BAA answers and the OpenAI BAA post.
+ok(body.includes(`${SITE.url}/compliance/hipaa`), "links the HIPAA hub");
+ok(body.includes(`${SITE.url}/tools/chatgpt/hipaa`) && body.includes("ChatGPT: BAA on"), "lists ChatGPT's BAA plans");
+ok(body.includes("Notion AI: BAA unverified"), "an unverified BAA is never listed as available");
+ok(body.includes(`${SITE.url}/blog/does-openai-sign-a-baa`), "links the OpenAI BAA post");
+
 done("llms-txt");

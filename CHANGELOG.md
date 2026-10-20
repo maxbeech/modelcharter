@@ -6,6 +6,14 @@ Why: the on-page content audit found pages with no explicit title or meta descri
 
 - **Home page title.** `app/page.tsx` exports its own metadata (title and description) through `pageMeta` instead of relying on the root layout.
 - **Meta descriptions.** `/login`, `/signup` and `/attest/[token]` have a description. All three stay `noindex`.
+## 2026-10-20: HIPAA content for the practices the kit is for
+
+- **HIPAA hub rebuilt.** `/compliance/hipaa` is now the "HIPAA-compliant AI tools" page. Its table, built from `data/ai-tools.json` by `lib/hipaa-directory.ts`, shows for every tool whether it has a BAA, which plan carries it, which plans don't, the vendor source and the date checked. It has FAQ structured data and links to the kit and the healthcare preset.
+- **Top tool answers strengthened.** The HIPAA answer pages for ChatGPT, Claude, Copilot, Gemini, Otter, Grammarly and Notion AI lead with a direct answer, then the plan that carries the BAA, the source and date, and safer alternatives.
+- **BAA facts rechecked** on 2026-10-20 against each vendor's own pages, stored as `hipaa_baa_plans` / `_excludes` / `_note` / `_source` / `_verified`. Notion AI moved from "yes" to Unverified: Notion's HIPAA page doesn't say Notion AI is covered.
+- **New post:** "Does OpenAI sign a BAA? ChatGPT and HIPAA".
+- **One source for BAA wording.** The kit, the register and the evidence pack now use the checked plan-specific fact when there is one. The kit page reuses the hub's featured-tools list.
+- `SITE.updated` bumped to 2026-10-20 for the content push.
 
 ## 2026-10-20: HIPAA AI Kit, healthcare repositioning and billing lock
 

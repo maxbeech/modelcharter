@@ -8,6 +8,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { RiskPill, Section } from "@/components/ui";
 import { HUB_BY_SLUG } from "@/lib/registry-frameworks";
 import { pageMeta, faqLd, breadcrumbLd } from "@/lib/seo";
+import { hipaaToolFaqs } from "@/lib/hipaa-directory";
+import { BaaAtAGlance, SaferAlternatives, PracticeCta } from "./HipaaDetails";
 
 // Head-term registry pages: "Is ChatGPT HIPAA compliant?", "Does Claude train
 // on your data?" etc. One page per tool x question, answered from the same
@@ -36,6 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 const PASS_LABEL: Record<string, { text: string; cls: string }> = {
   yes: { text: "Yes", cls: "bg-emerald-100 text-emerald-800 ring-emerald-200" },
+  somePlans: { text: "On some plans", cls: "bg-emerald-100 text-emerald-800 ring-emerald-200" },
   no: { text: "No", cls: "bg-red-100 text-red-800 ring-red-200" },
   unverified: { text: "Unverified", cls: "bg-slate-100 text-slate-600 ring-slate-200" },
 };
@@ -47,13 +50,14 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
   if (!t || !q) notFound();
   const r = scoreTool(t);
   const pass = q.passes(t);
-  const badge = pass === null ? PASS_LABEL.unverified : pass ? PASS_LABEL.yes : PASS_LABEL.no;
+  const badge = pass === null ? PASS_LABEL.unverified : pass ? (q.slug === "hipaa" && t.baaPlans ? PASS_LABEL.somePlans : PASS_LABEL.yes) : PASS_LABEL.no;
   const others = allQuestions().filter((x) => x.slug !== q.slug);
   const evidence = evidenceForQuestion(t, q.slug);
   const hub = HUB_BY_SLUG[q.framework];
   const peers = TOOLS.filter((x) => x.category === t.category && x.slug !== t.slug).slice(0, 6);
 
-  const faqs = [{ q: q.ask(t.name), a: q.answer(t) }];
+  const isHipaa = q.slug === "hipaa";
+  const faqs = isHipaa ? hipaaToolFaqs(t) : [{ q: q.ask(t.name), a: q.answer(t) }];
 
   return (
     <>
@@ -80,6 +84,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
       <Section className="py-10 sm:py-12">
         <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,300px)]">
           <div>
+            {isHipaa && <div className="mb-8"><BaaAtAGlance tool={t} /></div>}
             <h2 className="font-display text-xl font-semibold text-ink">What we checked</h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">
               This assessment separates the consumer product from any business plan. It uses the vendor documents linked below; an unverified item is not a pass.
@@ -100,6 +105,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
               <div className="mt-5 rounded-xl bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-950 ring-1 ring-inset ring-amber-100">
                 <span className="font-semibold">Practical risk:</span> {t.notableRisk}
               </div>
+            )}
+
+            {isHipaa && <SaferAlternatives tool={t} />}
+
+            {isHipaa && faqs.length > 1 && (
+              <>
+                <h2 className="mt-8 font-display text-xl font-semibold text-ink">Common questions</h2>
+                <dl className="mt-3 space-y-4">
+                  {faqs.slice(1).map((f) => (
+                    <div key={f.q}>
+                      <dt className="text-sm font-semibold text-ink">{f.q}</dt>
+                      <dd className="mt-1 text-sm leading-relaxed text-ink-soft">{f.a}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
             )}
 
             <h2 className="mt-8 font-display text-xl font-semibold text-ink">How to make a decision</h2>
@@ -151,11 +172,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 </ul>
               )}
             </div>
-            <div className="rounded-2xl bg-brand-800 p-5 text-white">
-              <h3 className="font-semibold">Approve it properly</h3>
-              <p className="mt-1 text-sm text-brand-100">Generate a free AI usage policy that names your approved tools and tiers.</p>
-              <Link href="/ai-usage-policy-generator" className="mt-3 inline-block rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-800 hover:bg-brand-50">Generate a policy →</Link>
-            </div>
+            {isHipaa ? <PracticeCta /> : (
+              <div className="rounded-2xl bg-brand-800 p-5 text-white">
+                <h3 className="font-semibold">Approve it properly</h3>
+                <p className="mt-1 text-sm text-brand-100">Generate a free AI usage policy that names your approved tools and tiers.</p>
+                <Link href="/ai-usage-policy-generator" className="mt-3 inline-block rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-800 hover:bg-brand-50">Generate a policy →</Link>
+              </div>
+            )}
           </aside>
         </div>
       </Section>

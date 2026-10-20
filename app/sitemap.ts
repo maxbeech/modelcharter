@@ -8,6 +8,10 @@ import { HUBS, USE_CASES } from "@/lib/registry-frameworks";
 import { popularComparePairs } from "@/lib/compare";
 import { GLOSSARY } from "@/lib/glossary";
 
+// A rechecked HIPAA BAA fact dates its own pages, so crawlers see the refresh.
+const baaDate = (slug: string) => { const d = TOOLS.find((t) => t.slug === slug)?.baaVerified; return d ? new Date(d) : undefined; };
+const latestBaa = TOOLS.map((t) => t.baaVerified).filter((d): d is string => !!d).sort().pop();
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const u = (p: string) => `${SITE.url}${p}`;
   const last = new Date(SITE.updated);
@@ -15,8 +19,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...statics.map((p) => ({ url: u(p), lastModified: last, changeFrequency: "weekly" as const, priority: p === "/" ? 1 : 0.8 })),
     ...TOOLS.map((t) => ({ url: u(`/tools/${t.slug}`), lastModified: last, changeFrequency: "monthly" as const, priority: 0.7 })),
-    ...TOOLS.flatMap((t) => QUESTION_SLUGS.map((q) => ({ url: u(`/tools/${t.slug}/${q}`), lastModified: last, changeFrequency: "monthly" as const, priority: 0.6 }))),
-    ...HUBS.map((h) => ({ url: u(`/compliance/${h.slug}`), lastModified: last, changeFrequency: "weekly" as const, priority: 0.7 })),
+    ...TOOLS.flatMap((t) => QUESTION_SLUGS.map((q) => ({ url: u(`/tools/${t.slug}/${q}`), lastModified: (q === "hipaa" && baaDate(t.slug)) || last, changeFrequency: "monthly" as const, priority: 0.6 }))),
+    ...HUBS.map((h) => ({ url: u(`/compliance/${h.slug}`), lastModified: h.slug === "hipaa" && latestBaa ? new Date(latestBaa) : last, changeFrequency: "weekly" as const, priority: 0.7 })),
     ...USE_CASES.map((uc) => ({ url: u(`/compliance/${uc.slug}`), lastModified: last, changeFrequency: "monthly" as const, priority: 0.6 })),
     ...popularComparePairs().map((p) => ({ url: u(`/compare/${p}`), lastModified: last, changeFrequency: "monthly" as const, priority: 0.5 })),
     ...GLOSSARY.map((t) => ({ url: u(`/glossary/${t.slug}`), lastModified: last, changeFrequency: "monthly" as const, priority: 0.5 })),

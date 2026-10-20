@@ -2997,6 +2997,56 @@ export const POSTS: Post[] = [
       { q: "Do the rules matter for a small team?", a: "Yes. The rules are short and cheap to follow. The risk depends on the data a team handles rather than its headcount, so a five-person team handling client records needs the same clarity as a larger one." },
     ],
   },
+  {
+    slug: "does-openai-sign-a-baa",
+    title: "Does OpenAI Sign a BAA? ChatGPT and HIPAA",
+    date: "2026-10-20",
+    description: "OpenAI signs a BAA for its API and for ChatGPT Enterprise and Edu, but not ChatGPT Business, Plus or Free. What that means for a small practice.",
+    keyword: "openai baa",
+    supportingKeywords: ["chatgpt baa", "is chatgpt hipaa compliant", "hipaa compliant chatgpt", "openai business associate agreement", "chatgpt enterprise hipaa", "openai api hipaa", "chatgpt for healthcare practices"],
+    category: "Academy",
+    author: "ModelCharter Team",
+    tldr: [
+      "Yes, but only for some products. OpenAI signs a BAA for its API and for sales-managed ChatGPT Enterprise and Edu accounts.",
+      "OpenAI says it does not offer a BAA for ChatGPT Business. Free and Plus are not listed as eligible either.",
+      "Eligible individual clinicians can sign a separate BAA inside ChatGPT for Clinicians.",
+      "A signed BAA is step one. You still need the right settings, user access and written rules for staff.",
+    ],
+    body: [
+      { p: "Short answer: yes, OpenAI will sign a Business Associate Agreement (BAA), but only for some of its products. It signs one for the OpenAI API and for sales-managed ChatGPT Enterprise and ChatGPT Edu accounts. It runs a separate BAA flow for eligible clinicians using ChatGPT for Clinicians. It says plainly that it does not offer a BAA for ChatGPT Business, and Free and Plus are not on the list at all. For a small practice, that usually means the ChatGPT account your staff already use cannot touch patient data. We checked all of this against [OpenAI's own help article](https://help.openai.com/en/articles/8660679-getting-a-business-associate-agreement-for-the-openai-api) on 20 October 2026, and the live answer sits on our [Is ChatGPT HIPAA compliant?](/tools/chatgpt/hipaa) page." },
+      { h: "Why the BAA decides the question", p: "Under HIPAA, a practice that shares protected health information (PHI) with a vendor needs a business associate agreement with that vendor first. The rule is in the Privacy Rule at 45 CFR 164.502(e) and 164.504(e), and the US Department of Health and Human Services publishes [sample BAA provisions](https://www.hhs.gov/hipaa/for-professionals/covered-entities/sample-business-associate-agreement-provisions/index.html) for it. If an AI tool processes a patient's name, a session note or an appointment detail on your behalf, the vendor is acting as a business associate. Without a signed BAA, putting that information into the tool is a disclosure HIPAA does not allow, however good the vendor's security is. That is why \"is ChatGPT HIPAA compliant?\" really means \"will OpenAI sign a BAA for the account we use?\"" },
+      { h: "Which OpenAI products come with a BAA", p: "There are three routes. The API route is self-serve: an organization admin opens the API Platform, goes to Settings, then Organization, then General, and enables HIPAA compliance support, which means accepting OpenAI's standard Business Associate and Healthcare Addendum. OpenAI says an enterprise agreement is not required, but self-serve enrollment needs an established history of API usage. If the setting shows Not eligible yet, OpenAI points you to baa@openai.com. The ChatGPT route is through sales: a BAA is available for sales-managed ChatGPT Enterprise and Edu accounts. The third route is ChatGPT for Clinicians, which OpenAI describes as having its own in-product BAA flow for eligible individual clinicians. Anything outside those routes, including the Business, Plus and Free plans, has no BAA." },
+      { h: "Why ChatGPT Business is not enough", p: "This is the trap we see most. ChatGPT Business, the plan once called Team, feels like the responsible choice. It is a paid workspace with admin controls, and OpenAI does not train on Business data by default. Many practice managers reasonably assume that makes it safe for patient work. It does not. OpenAI's help article states that it does not offer a BAA for ChatGPT Business. Not training on your data is a privacy setting, not a HIPAA contract. If your practice is on Business and staff paste in anything from a patient record, you have the same problem as if they used a free account." },
+      { h: "What about ChatGPT for Clinicians?", p: "OpenAI lists ChatGPT for Clinicians as a separate product where eligible individual clinicians can accept a BAA inside the product. It is aimed at individual practitioners rather than whole organizations. If you are a solo therapist or a clinician working alone, it may be the simplest route, but check who qualifies and exactly what the BAA covers inside the product before you rely on it. Only the account that accepted the BAA is covered. A colleague on a personal ChatGPT login is not." },
+      { h: "The API route, in plain terms", p: "Most small practices never touch the OpenAI API directly. They meet it through software built on top of it: an AI scribe, an intake form tool or a patient messaging product. In that setup there are two agreements that matter. The software vendor needs a BAA with OpenAI, and your practice needs a BAA with the software vendor. Ask the vendor for both in writing. OpenAI also says that accepting a BAA does not by itself make an application HIPAA compliant, and that only certain API services are eligible for PHI, so a good vendor should be able to tell you which features they use and how they are configured. One detail worth knowing: once HIPAA support is enabled for an API organization, it cannot be switched off in the settings." },
+      { h: "Signing the BAA is step one", p: "A BAA moves responsibility onto paper. It does not configure anything. After it is signed, a practice still needs to decide who gets access, turn on the right workspace settings, and set out what staff may and may not enter. HIPAA's minimum necessary standard still applies, so staff should share only what a task needs. You also need a record: which tools are approved, for what data, and proof that each person read the rules. That record is what you will want to show if a patient, an insurer or an auditor ever asks how AI is used in your practice." },
+      { h: "How ChatGPT compares with other AI tools", p: "OpenAI is not unusual here. Nearly every AI vendor that offers a BAA ties it to a business, enterprise or API account. Anthropic signs one for Claude Enterprise and its API once the BAA is accepted, Microsoft includes one for Microsoft 365 Copilot on commercial plans through its Data Protection Addendum, and Google covers the Gemini app and Gemini in Workspace once a Workspace admin accepts its BAA. Others, like Notion AI, are harder to pin down. Our [HIPAA-compliant AI tools table](/compliance/hipaa) shows every tool we track, which plan carries the BAA, the vendor page and the date we checked." },
+      { h: "What to tell your staff this week", p: "Keep it to three rules. First, no patient information goes into a personal or free ChatGPT account, or into ChatGPT Business. Second, if the practice needs ChatGPT for clinical or admin work involving PHI, use only an account covered by a signed BAA. Third, write the rules down and get each person to confirm they have read them. Our [free healthcare AI policy preset](/ai-usage-policy-generator?preset=healthcare) drafts the rules in a few minutes. The [HIPAA AI Kit](/hipaa-ai-kit) adds your approved tools, staff sign-off and a printable record for $99, paid once. This is guidance, not legal advice, so have your own advisor review the policy before you adopt it." },
+    ],
+    table: {
+      caption: "OpenAI products and BAA availability, checked 20 October 2026",
+      headers: ["Product", "BAA available?", "How to get it"],
+      rows: [
+        ["OpenAI API", "Yes", "Accept the standard BAA in the API Platform (needs API usage history), or email baa@openai.com"],
+        ["ChatGPT Enterprise", "Yes", "Through OpenAI sales, for sales-managed accounts"],
+        ["ChatGPT Edu", "Yes", "Through OpenAI sales, for sales-managed accounts"],
+        ["ChatGPT for Clinicians", "Yes, for eligible clinicians", "A separate BAA flow inside the product"],
+        ["ChatGPT Business", "No", "OpenAI says it does not offer one"],
+        ["ChatGPT Plus and Free", "No", "Not listed as eligible for a BAA"],
+      ],
+    },
+    quote: {
+      text: "We do not offer a BAA for ChatGPT Business.",
+      attribution: "OpenAI Help Center",
+    },
+    faqs: [
+      { q: "Is ChatGPT HIPAA compliant?", a: "Not on its own, and not on most plans. OpenAI signs a BAA for ChatGPT Enterprise and Edu through sales, for the API, and for eligible clinicians in ChatGPT for Clinicians. There is no BAA for ChatGPT Business, Plus or Free, so patient data must not go into those." },
+      { q: "Does OpenAI sign a BAA for ChatGPT Plus?", a: "No. ChatGPT Plus is a personal plan and OpenAI does not list it as eligible for a BAA. The same goes for the free plan." },
+      { q: "How do I get a BAA from OpenAI?", a: "For the API, an organization admin enables HIPAA compliance support in the API Platform settings and accepts the standard agreement. For ChatGPT Enterprise or Edu, contact OpenAI sales. Eligible clinicians can accept one inside ChatGPT for Clinicians." },
+      { q: "Is the OpenAI API HIPAA compliant?", a: "The API can be used with PHI once your organization has a BAA in place, but only certain API services are eligible, and OpenAI says the BAA does not by itself make your application compliant. Check the covered services before you build." },
+      { q: "Can staff paste de-identified notes into ChatGPT?", a: "Only if the notes are truly de-identified under HIPAA. Removing a name is not enough, because dates, places and record numbers can identify someone too. The safer rule for a small practice is to keep anything from a patient record out of accounts without a BAA." },
+    ],
+  },
 ];
 
 // This campaign list is deliberately explicit: it drives QA without relying on
@@ -3379,6 +3429,12 @@ const POST_IMAGES: Record<string, PostImage> = {
     alt: "Team reviewing a risk register during an AI risk management framework meeting",
     author: "Dylan Gillis",
     authorUrl: "https://unsplash.com/@mainermedia",
+  },
+  "does-openai-sign-a-baa": {
+    src: "https://images.pexels.com/photos/4989171/pexels-photo-4989171.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+    alt: "Doctor in a white coat typing on a laptop, checking whether ChatGPT is covered by a BAA",
+    author: "Ivan S",
+    authorUrl: "https://www.pexels.com/@ivan-s",
   },
 };
 

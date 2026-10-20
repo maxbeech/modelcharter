@@ -13,6 +13,10 @@ export interface ComplianceHub {
   blurb: string;
   keyword: string;
   match: (t: AiTool) => boolean;
+  /** Search-facing overrides; the visible title stays `title`. */
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
 }
 
 export const HUBS: ComplianceHub[] = [
@@ -21,9 +25,13 @@ export const HUBS: ComplianceHub[] = [
     label: "HIPAA",
     title: "HIPAA-compliant AI tools",
     blurb:
-      "AI tools whose vendor will sign a Business Associate Agreement (BAA), the baseline for handling protected health information (PHI) in the US. Usually available on an enterprise tier only.",
+      "Which AI tools will sign a Business Associate Agreement (BAA), and on which plan. A BAA is the minimum before patient data goes into any AI tool.",
     keyword: "hipaa compliant ai tools",
     match: (t) => t.hipaaBaa === "yes",
+    metaTitle: "HIPAA-compliant AI tools: who signs a BAA, and on which plan",
+    metaDescription:
+      "Is ChatGPT, Claude, Copilot or Gemini HIPAA compliant? See which AI vendors sign a BAA, on which plan, with the vendor source and the date we checked it.",
+    keywords: ["hipaa compliant ai", "hipaa compliant ai tools", "is chatgpt hipaa compliant", "is claude hipaa compliant", "is copilot hipaa compliant", "is gemini hipaa compliant", "hipaa compliant chatgpt", "openai baa", "ai baa"],
   },
   {
     slug: "gdpr",

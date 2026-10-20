@@ -8,8 +8,11 @@ import { JsonLd } from "@/components/JsonLd";
 import { RiskPill, Section } from "@/components/ui";
 import { PageHero } from "@/components/page";
 import { pageMeta, datasetLd, breadcrumbLd } from "@/lib/seo";
+import { HipaaHub } from "./HipaaHub";
 
 export const dynamicParams = false;
+// Rebuild weekly so the hub tracks data/ai-tools.json without a redeploy.
+export const revalidate = 604800;
 export function generateStaticParams() {
   return [...HUBS.map((h) => ({ framework: h.slug })), ...USE_CASES.map((u) => ({ framework: u.slug }))];
 }
@@ -18,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ framework
   const { framework } = await params;
   const hub = HUB_BY_SLUG[framework];
   const uc = USE_CASE_BY_SLUG[framework];
-  if (hub) return pageMeta({ title: hub.title, description: hub.blurb, path: `/compliance/${framework}`, keywords: [hub.keyword, `${hub.label.toLowerCase()} ai`, `is chatgpt ${hub.label.toLowerCase()} compliant`] });
+  if (hub) return pageMeta({ title: hub.metaTitle ?? hub.title, description: hub.metaDescription ?? hub.blurb, path: `/compliance/${framework}`, keywords: hub.keywords ?? [hub.keyword, `${hub.label.toLowerCase()} ai`, `is chatgpt ${hub.label.toLowerCase()} compliant`] });
   if (uc) return pageMeta({ title: uc.title, description: uc.blurb, path: `/compliance/${framework}`, keywords: [`ai tools for ${uc.label.toLowerCase()}`, `safe ai tools ${uc.label.toLowerCase()}`] });
   return {};
 }
@@ -43,6 +46,7 @@ export default async function Page({ params }: { params: Promise<{ framework: st
   const uc = USE_CASE_BY_SLUG[framework];
   if (!hub && !uc) notFound();
 
+  if (hub?.slug === "hipaa") return <HipaaHub hub={hub} />;
   if (hub) {
     const pass = TOOLS.filter(hub.match).map((t) => t.slug);
     return (

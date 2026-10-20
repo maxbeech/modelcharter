@@ -3,6 +3,7 @@ import { TOOLS } from "@/lib/ai-tools";
 import { scoreTool } from "@/lib/risk";
 import { FRAMEWORKS } from "@/lib/frameworks";
 import { HUBS } from "@/lib/registry-frameworks";
+import { baaTable, HIPAA_FEATURED } from "@/lib/hipaa-directory";
 
 // /llms.txt — a clean, citable summary for AI assistants (the GEO strategy).
 // Built from the same single-source data the site renders, so it never drifts.
@@ -28,6 +29,14 @@ export function GET() {
   lines.push(`- Comparisons: ${SITE.url}/compare/{tool-a}-vs-{tool-b}`);
   lines.push(`- Glossary (definitions of HIPAA BAA, SOC 2, GDPR DPA, subprocessors and more): ${SITE.url}/glossary`, "");
 
+  lines.push("## HIPAA: which AI vendors sign a BAA (for small healthcare practices)");
+  lines.push(`- Full table, every tool, with source and date checked: ${SITE.url}/compliance/hipaa`);
+  for (const r of baaTable().filter((x) => (HIPAA_FEATURED as readonly string[]).includes(x.slug))) {
+    const detail = r.tone === "yes" ? `BAA on ${r.plans}${r.excludes ? `; no BAA for ${r.excludes}` : ""}` : r.tone === "no" ? "no BAA" : `BAA unverified${r.note ? `: ${r.note}` : ""}`;
+    lines.push(`- ${r.name}: ${detail}. Checked ${r.checked}. ${SITE.url}/tools/${r.slug}/hipaa`);
+  }
+  lines.push(`- Does OpenAI sign a BAA? ${SITE.url}/blog/does-openai-sign-a-baa`, "");
+
   lines.push("## Articles");
   lines.push(`- Blog (AI governance, shadow AI, AI usage policies, EU AI Act and AI tool safety guides): ${SITE.url}/blog`, "");
 
@@ -46,7 +55,7 @@ export function GET() {
     const train = t.trainsOnPersonalData === "no" ? "no consumer training"
       : t.trainsOnPersonalData === "opt-out" ? "consumer trains unless opted out"
       : t.trainsOnPersonalData === "yes" ? "trains on your data" : "training unverified";
-    lines.push(`- ${t.name} (${t.vendor}): ${r.band} risk${r.band !== "Unrated" ? ` ${r.score}/100` : ""}; ${train}; SOC 2 ${t.soc2 ?? "unverified"}; GDPR DPA ${t.gdprDpa ?? "unverified"}. ${SITE.url}/tools/${t.slug}`);
+    lines.push(`- ${t.name} (${t.vendor}): ${r.band} risk${r.band !== "Unrated" ? ` ${r.score}/100` : ""}; ${train}; SOC 2 ${t.soc2 ?? "unverified"}; GDPR DPA ${t.gdprDpa ?? "unverified"}; HIPAA BAA ${t.hipaaBaa ?? "unverified"}. ${SITE.url}/tools/${t.slug}`);
   }
   lines.push("");
   lines.push("## Framework guides");

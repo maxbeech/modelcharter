@@ -143,7 +143,13 @@ Make the call from the baseline recorded in Phase 0:
 3. **Count signups.** Count real signups in Supabase, excluding `app_metadata.is_test`, for the baseline below.
 4. **Check GA in production.** Confirm `sign_up` → `begin_checkout` → `purchase` in GA DebugView after the first test purchase. Use a live-mode price with a 100% coupon, or a test-mode deployment.
 
-**Not started:** the HIPAA SEO content work (hub table, top tool pages, the "OpenAI BAA" post, a BAA fact re-check). It was offered as a separate session.
+**SEO content, done 2026-10-20:**
+- the HIPAA hub table
+- the seven top tool HIPAA pages
+- the "OpenAI BAA" post
+- a recheck of the BAA facts
+
+Notion AI is now Unverified.
 
 **Baseline for the 2027-01-31 decision:**
 

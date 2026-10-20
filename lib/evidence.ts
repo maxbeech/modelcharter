@@ -36,7 +36,7 @@ export function buildEvidence(input: EvidenceInput): Evidence {
     .filter((r) => r.status in STATUS_ORDER)
     .map((r): EvidenceTool => {
       const tool = input.toolFor(r.tool_slug);
-      const baaSource = tool?.sources.find((s) => /hipaa|baa/i.test(s.claim))?.url;
+      const baaSource = tool?.baaSource ?? tool?.sources.find((s) => /hipaa|baa/i.test(s.claim))?.url;
       return { slug: r.tool_slug, name: r.name, status: r.status, baa: baaStatus(tool), phiRisk: isPhiRisk(r.status, tool), sourceUrl: baaSource ?? tool?.trustUrl };
     })
     .sort((a, b) => STATUS_ORDER[a.status] - STATUS_ORDER[b.status] || a.name.localeCompare(b.name));

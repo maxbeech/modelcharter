@@ -14,11 +14,13 @@ export interface BaaStatus {
   detail: string;
 }
 
-export function baaStatus(tool: Pick<AiTool, "name" | "hipaaBaa" | "enterprisePlan"> | undefined): BaaStatus {
+export function baaStatus(tool: Pick<AiTool, "name" | "hipaaBaa" | "enterprisePlan"> & Partial<Pick<AiTool, "baaPlans">> | undefined): BaaStatus {
   if (!tool || tool.hipaaBaa == null) {
     return { tone: "unknown", short: "BAA unverified", detail: "We couldn't confirm a BAA from the vendor's own pages. Keep patient data out until you have one in writing." };
   }
   if (tool.hipaaBaa === "yes") {
+    // The checked, plan-specific fact wins over the generic enterprise plan name.
+    if (tool.baaPlans) return { tone: "yes", short: "BAA available", detail: `${tool.name} offers a BAA on ${tool.baaPlans}. Sign it before any patient data goes in.` };
     const plan = tool.enterprisePlan ? ` Usually only on ${tool.enterprisePlan} or another business plan, never a personal account.` : " Usually only on a business plan, never a personal account.";
     return { tone: "yes", short: "BAA available", detail: `${tool.name} offers a BAA.${plan} Sign it before any patient data goes in.` };
   }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { getTool } from "@/lib/ai-tools";
 import { baaStatus, type BaaTone } from "@/lib/hipaa";
+import { HIPAA_FEATURED } from "@/lib/hipaa-directory";
 import { KIT, SITE } from "@/lib/site";
 import { JsonLd } from "@/components/JsonLd";
 import { Section, btn } from "@/components/ui";
@@ -20,8 +21,6 @@ export const metadata: Metadata = pageMeta({
   keywords: ["hipaa compliant ai", "hipaa ai policy", "ai policy for healthcare practice", "hipaa compliant ai tools", "ai policy for therapists"],
 });
 
-// The tools practices ask about most, in the order people search for them.
-const ASKED_ABOUT = ["chatgpt", "claude", "microsoft-365-copilot", "google-gemini", "otter-ai", "grammarly", "notion-ai", "zoom-ai-companion"];
 
 const TONE_CLASS: Record<BaaTone, string> = {
   yes: "bg-emerald-50 text-emerald-800 ring-emerald-200",
@@ -45,7 +44,7 @@ const FAQS = [
 ];
 
 export default function Page() {
-  const tools = ASKED_ABOUT.map((slug) => getTool(slug)).filter((t) => t != null);
+  const tools = HIPAA_FEATURED.map((slug) => getTool(slug)).filter((t) => t != null);
   return (
     <>
       <Suspense fallback={null}><CheckoutReturnTracker /></Suspense>

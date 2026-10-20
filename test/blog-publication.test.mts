@@ -35,4 +35,27 @@ for (const post of posts) {
   ok(!!post.image?.src && !!post.image.alt && !!post.image.authorUrl, `${post.slug}: has a credited featured image`);
 }
 
+// --- HIPAA cluster: "Does OpenAI sign a BAA?" (targets "openai baa", "chatgpt baa") ---
+const baaPost = POSTS.find((post) => post.slug === "does-openai-sign-a-baa");
+ok(!!baaPost, "the OpenAI BAA post is registered in POSTS");
+if (baaPost) {
+  const content = textFor(baaPost);
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  ok(baaPost.title.length < 60, "openai baa: title is under 60 characters");
+  ok(baaPost.description.length < 155, "openai baa: description is under 155 characters");
+  eq(baaPost.keyword, "openai baa", "openai baa: targets the head term");
+  ok(!!baaPost.supportingKeywords?.includes("chatgpt baa"), "openai baa: also targets chatgpt baa");
+  ok((baaPost.supportingKeywords?.length ?? 0) >= 6, "openai baa: has six supporting keywords");
+  ok(/^\d{4}-\d{2}-\d{2}$/.test(baaPost.date) && baaPost.date <= new Date().toISOString().slice(0, 10), "openai baa: dated, not in the future");
+  ok(words >= 1200, `openai baa: has at least 1,200 words (${words})`);
+  ok((baaPost.faqs?.length ?? 0) >= 3 && !!baaPost.table && !!baaPost.quote, "openai baa: has FAQs, a table and a quote");
+  ok(!!baaPost.image?.src && !!baaPost.image.alt && !!baaPost.image.authorUrl, "openai baa: has a credited featured image");
+  ok(!/[\u2014\u2013]/.test(content), "openai baa: no em or en dashes");
+  // The facts must match the directory record the post points readers to.
+  ok(content.includes("ChatGPT Business") && /does not offer a BAA for ChatGPT Business/.test(content), "openai baa: says Business has no BAA");
+  ok(content.includes("/tools/chatgpt/hipaa") && content.includes("/compliance/hipaa"), "openai baa: links the live answer page and the hub");
+  ok(content.includes("/hipaa-ai-kit") && content.includes("/ai-usage-policy-generator?preset=healthcare"), "openai baa: links both practice CTAs");
+  ok(content.includes("help.openai.com"), "openai baa: cites OpenAI's own help article");
+}
+
 done("blog publication");
