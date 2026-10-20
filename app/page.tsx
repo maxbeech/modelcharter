@@ -7,8 +7,8 @@ import { TrustStrip, DirectoryPreview, Positioning, FrameworksStrip, FaqAndCta, 
 
 // Explicit title and description for the home page, so it does not rely on the root layout alone.
 export const metadata: Metadata = pageMeta({
-  title: `AI usage policy and tool register for small teams | ${SITE.name}`,
-  description: "Write an AI usage policy, keep a register of approved AI tools and collect staff sign-off. Built for small teams without a compliance department.",
+  title: `HIPAA AI policy and BAA checker for small practices | ${SITE.name}`,
+  description: "See which AI tools will sign a BAA, write an AI policy that keeps patient data safe, and collect staff sign-off. Built for small healthcare practices without a compliance department.",
   path: "/",
 });
 
