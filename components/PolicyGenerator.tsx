@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { generatePolicy, policyToMarkdown, type PolicyInput, type Stance } from "@/lib/policy";
-import { analyticsEvents, reportAction, trackEvent, trackFailure, type ActionResult } from "@/lib/analytics-events";
+import { analyticsEvents, identifyAnonymousVisitor, reportAction, trackEvent, trackFailure, type ActionResult } from "@/lib/analytics-events";
 
 const INDUSTRIES = ["General business", "Software / SaaS", "Healthcare", "Finance", "Legal", "Education", "Marketing / agency", "E-commerce / retail", "Government / public sector", "Non-profit"];
 const REGS = ["EU AI Act", "GDPR", "HIPAA", "SOC 2", "ISO 42001"];
@@ -31,6 +31,10 @@ export function PolicyGenerator({ today: todayProp, toolNames, saveAction }: { t
   // real current date after mount so a long-cached page still dates correctly.
   const [today, setToday] = useState(todayProp);
   useEffect(() => { setToday(new Date().toISOString().slice(0, 10)); }, []);
+  // The free generator is the anonymous entry to the journey. Only the public
+  // page (no saveAction) labels the visitor anonymous; the dashboard copy is
+  // identified by the dashboard layout.
+  useEffect(() => { if (!saveAction) identifyAnonymousVisitor(); }, [saveAction]);
   const [companyName, setCompanyName] = useState("");
   const [industry, setIndustry] = useState(INDUSTRIES[0]);
   const [stance, setStance] = useState<Stance>("balanced");

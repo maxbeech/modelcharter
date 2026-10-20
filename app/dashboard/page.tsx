@@ -3,7 +3,7 @@ import { ensureOrg, getRegister, getPolicies, getAttestations } from "@/lib/work
 import { getAlerts } from "@/lib/alerts";
 import { confirmCheckoutSession, reconcileCheckoutSession } from "@/lib/billing/entitlements";
 import { getSession } from "@/lib/auth";
-import { analyticsUserRef } from "@/lib/analytics-ref";
+import { buildAnalyticsIdentity } from "@/lib/analytics-identity";
 import { PurchaseTracker, type PurchaseOutcome } from "@/components/PurchaseTracker";
 import { redirect } from "next/navigation";
 import { actionMarkAlertsRead } from "./actions";
@@ -23,7 +23,8 @@ export default async function DashboardHome({ searchParams }: { searchParams: Pr
   } else if (confirmedId) {
     const [result, user] = await Promise.all([confirmCheckoutSession(confirmedId, org.id), getSession()]);
     purchase = result.ok && user
-      ? { kind: "confirmed", purchase: result.purchase, identity: { userRef: analyticsUserRef(user.id), plan: "paid" } }
+      // The plan comes from the verified Checkout session, not from the stale org row.
+      ? { kind: "confirmed", purchase: result.purchase, identity: buildAnalyticsIdentity(user.id, result.purchase.items[0]?.item_id, user.isTest) }
       : { kind: "failed", reason: result.ok ? "unauthorized" : result.reason };
   }
   const [register, policies, attestations, alerts] = await Promise.all([

@@ -5,9 +5,10 @@ process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID = "G-TEST12345";
 
 const { eq, ok, done } = await import("./_assert.mts");
 const { analyticsUserRef } = await import("../lib/analytics-ref.ts");
-const { analyticsPlanFor, buildAnalyticsIdentity } = await import("../lib/analytics-identity.ts");
-const { analyticsEvents, failureReason, isAnalyticsIdentity, beginCheckoutParams, reportAction } =
-  await import("../lib/analytics-events.ts");
+const { analyticsPlanFor, buildAnalyticsIdentity, isTestUserMetadata } = await import("../lib/analytics-identity.ts");
+const { analyticsEvents, failureReason, isAnalyticsIdentity, beginCheckoutParams, reportAction,
+  identifyJourney, identifyAnonymousVisitor, captureJourneyFailure } = await import("../lib/analytics-events.ts");
+const { analyticsConsentGranted, hasSupabaseSessionCookie } = await import("../lib/analytics-consent.ts");
 const { checkoutSessionProblem, purchaseFromSession } = await import("../lib/billing/purchase.ts");
 const { userRefFor } = await import("../lib/openhelm-analytics-mp.ts");
 
@@ -28,9 +29,30 @@ eq(analyticsPlanFor(undefined), "free", "no org is free");
 eq(analyticsPlanFor("team"), "paid", "Team is paid");
 eq(analyticsPlanFor("business"), "paid", "Business is paid");
 const identity = buildAnalyticsIdentity(ZERO, "team");
-eq(identity, { userRef: "12b9377cbe7e5c94", plan: "paid" }, "identity is ref + plan");
+eq(identity, { userRef: "12b9377cbe7e5c94", plan: "paid", isTest: false }, "identity is ref + plan + test flag");
+ok(!JSON.stringify(identity).includes(ZERO), "identity never carries the raw user id");
 ok(!JSON.stringify(identity).includes(ZERO), "identity never carries the raw user id");
 ok(isAnalyticsIdentity(identity), "identity passes its own guard");
+
+// -- test-user marker: app_metadata is_test only, strictly true -----------------
+ok(isTestUserMetadata({ is_test: true }), "is_test true marks a test account");
+ok(!isTestUserMetadata({ is_test: "true" }), "a string 'true' is not the marker");
+ok(!isTestUserMetadata({}), "no marker, not a test account");
+ok(!isTestUserMetadata(undefined), "missing app_metadata is not a test account");
+ok(!isTestUserMetadata(null), "null app_metadata is not a test account");
+ok(buildAnalyticsIdentity(ZERO, "team", true).isTest === true, "the test flag rides on the identity");
+ok(!("email" in identity), "no email on the identity");
+
+// -- consent: identifiers only after an explicit opt-in cookie ------------------
+const CONSENT = "theme=warm; oh_analytics_consent=granted";
+ok(analyticsConsentGranted(CONSENT), "granted consent is recognised");
+ok(!analyticsConsentGranted("oh_analytics_consent=denied"), "denied consent is not granted");
+ok(!analyticsConsentGranted("x_oh_analytics_consent=granted"), "a similarly named cookie is not consent");
+ok(!analyticsConsentGranted(""), "no cookie is not consent");
+ok(!analyticsConsentGranted(undefined), "an absent header is not consent");
+ok(hasSupabaseSessionCookie("sb-abcd-auth-token=x"), "a Supabase session cookie is detected");
+ok(hasSupabaseSessionCookie("a=1; sb-abcd-auth-token.0=x"), "a chunked Supabase session cookie is detected");
+ok(!hasSupabaseSessionCookie("a=1; oh_analytics_consent=granted"), "no session cookie without one");
 ok(!isAnalyticsIdentity({ userRef: "a@b.com", plan: "free" }), "an email is not a user ref");
 ok(!isAnalyticsIdentity({ userRef: "12b9377cbe7e5c94", plan: "vip" }), "an unknown plan is refused");
 
@@ -68,9 +90,12 @@ eq(checkoutSessionProblem({ ...(session as object), mode: "payment" } as never, 
 const win: { dataLayer: unknown[]; location: { href: string } } = { dataLayer: [], location: { href: "https://modelcharter.test/" } };
 (globalThis as unknown as { window: unknown }).window = win;
 (globalThis as unknown as { document: unknown }).document = { title: "T" };
-const { identify, track } = await import("../lib/openhelm-analytics.tsx");
+const { track } = await import("../lib/openhelm-analytics.tsx");
 
-ok(identify(identity), "identify records when a measurement id is set");
+ok(!identifyJourney(identity, ""), "without consent no user property is sent");
+ok(!identifyJourney(identity, "oh_analytics_consent=denied"), "a refusal sends no user property");
+eq(win.dataLayer.length, 0, "a refused identify queues nothing");
+ok(identifyJourney(identity, CONSENT), "identify records once consent is granted");
 ok(track(analyticsEvents.signUp, { method: "email" }), "track records when a measurement id is set");
 eq(win.dataLayer.length, 2, "two commands queued");
 ok(win.dataLayer.every(isArguments), "every command is an arguments object, not an array");
@@ -91,5 +116,45 @@ eq(win.dataLayer.map((e) => Array.from(e as ArrayLike<unknown>)), [
   ["event", "policy_save_failed", { reason: "save_failed" }],
   ["event", "policy_save_failed", { reason: "request_failed" }],
 ], "success, failure and a thrown call each send their own event");
+
+// -- user properties: exactly the contract keys, oh_is_test only for test users --
+win.dataLayer.length = 0;
+ok(identifyJourney({ userRef: "12b9377cbe7e5c94", plan: "free" }, CONSENT), "free user identified");
+eq(Array.from(win.dataLayer[0] as ArrayLike<unknown>), ["set", "user_properties", { oh_user_ref: "12b9377cbe7e5c94", oh_plan: "free" }],
+  "an ordinary user carries oh_user_ref and oh_plan and no oh_is_test");
+win.dataLayer.length = 0;
+ok(identifyJourney(buildAnalyticsIdentity(ZERO, "team", true), CONSENT), "test user identified");
+eq(Array.from(win.dataLayer[0] as ArrayLike<unknown>), ["set", "user_properties", { oh_user_ref: "12b9377cbe7e5c94", oh_plan: "paid", oh_is_test: "true" }],
+  "a test account carries oh_is_test: true");
+win.dataLayer.length = 0;
+ok(identifyJourney(buildAnalyticsIdentity(ZERO, "team", false), CONSENT), "non-test user identified");
+ok(!("oh_is_test" in (win.dataLayer[0] as Record<string, unknown>)) &&
+  !Array.from(win.dataLayer[0] as ArrayLike<unknown>).includes("oh_is_test"),
+  "a non-test account never sends oh_is_test");
+
+// -- anonymous visitors: oh_plan only, never over a signed-in session -----------
+win.dataLayer.length = 0;
+ok(!identifyAnonymousVisitor(""), "anonymous identify is consent-gated");
+ok(identifyAnonymousVisitor(CONSENT), "an anonymous visitor with consent is identified");
+eq(Array.from(win.dataLayer[0] as ArrayLike<unknown>), ["set", "user_properties", { oh_plan: "anonymous" }],
+  "an anonymous visitor sends only oh_plan");
+ok(!identifyAnonymousVisitor(`${CONSENT}; sb-abcd-auth-token=x`), "a signed-in browser keeps its real plan");
+
+// -- failure capture: a thrown action is reported to Sentry, a result is not ----
+win.dataLayer.length = 0;
+const captured: [unknown, string][] = [];
+const spy = (error: unknown, event: string) => { captured.push([error, event]); };
+const boom = new Error("offline");
+const thrown = await reportAction(async () => { throw boom; },
+  { ok: analyticsEvents.policySaved, failed: analyticsEvents.policySaveFailed }, undefined, spy);
+eq(thrown, { ok: false, reason: "request_failed" }, "a thrown action resolves to request_failed");
+eq(captured.length, 1, "a thrown action is captured once");
+ok(captured[0][0] === boom, "the captured error is the thrown error, not a copy");
+eq(captured[0][1], "policy_save_failed", "the capture is tagged with the failed journey event");
+captured.length = 0;
+await reportAction(async () => ({ ok: false, reason: "save_failed" }),
+  { ok: analyticsEvents.policySaved, failed: analyticsEvents.policySaveFailed }, undefined, spy);
+eq(captured.length, 0, "a handled failure result is not an exception");
+ok(typeof captureJourneyFailure === "function", "the default capture is exported for the journey");
 
 done("analytics");

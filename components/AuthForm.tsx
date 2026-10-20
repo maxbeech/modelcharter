@@ -2,8 +2,7 @@
 
 import { useActionState, useEffect } from "react";
 import type { AuthState } from "@/app/auth-actions";
-import { identify } from "@/lib/openhelm-analytics";
-import { analyticsEvents, trackEvent, trackFailure } from "@/lib/analytics-events";
+import { analyticsEvents, identifyJourney, trackEvent, trackFailure } from "@/lib/analytics-events";
 
 // Email + password form for login/signup. Uses useActionState so server-side
 // validation errors render inline without losing the page.
@@ -23,7 +22,7 @@ export function AuthForm({
   useEffect(() => {
     const failed = mode === "signup" ? analyticsEvents.signUpFailed : analyticsEvents.loginFailed;
     if (state.notice && state.analytics) {
-      identify(state.analytics);
+      identifyJourney(state.analytics);
       trackEvent(analyticsEvents.signUp, { method: "email" });
     } else if (state.error) {
       trackFailure(failed, state.reason, { method: "email" });

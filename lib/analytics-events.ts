@@ -1,4 +1,6 @@
-import { track, type AnalyticsPlan } from "./openhelm-analytics";
+import * as Sentry from "@sentry/nextjs";
+import { identify, track, type AnalyticsPlan } from "./openhelm-analytics";
+import { analyticsConsentGranted, currentCookieHeader, hasSupabaseSessionCookie } from "./analytics-consent";
 import { PLANS } from "./site";
 
 /**
@@ -36,6 +38,8 @@ export type AnalyticsEventName = (typeof analyticsEvents)[keyof typeof analytics
 export interface AnalyticsIdentity {
   userRef: string;
   plan: AnalyticsPlan;
+  /** True ONLY for the product's own test accounts (Supabase app_metadata is_test). */
+  isTest?: boolean;
 }
 
 const USER_REF = /^[0-9a-f]{16}$/;
@@ -44,7 +48,32 @@ export function isAnalyticsIdentity(value: unknown): value is AnalyticsIdentity 
   if (!value || typeof value !== "object") return false;
   const v = value as Record<string, unknown>;
   return typeof v.userRef === "string" && USER_REF.test(v.userRef) &&
-    (v.plan === "anonymous" || v.plan === "free" || v.plan === "paid");
+    (v.plan === "anonymous" || v.plan === "free" || v.plan === "paid") &&
+    (v.isTest === undefined || typeof v.isTest === "boolean");
+}
+
+/**
+ * Set the user properties for every later event. Consent-gated: without the
+ * consent cookie nothing is sent and this returns false. `isTest` reaches GA
+ * only as `oh_is_test: "true"`; the shared client never sends "false", so an
+ * ordinary user carries no `oh_is_test` at all.
+ */
+export function identifyJourney(
+  identity: { userRef?: string; plan: AnalyticsPlan; isTest?: boolean },
+  cookieHeader: string = currentCookieHeader(),
+): boolean {
+  if (!analyticsConsentGranted(cookieHeader)) return false;
+  return identify({ userRef: identity.userRef, plan: identity.plan, isTest: identity.isTest === true });
+}
+
+/**
+ * `oh_plan = anonymous` for a visitor with no account, on a public page. Sent
+ * only when there is no Supabase session cookie, so a signed-in user browsing
+ * the free tools keeps their real plan instead of being relabelled.
+ */
+export function identifyAnonymousVisitor(cookieHeader: string = currentCookieHeader()): boolean {
+  if (hasSupabaseSessionCookie(cookieHeader)) return false;
+  return identifyJourney({ plan: "anonymous" }, cookieHeader);
 }
 
 /** A `reason` is a short code, never free text: anything else becomes "unknown". */
@@ -89,19 +118,39 @@ export interface ActionResult {
 }
 
 /**
+ * Sentry capture for a journey step whose call threw before it returned (network
+ * loss, deploy skew). The journey event says the step failed; this says why, so
+ * a stalled user is visible as an Issue and not only as a GA count. The tag is
+ * the event name, never the payload, so no user content is attached.
+ */
+export function captureJourneyFailure(error: unknown, failedEvent: AnalyticsEventName): void {
+  try {
+    Sentry.withScope((scope) => {
+      scope.setTag("journey_event", failedEvent);
+      scope.setTag("scope", "journey");
+      Sentry.captureException(error instanceof Error ? error : new Error(String(error)));
+    });
+  } catch {
+    // Reporting a failure must never become one; the GA event already went out.
+  }
+}
+
+/**
  * Turn a server action's result into its success or `*_failed` event. A call
  * that threw before returning (network, deploy skew) is a failure too, reported
- * as `request_failed`.
+ * as `request_failed` and captured to Sentry with the thrown error.
  */
 export async function reportAction(
   run: () => Promise<ActionResult>,
   events: { ok: AnalyticsEventName; failed: AnalyticsEventName },
   okParams: (result: ActionResult) => Record<string, unknown> = () => ({}),
+  capture: (error: unknown, failedEvent: AnalyticsEventName) => void = captureJourneyFailure,
 ): Promise<ActionResult> {
   let result: ActionResult;
   try {
     result = await run();
-  } catch {
+  } catch (error) {
+    capture(error, events.failed);
     result = { ok: false, reason: "request_failed" };
   }
   if (result.ok) trackEvent(events.ok, okParams(result));

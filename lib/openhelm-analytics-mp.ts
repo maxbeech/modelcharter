@@ -59,6 +59,8 @@ export const MAX_EVENTS_PER_REQUEST = 25;
  */
 export const USER_PROPERTY_REF = "oh_user_ref";
 export const USER_PROPERTY_PLAN = "oh_plan";
+/** Set to "true" ONLY for the product's own test accounts; never sent as "false". */
+export const USER_PROPERTY_TEST = "oh_is_test";
 export type AnalyticsPlan = "anonymous" | "free" | "paid";
 
 /**
@@ -94,6 +96,12 @@ export interface MeasurementConfig {
   clientId?: string;
   /** Which surface these events came from; recorded on every event. */
   surface?: Surface;
+  /**
+   * GA4 user properties to attach to the request (Measurement Protocol's
+   * top-level `user_properties`), e.g. `{ oh_user_ref: "...", oh_plan: "paid" }`.
+   * Values are strings; undefined values are dropped.
+   */
+  userProperties?: Record<string, string | undefined>;
 }
 
 export type SendResult =
@@ -147,6 +155,10 @@ function buildPayload(config: MeasurementConfig, events: AnalyticsEvent[]) {
   };
   if (app) body.app_instance_id = config.clientId;
   else body.client_id = config.clientId;
+  const props = Object.entries(config.userProperties ?? {}).filter(([, v]) => v !== undefined && v !== "");
+  if (props.length > 0) {
+    body.user_properties = Object.fromEntries(props.map(([k, v]) => [k, { value: v }]));
+  }
   return body;
 }
 

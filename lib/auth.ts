@@ -1,13 +1,15 @@
 import { createServerSupabase } from "./supabase/server";
 import { isSupabaseConfigured } from "./supabase/config";
-import { buildAnalyticsIdentity } from "./analytics-identity";
+import { buildAnalyticsIdentity, isTestUserMetadata } from "./analytics-identity";
 import type { AnalyticsIdentity } from "./analytics-events";
+import { captureServerError } from "./observability";
 
 // Email + password auth on Supabase Auth. Session lives in the Supabase cookies
 // (refreshed by middleware); authorization always uses getUser(), which
 // validates the JWT with the auth server rather than trusting the raw cookie.
 
-export interface SessionUser { id: string; email: string }
+/** `isTest` comes from server-only app_metadata; see `isTestUserMetadata`. */
+export interface SessionUser { id: string; email: string; isTest: boolean }
 
 // Kept under its historical name so the dashboard/login/signup gates don't churn.
 export { isSupabaseConfigured as isDbConfigured };
@@ -24,7 +26,7 @@ export async function getSession(): Promise<SessionUser | null> {
   const supabase = await createServerSupabase();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
-  return { id: user.id, email: user.email ?? "" };
+  return { id: user.id, email: user.email ?? "", isTest: isTestUserMetadata(user.app_metadata) };
 }
 
 export async function destroySession(): Promise<void> {
@@ -50,6 +52,9 @@ export async function signup(email: string, password: string): Promise<AuthResul
   const { data, error } = await supabase.auth.signUp({ email: e, password });
   if (error) {
     const exists = /registered|already/i.test(error.message);
+    // A rejected sign-up for a known reason is expected; anything else is the
+    // stalled-user case, so it goes to Sentry with the provider's status code.
+    if (!exists) captureServerError(error, { scope: "auth", stage: "signup", code: error.code ?? null, status: error.status ?? null });
     const msg = exists ? "An account with that email already exists. Try logging in." : error.message;
     return { ok: false, error: msg, reason: exists ? "already_registered" : "auth_error" };
   }
@@ -72,6 +77,12 @@ export async function login(email: string, password: string): Promise<AuthResult
   if (!isSupabaseConfigured()) return { ok: false, error: "Accounts are not configured on this deployment yet.", reason: "not_configured" };
   const supabase = await createServerSupabase();
   const { error } = await supabase.auth.signInWithPassword({ email: normalizeEmail(email), password });
-  if (error) return { ok: false, error: "No account with that email, or wrong password.", reason: "invalid_credentials" };
+  if (error) {
+    // Wrong password is normal and stays out of Sentry; a provider outage or
+    // rate limit leaves the user stalled, so it is captured.
+    const credentials = error.status === 400 || error.code === "invalid_credentials";
+    if (!credentials) captureServerError(error, { scope: "auth", stage: "login", code: error.code ?? null, status: error.status ?? null });
+    return { ok: false, error: "No account with that email, or wrong password.", reason: credentials ? "invalid_credentials" : "auth_error" };
+  }
   return { ok: true };
 }

@@ -20,7 +20,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const org = await ensureOrg();
 
   // A one-way ref and the plan; the raw user id never leaves the server.
-  const identity = buildAnalyticsIdentity(user.id, org?.plan);
+  const identity = buildAnalyticsIdentity(user.id, org?.plan, user.isTest);
 
   return (
     <Section className="py-10">

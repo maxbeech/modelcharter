@@ -2,13 +2,17 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getStripe, priceForPlan } from "@/lib/stripe";
 import { getSession } from "@/lib/auth";
 import { ensureOrg } from "@/lib/workspace";
-import { captureServerError } from "@/lib/observability";
+import { captureServerError, captureServerMessage } from "@/lib/observability";
 import { SITE } from "@/lib/site";
 
 // A checkout that cannot start sends the user to /pricing with a short reason,
 // where the page reports `checkout_failed` to analytics. `reason` is a code, never free text.
-const failedCheckout = (reason: string) =>
-  NextResponse.redirect(`${SITE.url}/pricing?checkout=failed&reason=${reason}`, { status: 303 });
+// Every reason here leaves a visitor stalled on pricing, so each one is also a
+// Sentry warning (the Stripe exception, when there is one, is captured separately).
+const failedCheckout = (reason: string) => {
+  captureServerMessage("checkout could not start", { scope: "stripe-checkout", reason });
+  return NextResponse.redirect(`${SITE.url}/pricing?checkout=failed&reason=${reason}`, { status: 303 });
+};
 
 // Starts a Stripe Checkout subscription for the signed-in user's org.
 export async function POST(request: NextRequest) {

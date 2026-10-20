@@ -105,7 +105,8 @@ export async function createAttestationLink(orgId: string): Promise<string | nul
   const { data: pol } = await supabase
     .from("policies").select("id").eq("org_id", orgId).order("version", { ascending: false }).limit(1);
   if (!pol?.length) return null;
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("attestations").insert({ org_id: orgId, policy_id: pol[0].id }).select("token").single();
+  if (error) captureServerError(error, { scope: "workspace", stage: "create_attestation", orgId, code: error.code });
   return (data?.token as string) ?? null;
 }

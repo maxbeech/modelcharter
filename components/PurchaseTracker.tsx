@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { analyticsEnabled, identify } from "@/lib/openhelm-analytics";
-import { analyticsEvents, trackEvent, trackFailure, type AnalyticsIdentity } from "@/lib/analytics-events";
+import { analyticsEnabled } from "@/lib/openhelm-analytics";
+import { analyticsEvents, identifyJourney, trackEvent, trackFailure, type AnalyticsIdentity } from "@/lib/analytics-events";
 import type { PurchasePayload } from "@/lib/billing/purchase";
 
 export type PurchaseOutcome =
@@ -53,7 +53,7 @@ export function PurchaseTracker({ outcome }: { outcome: PurchaseOutcome }) {
     const { purchase, identity } = outcome;
     stripCheckoutParams();
     if (alreadyTracked(purchase.transaction_id)) return;
-    identify(identity);
+    identifyJourney(identity);
     trackEvent(analyticsEvents.purchase, { ...purchase });
     markTracked(purchase.transaction_id);
   }, [outcome]);

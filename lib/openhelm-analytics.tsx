@@ -51,7 +51,7 @@
 import { Suspense, useEffect, useRef } from "react";
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
-import { USER_PROPERTY_PLAN, USER_PROPERTY_REF, type AnalyticsPlan } from "./openhelm-analytics-mp";
+import { USER_PROPERTY_PLAN, USER_PROPERTY_REF, USER_PROPERTY_TEST, type AnalyticsPlan } from "./openhelm-analytics-mp";
 
 export { userRefFor, type AnalyticsPlan } from "./openhelm-analytics-mp";
 
@@ -112,10 +112,26 @@ export function track(event: string, params: Record<string, unknown> = {}): bool
  * computed on the server so the raw id never reaches the browser. Respect the
  * product's consent rules: call it only where you'd send events.
  */
-export function identify({ userRef, plan }: { userRef: string; plan: AnalyticsPlan }): boolean {
+export function identify({
+  userRef,
+  plan,
+  isTest,
+}: {
+  /** Omit only for `plan: "anonymous"` (no account, so no ref). */
+  userRef?: string;
+  plan: AnalyticsPlan;
+  /** True ONLY for the product's own test accounts (auth metadata is_test). */
+  isTest?: boolean;
+}): boolean {
   if (!analyticsEnabled) return false;
   if (typeof window === "undefined") return false;
-  pushCommand("set", "user_properties", { [USER_PROPERTY_REF]: userRef, [USER_PROPERTY_PLAN]: plan });
+  if (!userRef && plan !== "anonymous") return false;
+  pushCommand("set", "user_properties", {
+    ...(userRef ? { [USER_PROPERTY_REF]: userRef } : {}),
+    [USER_PROPERTY_PLAN]: plan,
+    // Never sent as "false": absent means "not a test account".
+    ...(isTest === true ? { [USER_PROPERTY_TEST]: "true" } : {}),
+  });
   return true;
 }
 

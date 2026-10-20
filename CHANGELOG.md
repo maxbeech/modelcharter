@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-10-19: Journey analytics identity, consent gate and failure capture
+
+- **Test-user marker.** `oh_is_test: "true"` is sent only for accounts whose Supabase `app_metadata.is_test` is `true` (the marker OpenHelm's test accounts carry). `user_metadata` and email addresses are never read. Ordinary users carry no `oh_is_test` at all.
+- **Consent gate.** `oh_user_ref`, `oh_plan` and `oh_is_test` are sent only when the first-party cookie `oh_analytics_consent=granted` is present (`lib/analytics-consent.ts`). ModelCharter has no consent control yet, so until one writes that cookie no user property is sent. Events are unchanged.
+- **Anonymous plan.** The free policy generator sends `oh_plan: anonymous` only when there is no Supabase session cookie, so a signed-in visitor keeps their real plan.
+- **Paid plan after payment.** The post-checkout identity takes its plan from the verified Checkout session's line item, not the stale org row.
+- **Failure capture.** A journey action that throws is captured to Sentry, tagged with its `*_failed` event (`captureJourneyFailure`). Unexpected sign-up and login provider errors, attestation insert failures and Checkout start failures are captured server-side. Wrong passwords and known "already registered" responses stay out of Sentry.
+- **Login reason.** A provider error other than invalid credentials now reports `auth_error` instead of `invalid_credentials`.
+- **Shared client re-synced.** `lib/openhelm-analytics.tsx` and `lib/openhelm-analytics-mp.ts` now match the canonical `_services/openhelm-analytics` (plan-only identify, `oh_is_test`, Measurement Protocol user properties).
+- **Tests.** `test/analytics.test.mts` pins the user-reference vector and covers the consent gate, the test-user marker (set for a test account, absent otherwise), anonymous identity and failure capture.
+
 ## 2026-10-19: llms.txt blog link
 
 - **llms.txt articles.** `/llms.txt` now has an Articles section linking `/blog`, the site's long-form content, which assistants could not previously discover from the file. A regression assertion in the llms-txt test guards the link. Fixes the weakest GEO surface (llms.txt, partial 70).

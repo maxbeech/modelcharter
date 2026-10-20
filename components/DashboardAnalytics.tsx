@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { analyticsEnabled, identify } from "@/lib/openhelm-analytics";
-import { analyticsEvents, trackEvent, type AnalyticsIdentity } from "@/lib/analytics-events";
+import { analyticsEnabled } from "@/lib/openhelm-analytics";
+import { analyticsEvents, identifyJourney, trackEvent, type AnalyticsIdentity } from "@/lib/analytics-events";
 
 /**
  * Sits in the dashboard layout, which already knows the signed-in user. Tells GA
@@ -19,11 +19,12 @@ export function DashboardAnalytics({ identity }: { identity: AnalyticsIdentity |
   // The server hands over a fresh object on every render; key on the values.
   const userRef = identity?.userRef;
   const plan = identity?.plan;
+  const isTest = identity?.isTest;
 
   useEffect(() => {
     if (!analyticsEnabled || !userRef || !plan) return;
-    identify({ userRef, plan });
-  }, [userRef, plan]);
+    identifyJourney({ userRef, plan, isTest });
+  }, [userRef, plan, isTest]);
 
   useEffect(() => {
     if (!analyticsEnabled || !userRef || !joined || sentFor.current === joined) return;
