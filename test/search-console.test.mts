@@ -8,7 +8,7 @@ import { eq, ok, done } from "./_assert.mts";
 // Search Console must see one canonical origin across sitemap, metadata and
 // structured-data builders. The host redirect itself is owned by Helm7/Caddy.
 eq(SITE.url, "https://www.modelcharter.com", "www is the canonical site origin");
-eq(SITE.updated, "2026-10-07", "sitemap freshness date reflects the content release");
+eq(SITE.updated, "2026-10-20", "sitemap freshness date reflects the content release (HIPAA content push)");
 
 const sitemapSource = readFileSync(fileURLToPath(new URL("../app/sitemap.ts", import.meta.url)), "utf8");
 ok(sitemapSource.includes('import { SITE } from "@/lib/site"'), "sitemap uses the site source of truth");
