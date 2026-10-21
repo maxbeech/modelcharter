@@ -51,3 +51,7 @@ The drop looks like ordinary reversion after a transient spike plus the second s
 1. The sitemap lists 496 URLs but Search Console reports 990 submitted. Worth checking which sitemap(s) are submitted (possibly the non-www host or an older file).
 2. Search Console reports the www host; check non-www redirects to it.
 3. Consolidate the overlapping blog posts (301 weaker into stronger) as a separate editorial pass.
+
+## Update, 2026-10-21: unverified tool x question pages
+
+The "keep, watch" verdict on the 300 tool x question pages was revisited. 70 of them answer "Not verified" (hipaa 30, gdpr 8, soc2 7, iso27001 22, training 3): they re-slice the tool profile with shared boilerplate and no established answer, which fails the distinct-data test. Those 70 now carry `noindex,follow` (`isQuestionPageIndexable` in `lib/registry-questions.ts`) and are out of the sitemap. The 230 pages with a yes or no answer stay indexed and listed. Sitemap: 496 URLs before, 426 after.

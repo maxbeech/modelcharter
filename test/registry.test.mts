@@ -1,5 +1,5 @@
 import { TOOLS, getTool } from "../lib/ai-tools.ts";
-import { allQuestions, evidenceForQuestion, getQuestion, QUESTION_SLUGS } from "../lib/registry-questions.ts";
+import { allQuestions, evidenceForQuestion, getQuestion, isQuestionPageIndexable, QUESTION_SLUGS } from "../lib/registry-questions.ts";
 import { HUBS, HUB_BY_SLUG, USE_CASES } from "../lib/registry-frameworks.ts";
 import { assessRisk } from "../lib/risk-assessment.ts";
 import { parsePair, popularComparePairs, PAIR_DELIMITER } from "../lib/compare.ts";
@@ -19,6 +19,9 @@ if (chatgpt) {
   // passes() mirrors the underlying fact
   eq(hipaa.passes(chatgpt), chatgpt.hipaaBaa === null ? null : chatgpt.hipaaBaa === "yes", "hipaa passes() matches fact");
 }
+
+// Only established answers are indexable; unverified ones are noindex and unlisted.
+for (const t of TOOLS) for (const q of allQuestions()) eq(isQuestionPageIndexable(t, q), q.passes(t) !== null, `${t.slug}/${q.slug}: indexable iff the answer is established`);
 
 // Every question, every tool: answer is a non-empty string with no em dash.
 for (const t of TOOLS) {

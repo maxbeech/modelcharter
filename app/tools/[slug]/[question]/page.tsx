@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { TOOLS, getTool, CATEGORY_LABELS } from "@/lib/ai-tools";
 import { scoreTool } from "@/lib/risk";
-import { QUESTION_SLUGS, getQuestion, allQuestions, evidenceForQuestion } from "@/lib/registry-questions";
+import { QUESTION_SLUGS, getQuestion, allQuestions, evidenceForQuestion, isQuestionPageIndexable } from "@/lib/registry-questions";
 import { JsonLd } from "@/components/JsonLd";
 import { RiskPill, Section } from "@/components/ui";
 import { HUB_BY_SLUG } from "@/lib/registry-frameworks";
@@ -33,6 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: q.answer(t).slice(0, 155),
     path: `/tools/${t.slug}/${q.slug}`,
     keywords: q.keywords(t.name.toLowerCase()),
+    indexable: isQuestionPageIndexable(t, q),
   });
 }
 

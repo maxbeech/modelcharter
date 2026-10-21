@@ -114,6 +114,16 @@ export function allQuestions(): QuestionDef[] {
   return QUESTION_SLUGS.map((s) => DEFS[s]);
 }
 
+/**
+ * A tool x question page is indexable only when its answer is established
+ * (yes or no). An unverified answer re-slices the tool profile with the same
+ * boilerplate and says "not verified", which is the thin shape the August 2026
+ * spam update punishes. Those pages stay reachable but are noindex and unlisted.
+ */
+export function isQuestionPageIndexable(t: AiTool, q: QuestionDef): boolean {
+  return q.passes(t) !== null;
+}
+
 function verdict(value: AiTool["soc2"]): string {
   return value === "yes" ? "Confirmed" : value === "no" ? "Not offered" : "Not verified";
 }

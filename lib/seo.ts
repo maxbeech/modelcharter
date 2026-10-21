@@ -10,6 +10,8 @@ export function pageMeta(opts: {
   description: string;
   path: string;
   keywords?: string[];
+  /** false => noindex,follow (kept reachable, kept out of search). */
+  indexable?: boolean;
 }): Metadata {
   const url = `${SITE.url}${opts.path}`;
   const title = opts.path === "/" ? opts.title : `${opts.title} · ${SITE.name}`;
@@ -19,6 +21,7 @@ export function pageMeta(opts: {
     title: { absolute: title },
     description: opts.description,
     keywords: opts.keywords,
+    ...(opts.indexable === false ? { robots: { index: false, follow: true } } : {}),
     alternates: { canonical: url },
     openGraph: {
       title,

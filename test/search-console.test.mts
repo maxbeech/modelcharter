@@ -12,7 +12,8 @@ eq(SITE.updated, "2026-10-20", "sitemap freshness date reflects the content rele
 
 const sitemapSource = readFileSync(fileURLToPath(new URL("../app/sitemap.ts", import.meta.url)), "utf8");
 ok(sitemapSource.includes('import { SITE } from "@/lib/site"'), "sitemap uses the site source of truth");
-ok(sitemapSource.includes('u(`/tools/${t.slug}/${q}`)'), "sitemap includes every tool-question route");
+ok(sitemapSource.includes('u(`/tools/${t.slug}/${q}`)'), "sitemap includes the tool-question routes");
+ok(sitemapSource.includes("isQuestionPageIndexable"), "sitemap leaves out unverified tool-question routes");
 ok(sitemapSource.includes('u(`/blog/${p.slug}`)'), "sitemap includes every blog route");
 ok(!sitemapSource.includes("modelcharter.com/"), "sitemap does not hardcode a competing host");
 
