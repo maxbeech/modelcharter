@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-26: On-page SEO fixes
+
+Why: the on-page content audit found `responsible-use-of-ai` as the only blog post without a featured image.
+
+- **Featured image.** `lib/posts.ts` gives `responsible-use-of-ai` an entry in `POST_IMAGES`, reusing the Unsplash checklist photo already credited for `responsible-ai-practices-checklist`. All 62 posts now have an image.
+
 ## 2026-10-21: No-training hub refresh
 
 Why: the weekly content pass flagged `/compliance/no-training` (309 impressions, position 19.6) for a substantive refresh. Its copy was a generic one-liner and did not say that training defaults often differ by plan.

@@ -3436,6 +3436,14 @@ const POST_IMAGES: Record<string, PostImage> = {
     author: "Ivan S",
     authorUrl: "https://www.pexels.com/@ivan-s",
   },
+  // Reuses the responsible-ai-practices-checklist photo: the post is about the
+  // day-to-day rules staff follow, which that image depicts.
+  "responsible-use-of-ai": {
+    src: "https://images.unsplash.com/photo-1754039985008-a15410211b67?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    alt: "Hand ticking off a checklist of responsible AI use rules",
+    author: "Jakub Żerdzicki",
+    authorUrl: "https://unsplash.com/@jakubzerdzicki",
+  },
 };
 
 POSTS.forEach((p) => {
