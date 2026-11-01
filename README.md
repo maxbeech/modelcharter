@@ -33,7 +33,7 @@ GA4 through `lib/openhelm-analytics.tsx` (a copy of the shared `openhelm-analyti
 the `oh_user_ref` / `oh_plan` / `oh_is_test` user properties are defined in `lib/analytics-events.ts`
 and `lib/analytics-identity.ts`. User properties are sent only after the `oh_analytics_consent=granted`
 cookie is set (`lib/analytics-consent.ts`); no consent control ships yet, so none are sent until one does.
-`oh_is_test` comes only from Supabase `app_metadata.is_test`. A thrown journey action is captured to Sentry. To check a change, open GA DebugView on a build with the id set and walk
+`oh_is_test` comes only from Supabase `app_metadata.is_test`. A thrown journey action, including a sign-in or sign-up request (`guardJourneyRequest`), is captured to Sentry. To check a change, open GA DebugView on a build with the id set and walk
 sign up, triage a tool, save a policy, create an attestation link and upgrade; each step should show
 its event and no `*_failed` sibling.
 
