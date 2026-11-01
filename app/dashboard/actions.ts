@@ -5,6 +5,14 @@ import { ensureOrg, setToolStatus, savePolicy, createAttestationLink, renameOrg 
 import { markAlertsRead, setTracked } from "@/lib/alerts";
 import type { ActionResult } from "@/lib/analytics-events";
 import { isPaidPlan } from "@/lib/site";
+import { captureServerMessage } from "@/lib/observability";
+
+// A journey action with no workspace leaves the user stalled on a dashboard that
+// cannot save, so it is a Sentry warning as well as a `*_failed` event.
+function noWorkspace(action: string): ActionResult {
+  captureServerMessage("journey action without a workspace", { scope: "dashboard-action", action });
+  return { ok: false, reason: "no_workspace" };
+}
 
 // All actions re-derive the org server-side (never trust a client-supplied id),
 // and the workspace helpers verify org membership on every query. Each action
@@ -13,7 +21,7 @@ import { isPaidPlan } from "@/lib/site";
 
 export async function actionSetToolStatus(formData: FormData): Promise<ActionResult> {
   const org = await ensureOrg();
-  if (!org) return { ok: false, reason: "no_workspace" };
+  if (!org) return noWorkspace("set_tool_status");
   const ok = await setToolStatus(org.id, String(formData.get("slug")), String(formData.get("name")), String(formData.get("status")));
   revalidatePath("/dashboard/tools");
   return ok ? { ok } : { ok, reason: "save_failed" };
@@ -21,7 +29,7 @@ export async function actionSetToolStatus(formData: FormData): Promise<ActionRes
 
 export async function actionSavePolicy(formData: FormData): Promise<ActionResult> {
   const org = await ensureOrg();
-  if (!org) return { ok: false, reason: "no_workspace" };
+  if (!org) return noWorkspace("save_policy");
   const md = String(formData.get("content_md") ?? "");
   let input: unknown = null;
   try { input = JSON.parse(String(formData.get("input_json") ?? "null")); } catch { input = null; }
@@ -33,7 +41,7 @@ export async function actionSavePolicy(formData: FormData): Promise<ActionResult
 
 export async function actionCreateAttestation(formData?: FormData): Promise<ActionResult> {
   const org = await ensureOrg();
-  if (!org) return { ok: false, reason: "no_workspace" };
+  if (!org) return noWorkspace("create_attestation");
   // Enforced here, not just by hiding the button: a server action is callable directly.
   if (!isPaidPlan(org.plan)) return { ok: false, reason: "needs_kit" };
   const token = await createAttestationLink(org.id, String(formData?.get("name") ?? ""));

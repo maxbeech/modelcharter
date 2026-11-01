@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-01: Journey instrumentation hardening
+
+Why: the user-journey review found steps where a failure left a visitor stalled with no journey event or Sentry issue: a sign-in or sign-up request that threw, a policy download that failed, and a Checkout return that could not be confirmed.
+
+- **Sign-in and sign-up.** `components/AuthForm.tsx` runs the action through `guardJourneyRequest` (`lib/analytics-events.ts`). A thrown request shows an inline error, sends `login_failed` or `sign_up_failed` with `request_failed`, and is captured to Sentry.
+- **Policy download.** `components/PolicyGenerator.tsx` sends `policy_export_failed` (`download_failed`) and captures to Sentry when the download throws.
+- **Server-side warnings.** Dashboard actions with no workspace, a Checkout return the server cannot confirm, and auth that is not configured are now Sentry warnings (`lib/observability.ts` `captureServerMessage`).
+- **Test.** `test/analytics.test.mts` covers the guarded request (thrown, returned and handled results) and the warning output when no DSN is set.
+
 ## 2026-10-26: On-page SEO fixes
 
 Why: the on-page content audit found `responsible-use-of-ai` as the only blog post without a featured image.

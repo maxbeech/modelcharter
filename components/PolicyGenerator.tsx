@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { useSearchParams } from "next/navigation";
 import { generatePolicy, policyToMarkdown, POLICY_PRESETS, isPresetId, type PolicyInput, type PresetId, type SavedAnswers, type Stance } from "@/lib/policy";
-import { analyticsEvents, identifyAnonymousVisitor, reportAction, trackEvent, trackFailure, type ActionResult } from "@/lib/analytics-events";
+import { analyticsEvents, captureJourneyFailure, identifyAnonymousVisitor, reportAction, trackEvent, trackFailure, type ActionResult } from "@/lib/analytics-events";
 
 const INDUSTRIES = ["General business", "Software / SaaS", "Healthcare", "Finance", "Legal", "Education", "Marketing / agency", "E-commerce / retail", "Government / public sector", "Non-profit"];
 const REGS = ["EU AI Act", "GDPR", "HIPAA", "SOC 2", "ISO 42001"];
@@ -90,11 +90,19 @@ export function PolicyGenerator({ today: todayProp, toolNames, baaToolNames = []
     set(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
 
   function download() {
-    const blob = new Blob([markdown], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = `${(companyName || "ai-usage").toLowerCase().replace(/[^a-z0-9]+/g, "-")}-ai-usage-policy.md`;
-    a.click(); URL.revokeObjectURL(url);
+    // A blob or object-URL failure leaves the visitor with no file: report it
+    // as `policy_export_failed` and to Sentry, then rethrow so the page still shows it.
+    try {
+      const blob = new Blob([markdown], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = `${(companyName || "ai-usage").toLowerCase().replace(/[^a-z0-9]+/g, "-")}-ai-usage-policy.md`;
+      a.click(); URL.revokeObjectURL(url);
+    } catch (error) {
+      captureJourneyFailure(error, analyticsEvents.policyExportFailed);
+      trackFailure(analyticsEvents.policyExportFailed, "download_failed", { method: "download" });
+      throw error;
+    }
     trackEvent(analyticsEvents.policyExported, { method: "download" });
   }
   async function copy() {

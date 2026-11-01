@@ -182,4 +182,43 @@ await reportAction(async () => ({ ok: false, reason: "save_failed" }),
 eq(captured.length, 0, "a handled failure result is not an exception");
 ok(typeof captureJourneyFailure === "function", "the default capture is exported for the journey");
 
+// -- guarded sign-in/sign-up request: a thrown call is a form error + capture ----
+const { guardJourneyRequest } = await import("../lib/analytics-events.ts");
+const guardCaptured: [unknown, string][] = [];
+const guardSpy = (error: unknown, event: string) => { guardCaptured.push([error, event]); };
+const networkDown = new Error("fetch failed");
+const guardedFail = await guardJourneyRequest(async () => { throw networkDown; },
+  analyticsEvents.loginFailed, "Try again.", guardSpy);
+eq(guardedFail, { error: "Try again.", reason: "request_failed" }, "a thrown sign-in resolves to a form error, not an exception");
+eq(guardCaptured.length, 1, "a thrown sign-in is captured once");
+ok(guardCaptured[0][0] === networkDown, "the captured error is the thrown error");
+eq(guardCaptured[0][1], "login_failed", "the capture is tagged with the failed journey event");
+guardCaptured.length = 0;
+const guardedOk = await guardJourneyRequest<{ notice?: string; error?: string; reason?: string }>(async () => ({ notice: "Account created." }),
+  analyticsEvents.signUpFailed, "Try again.", guardSpy);
+eq(guardedOk, { notice: "Account created." }, "a returned result passes through untouched");
+eq(guardCaptured.length, 0, "a returned result is not captured");
+const guardedHandled = await guardJourneyRequest(async () => ({ error: "wrong", reason: "invalid_credentials" }),
+  analyticsEvents.loginFailed, "Try again.", guardSpy);
+eq(guardedHandled.reason, "invalid_credentials", "a handled failure keeps its own reason");
+eq(guardCaptured.length, 0, "a handled failure is not an exception");
+
+// -- a misconfigured or unreachable step is visible, not silent ------------------
+const { captureServerMessage, safeContext } = await import("../lib/observability.ts");
+eq(safeContext({ scope: "auth", stage: "login", email: "a@b.com", n: 2 }),
+  { scope: "auth", stage: "login", email: "[omitted]", n: 2 }, "a warning's context drops anything that is not an id or code");
+const warnings: unknown[][] = [];
+const realWarn = console.warn;
+console.warn = (...args: unknown[]) => { warnings.push(args); };
+try {
+  delete process.env.SENTRY_DSN;
+  delete process.env.NEXT_PUBLIC_SENTRY_DSN;
+  captureServerMessage("auth is not configured on this deployment", { scope: "auth", stage: "signup" });
+} finally {
+  console.warn = realWarn;
+}
+eq(warnings.length, 1, "without a DSN a warning is printed, not dropped");
+ok(String(warnings[0][0]).includes("[auth]") && String(warnings[0][1]).includes("not configured"),
+  "the printed warning names the scope and the message");
+
 done("analytics");
