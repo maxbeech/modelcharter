@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-04: Airtable AI tool profile refresh
+
+Why: the weekly content lifecycle pass flagged `/tools/airtable-ai` (74 impressions, position 9.5) for a substantive refresh.
+
+- **Re-verified against Airtable's own pages.** The AI terms (last updated 23 July 2026) confirm no training on inputs and the tier-based retention already recorded. The trust page confirms SOC 2 Type 2, ISO 27001, EU residency and SAML SSO. The subprocessor list names the AI model providers (AWS, Anthropic, Google, IBM, OpenAI) and places the BAA footnote on Enterprise Scale.
+- **Retention.** `data/ai-tools.json` adds that content confirmed as prohibited may be kept longer for legal reporting, which the terms state.
+- **Sources.** The AI terms and subprocessor source claims now say what they support.
+- **Dataset date unchanged.** The file-level `generated` date is shared by every tool, so it is not bumped for this one-tool refresh.
+
 ## 2026-10-26: On-page SEO fixes
 
 Why: the on-page content audit found `responsible-use-of-ai` as the only blog post without a featured image.

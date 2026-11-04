@@ -2128,7 +2128,7 @@
       "trains_on_personal_data_note": "Airtable will not use, or permit third-party AI providers to use, input, output or other Customer Data to train the models behind Airtable AI. Input retention is tier-based.",
       "trains_on_business_data": "no",
       "training_optout": null,
-      "retention": "Tier-based: on Free, Team, Pro and Plus, third-party providers may retain input and output up to 30 days for safety moderation; on Business and Enterprise Scale, providers do not retain inputs or outputs (only billing and safety metadata).",
+      "retention": "Tier-based: on Free, Team, Pro and Plus, third-party providers may retain input and output up to 30 days for safety moderation; on Business and Enterprise Scale, providers do not retain inputs or outputs (only billing and safety metadata). Content confirmed as prohibited may be kept longer to meet legal reporting duties.",
       "soc2": "yes",
       "iso27001": "yes",
       "iso42001": null,
@@ -2140,7 +2140,7 @@
       "notable_risk": "Airtable AI does not train models on customer inputs, and Business and Enterprise Scale plans get no third-party retention beyond compliance metadata versus a 30-day window on lower tiers. HIPAA BAA and EU residency are reserved for Enterprise Scale.",
       "sources": [
         {
-          "claim": "No training, tier-based retention",
+          "claim": "No training; tier-based retention (AI terms, last updated 23 July 2026)",
           "url": "https://www.airtable.com/company/ai-terms"
         },
         {
@@ -2152,7 +2152,7 @@
           "url": "https://www.airtable.com/company/dpa"
         },
         {
-          "claim": "HIPAA BAA and AI subprocessors",
+          "claim": "AI model providers (AWS, Anthropic, Google, IBM, OpenAI); BAA footnote for Enterprise Scale",
           "url": "https://www.airtable.com/company/subprocessors"
         }
       ],
