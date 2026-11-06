@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ pair: str
   const [a, b] = r;
   return pageMeta({
     title: `${a.name} vs ${b.name}: which is safer for work?`,
-    description: `${a.name} and ${b.name} compared on data training, retention, SOC 2, GDPR DPA and HIPAA, sourced from each vendor's own policies and rated for at-work use.`,
+    description: `${a.name} and ${b.name} compared on data training, retention, SOC 2, GDPR DPA and HIPAA, sourced from each vendor&apos;s own policies and rated for at-work use.`,
     path: `/compare/${pair}`,
     keywords: [`${a.name.toLowerCase()} vs ${b.name.toLowerCase()}`, `${a.name.toLowerCase()} or ${b.name.toLowerCase()}`, "ai tool comparison"],
   });
@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: Promise<{ pair: string 
           </table>
         </div>
         <p className="mt-6 text-sm text-ink-soft">
-          Full profiles: <Link href={`/tools/${a.slug}`} className="text-brand-700 hover:underline">{a.name}</Link> · <Link href={`/tools/${b.slug}`} className="text-brand-700 hover:underline">{b.name}</Link>. Facts are sourced from each vendor's own policies; confirm the tier before relying on them.
+          Full profiles: <Link href={`/tools/${a.slug}`} className="text-brand-700 hover:underline">{a.name}</Link> · <Link href={`/tools/${b.slug}`} className="text-brand-700 hover:underline">{b.name}</Link>. Facts are sourced from each vendor&apos;s own policies; confirm the tier before relying on them.
         </p>
       </Section>
     </>

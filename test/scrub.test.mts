@@ -96,7 +96,7 @@ ok(!tx.spans![0].description!.includes("?"), "span description");
 // FAIL CLOSED: a throwing scrub drops the item, never sends it raw.
 const boom = { get message() { throw new Error("nope"); } } as unknown as ErrorEvent;
 eq(scrubEvent(boom), null, "event dropped on scrub failure");
-const boomLog = { level: "info", get message(): string { throw new Error("nope"); } } as Loose;
+const boomLog = { level: "info" as const, get message(): string { throw new Error("nope"); } };
 eq(scrubLog(boomLog), null, "log dropped on scrub failure");
 const boomCrumb = { get data(): Loose { throw new Error("nope"); } } as Loose;
 eq(scrubBreadcrumb(boomCrumb), null, "breadcrumb dropped on scrub failure");

@@ -126,7 +126,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
 
             <h2 className="mt-8 font-display text-xl font-semibold text-ink">How to make a decision</h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">
-              Check the precise account tier, written contract and intended data before approving {t.name}. A security certification, DPA or setting can apply to only part of a vendor's service. Keep the source links with your supplier review and revisit them when the vendor changes its terms.
+              Check the precise account tier, written contract and intended data before approving {t.name}. A security certification, DPA or setting can apply to only part of a vendor&apos;s service. Keep the source links with your supplier review and revisit them when the vendor changes its terms.
             </p>
 
             <h2 className="mt-8 font-display text-xl font-semibold text-ink">More on {t.name}</h2>
@@ -164,7 +164,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
                 <h3 className="text-sm font-semibold text-ink">Overall risk</h3>
                 <RiskPill band={r.band} score={r.score} />
               </div>
-              <p className="mt-2 text-sm text-ink-soft">For default at-work use, sourced from {t.vendor}'s own policies.</p>
+              <p className="mt-2 text-sm text-ink-soft">For default at-work use, sourced from {t.vendor}&apos;s own policies.</p>
               {t.sources.length > 0 && (
                 <ul className="mt-3 space-y-2 text-sm">
                   {t.sources.slice(0, 3).map((source) => (

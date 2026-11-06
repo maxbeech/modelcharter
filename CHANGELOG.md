@@ -444,3 +444,7 @@ compliance department.
 - Next.js 16 (App Router, TS) + Tailwind 4 on Vercel; public site fully static/ISR.
 - 456 unit assertions across policy generation, risk scoring, dataset integrity,
   SEO builders and frameworks.
+
+Generated Node analytics tests assert the empty error count without narrowing the mutable collection to `never[]`; storage-error checks remain unchanged.
+
+The full test command now includes the existing Vitest billing guards. Remove unnecessary `any` casts in SEO tests and encode JSX apostrophes without changing rendered copy, so the existing lint checks can pass.

@@ -11,30 +11,30 @@ ok(m.title !== null && typeof m.title === "object" && "absolute" in m.title, "ti
 eq(titleText(pageMeta({ title: "Home", description: "d", path: "/" }).title), "Home", "home title not suffixed");
 
 // faqLd shape.
-const faq = faqLd([{ q: "Q1", a: "A1" }, { q: "Q2", a: "A2" }]) as any;
+const faq = faqLd([{ q: "Q1", a: "A1" }, { q: "Q2", a: "A2" }]);
 eq(faq["@type"], "FAQPage", "faqLd is FAQPage");
 eq(faq.mainEntity.length, 2, "faqLd maps all questions");
 eq(faq.mainEntity[0].acceptedAnswer.text, "A1", "faqLd carries the answer");
 
 // breadcrumb positions are 1-indexed and in order.
-const bc = breadcrumbLd([{ name: "Home", path: "/" }, { name: "Tools", path: "/tools" }]) as any;
+const bc = breadcrumbLd([{ name: "Home", path: "/" }, { name: "Tools", path: "/tools" }]);
 eq(bc.itemListElement[0].position, 1, "breadcrumb starts at 1");
 eq(bc.itemListElement[1].position, 2, "breadcrumb increments");
 ok(bc.itemListElement[1].item.endsWith("/tools"), "breadcrumb item is absolute URL");
 
 // datasetLd advertises the measured variables (GEO).
-const ds = datasetLd({ name: "AI Tool Risk Directory", description: "d", path: "/tools", count: 22 }) as any;
+const ds = datasetLd({ name: "AI Tool Risk Directory", description: "d", path: "/tools", count: 22 });
 eq(ds["@type"], "Dataset", "datasetLd is a Dataset");
 ok(ds.variableMeasured.includes("SOC 2"), "datasetLd lists measured variables");
 ok(ds.measurementTechnique.includes("22"), "datasetLd notes the count");
 
 // Other builders return the right @type.
-eq((softwareAppLd("n", "d", "/") as any)["@type"], "SoftwareApplication", "softwareAppLd type");
-eq((articleLd({ title: "t", description: "d", path: "/blog/x", date: "2026-06-18" }) as any)["@type"], "BlogPosting", "articleLd type");
-eq((organizationLd() as any)["@type"], "Organization", "organizationLd type");
+eq((softwareAppLd("n", "d", "/"))["@type"], "SoftwareApplication", "softwareAppLd type");
+eq((articleLd({ title: "t", description: "d", path: "/blog/x", date: "2026-06-18" }))["@type"], "BlogPosting", "articleLd type");
+eq((organizationLd())["@type"], "Organization", "organizationLd type");
 
 // websiteLd identifies the site itself (distinct from Organization) for GEO.
-const ws = websiteLd() as any;
+const ws = websiteLd();
 eq(ws["@type"], "WebSite", "websiteLd type");
 eq(ws.url, "https://www.modelcharter.com", "websiteLd url is the canonical site url");
 ok(!!ws.name && !!ws.description, "websiteLd carries name + description");
