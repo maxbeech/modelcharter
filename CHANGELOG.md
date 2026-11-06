@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-06: active return measurement
+
+- Record first measured visits and intentional returns using the shared three-hour, seven-day browser contract.
+- Preserve the product analytics boundary and add regression tests for passive tabs, continuous sessions, consent and storage errors.
+
 ## 2026-11-04: Airtable AI tool profile refresh
 
 Why: the weekly content lifecycle pass flagged `/tools/airtable-ai` (74 impressions, position 9.5) for a substantive refresh.
