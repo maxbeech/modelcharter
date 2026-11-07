@@ -105,3 +105,5 @@ The generated return modules come from OpenHelm/shared/src through Products/_ser
 Generated Node analytics tests assert the empty error count without narrowing the mutable collection to `never[]`; storage-error checks remain unchanged.
 
 The complete test command also runs the existing Vitest billing ownership guards; Vitest is an explicit development dependency. Node `.mts` suites retain their own runner.
+
+2026-11-06: The shared GA bootstrap disables implicit page views before startup, so the explicit route tracker owns the initial and subsequent SPA page views. Product value and active-return events remain enabled.
