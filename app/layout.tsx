@@ -65,7 +65,7 @@ function Footer() {
         </div>
         <FooterCol title="Product" links={[["AI Tool Risk Directory", "/tools"], ["AI vendor risk assessment", "/ai-vendor-risk-assessment"], ["Compare tools", "/compare"], ["AI usage policy generator", "/ai-usage-policy-generator"], ["HIPAA AI Kit", "/hipaa-ai-kit"], ["Pricing", "/pricing"]]} />
         <FooterCol title="Compliance" links={[["HIPAA-compliant AI tools", "/compliance/hipaa"], ["GDPR-ready AI tools", "/compliance/gdpr"], ["SOC 2 AI tools", "/compliance/soc-2"], ["Tools that don't train on your data", "/compliance/no-training"]]} />
-        <FooterCol title="Company" links={[["Blog", "/blog"], ["Glossary", "/glossary"], ["Frameworks", "/frameworks"], ["About", "/about"], ["Contact", "/contact"], ["Security", "/security"]]} />
+        <FooterCol title="Company" links={[["Blog", "/blog"], ["What is AI compliance?", "/blog/what-is-ai-compliance"], ["What is AI attestation?", "/blog/what-is-ai-attestation"], ["ChatGPT for work", "/blog/chatgpt-for-work"], ["Glossary", "/glossary"], ["Frameworks", "/frameworks"], ["About", "/about"], ["Contact", "/contact"], ["Security", "/security"]]} />
       </div>
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-5 py-6 text-xs text-ink-faint sm:flex-row sm:items-center sm:justify-between">
