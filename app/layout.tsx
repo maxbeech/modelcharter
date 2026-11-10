@@ -63,7 +63,7 @@ function Footer() {
             AI governance for teams that do not have a compliance department.
           </p>
         </div>
-        <FooterCol title="Product" links={[["AI Tool Risk Directory", "/tools"], ["AI vendor risk assessment", "/ai-vendor-risk-assessment"], ["Compare tools", "/compare"], ["AI usage policy generator", "/ai-usage-policy-generator"], ["Pricing", "/pricing"]]} />
+        <FooterCol title="Product" links={[["AI Tool Risk Directory", "/tools"], ["AI vendor risk assessment", "/ai-vendor-risk-assessment"], ["Compare tools", "/compare"], ["AI usage policy generator", "/ai-usage-policy-generator"], ["HIPAA AI Kit", "/hipaa-ai-kit"], ["Pricing", "/pricing"]]} />
         <FooterCol title="Compliance" links={[["HIPAA-compliant AI tools", "/compliance/hipaa"], ["GDPR-ready AI tools", "/compliance/gdpr"], ["SOC 2 AI tools", "/compliance/soc-2"], ["Tools that don't train on your data", "/compliance/no-training"]]} />
         <FooterCol title="Company" links={[["Blog", "/blog"], ["Glossary", "/glossary"], ["Frameworks", "/frameworks"], ["About", "/about"], ["Contact", "/contact"], ["Security", "/security"]]} />
       </div>
