@@ -14,7 +14,10 @@ export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const tokenHash = searchParams.get("token_hash");
-  const type = searchParams.get("type") as EmailOtpType | null;
+  // Only signup-style confirmations are accepted. Recovery and magic links
+  // would sign a visitor into someone else's session if they opened a crafted URL.
+  const rawType = searchParams.get("type");
+  const type: EmailOtpType | null = rawType === "signup" || rawType === "email" ? rawType : null;
   const dest = confirmedPath(searchParams.get("next"));
 
   if (isSupabaseConfigured() && (code || (tokenHash && type))) {
