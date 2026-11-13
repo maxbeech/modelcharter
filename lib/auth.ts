@@ -3,6 +3,7 @@ import { isSupabaseConfigured } from "./supabase/config";
 import { buildAnalyticsIdentity, isTestUserMetadata } from "./analytics-identity";
 import type { AnalyticsIdentity } from "./analytics-events";
 import { captureServerError } from "./observability";
+import { confirmUrl } from "./auth-confirm";
 
 // Email + password auth on Supabase Auth. Session lives in the Supabase cookies
 // (refreshed by middleware); authorization always uses getUser(), which
@@ -49,7 +50,7 @@ export async function signup(email: string, password: string): Promise<AuthResul
   if (pwErr) return { ok: false, error: pwErr, reason: "weak_password" };
 
   const supabase = await createServerSupabase();
-  const { data, error } = await supabase.auth.signUp({ email: e, password });
+  const { data, error } = await supabase.auth.signUp({ email: e, password, options: { emailRedirectTo: confirmUrl() } });
   if (error) {
     const exists = /registered|already/i.test(error.message);
     // A rejected sign-up for a known reason is expected; anything else is the
@@ -82,6 +83,8 @@ export async function login(email: string, password: string): Promise<AuthResult
     // rate limit leaves the user stalled, so it is captured.
     const credentials = error.status === 400 || error.code === "invalid_credentials";
     if (!credentials) captureServerError(error, { scope: "auth", stage: "login", code: error.code ?? null, status: error.status ?? null });
+    // Signed up but never clicked the link: say so instead of "no account".
+    if (error.code === "email_not_confirmed") return { ok: false, error: "Confirm your email first. We sent you a link when you signed up.", reason: "email_not_confirmed" };
     return { ok: false, error: "No account with that email, or wrong password.", reason: credentials ? "invalid_credentials" : "auth_error" };
   }
   return { ok: true };
