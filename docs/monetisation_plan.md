@@ -137,11 +137,17 @@ Make the call from the baseline recorded in Phase 0:
 - **Database test:** `rls.test.mts` against a throwaway Postgres. It fails without the new migration.
 - **Browser run:** a full end-to-end pass against a local Supabase stack. A self-upgrade attempt through the REST API returned 403 / 42501.
 
+**Done by hand, 2026-11-13:**
+1. **Migration applied in production Supabase.** `20261020120000_lock_billing_columns.sql` is live, so the plan self-upgrade hole is closed.
+2. **Stripe set up** on the ModelCharter account: "HIPAA AI Kit" product with a $99 one-time price, and a new webhook endpoint at `/api/stripe/webhook` (`checkout.session.completed`, `charge.refunded`, `charge.dispute.created`, `customer.subscription.*`). The old endpoint was deleted. Team and Business prices are untouched.
+3. **Helm7 production env:** `NEXT_PUBLIC_STRIPE_PRICE_HIPAA_KIT` and `STRIPE_WEBHOOK_SECRET` set, then redeployed (the price id is baked in at build time).
+4. **Signup baseline:** zero real signups at this date.
+
 **Still to do by hand:**
-1. **Apply the migration in production Supabase.** Paste `supabase/migrations/20261020120000_lock_billing_columns.sql` into the SQL editor. Until then the plan self-upgrade hole stays open in production.
-2. **Create the Stripe price.** Make a one-time $99 price for "HIPAA AI Kit" and set `NEXT_PUBLIC_STRIPE_PRICE_HIPAA_KIT` on Helm7. Until then every buy button says checkout isn't switched on.
-3. **Count signups.** Count real signups in Supabase, excluding `app_metadata.is_test`, for the baseline below.
-4. **Check GA in production.** Confirm `sign_up` → `begin_checkout` → `purchase` in GA DebugView after the first test purchase. Use a live-mode price with a 100% coupon, or a test-mode deployment.
+1. **Supabase redirect URL.** Add `https://www.modelcharter.com/auth/confirm` under Auth, URL Configuration, Redirect URLs. The proxy fallback catches codes that land on the homepage, but this stops it happening.
+2. **Open Checkout while signed in.** Click buy on `/hipaa-ai-kit` and confirm Stripe shows "HIPAA AI Kit $99". If it errors, the old production `STRIPE_SECRET_KEY` is likely stale and needs replacing with a key for this account.
+3. **Check GA in production.** Confirm `sign_up` → `begin_checkout` → `purchase` in GA DebugView after the first test purchase (live-mode price with a 100% coupon).
+4. **Click through a fresh signup** from the same browser to check the confirmation link lands on the dashboard.
 
 **SEO content, done 2026-10-20:**
 - the HIPAA hub table

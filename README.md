@@ -45,6 +45,10 @@ static/ISR (no backend). The account layer runs on **Supabase** (Postgres + Auth
 for billing. A daily Helm7 **cron** (`/api/cron/sync-alerts`) snapshots the tool
 facts and raises change alerts. See [SETUP.md](./SETUP.md).
 
+Sign-up confirmation emails link to `/auth/confirm` (`lib/auth-confirm.ts`), which
+exchanges the code for a session. That URL must be in Supabase Auth's Redirect URLs.
+`proxy.ts` forwards a `?code=` that lands on the homepage instead.
+
 Stripe remains the billing source of truth: the signed-in Checkout return verifies
 the completed, funded session and repairs the organisation entitlement if a
 webhook was delayed. Webhook failures return 5xx so Stripe can retry them.

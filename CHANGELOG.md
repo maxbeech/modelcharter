@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-11-13: signup confirmation and HIPAA AI Kit go-live
+
+- **Confirmation link.** New `/auth/confirm` route exchanges the emailed code for a session and sends the user to the dashboard. `signUp` points at it, and `proxy.ts` forwards a stray `?code=` from the homepage. A failed or expired link lands on `/login?confirm=failed` with a plain explanation.
+- **Login.** An unconfirmed account now sees "Confirm your email first" instead of "not recognised".
+- **Kit billing live.** Production Stripe price, webhook endpoint and Helm7 env are set (see `docs/monetisation_plan.md`). Real signup baseline recorded as zero.
+
 ## 2026-11-06: active return measurement
 
 - Record first measured visits and intentional returns using the shared three-hour, seven-day browser contract.
