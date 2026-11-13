@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useMemo } from "react";
 import type { AuthState } from "@/app/auth-actions";
-import { analyticsEvents, identifyJourney, trackEvent, trackFailure } from "@/lib/analytics-events";
+import { analyticsEvents, guardJourneyRequest, identifyJourney, trackEvent, trackFailure } from "@/lib/analytics-events";
 
 // Email + password form for login/signup. Uses useActionState so server-side
 // validation errors render inline without losing the page.
@@ -16,21 +16,27 @@ export function AuthForm({
   /** A purchase to continue with after auth (only ever a sellable plan id). */
   plan?: string | null;
 }) {
-  const [state, formAction, pending] = useActionState(action, {});
+  const failed = mode === "signup" ? analyticsEvents.signUpFailed : analyticsEvents.loginFailed;
+  // A thrown request becomes an inline error plus `*_failed` and a Sentry capture,
+  // instead of reaching the route error boundary with no journey event.
+  const guarded = useMemo(
+    () => (prev: AuthState, fd: FormData) => guardJourneyRequest(() => action(prev, fd), failed, "Something went wrong. Try again in a moment."),
+    [action, failed],
+  );
+  const [state, formAction, pending] = useActionState(guarded, {});
 
   // A successful sign-in or sign-up redirects to the dashboard, which sends
   // `login` / `sign_up` there. The results that stay on this page are the
   // "confirm your email" notice (a new account, so `sign_up` and identity) and
   // the failures.
   useEffect(() => {
-    const failed = mode === "signup" ? analyticsEvents.signUpFailed : analyticsEvents.loginFailed;
     if (state.notice && state.analytics) {
       identifyJourney(state.analytics);
       trackEvent(analyticsEvents.signUp, { method: "email" });
     } else if (state.error) {
       trackFailure(failed, state.reason, { method: "email" });
     }
-  }, [state, mode]);
+  }, [state, failed]);
 
   return (
     <form action={formAction} className="space-y-4">

@@ -157,3 +157,26 @@ export async function reportAction(
   else trackFailure(events.failed, result.reason);
   return result;
 }
+
+/**
+ * Run a sign-in or sign-up request that reports its outcome through its form
+ * state (not through `reportAction`). A call that throws before returning
+ * (network loss, deploy skew) would otherwise reach the route error boundary
+ * with no journey event, which is a stalled user nobody can see in GA. Here it
+ * becomes the form's own `request_failed` error, the matching `*_failed` event
+ * and a Sentry capture. Server-side redirects are not exceptions on the client,
+ * so this never swallows a successful sign-in.
+ */
+export async function guardJourneyRequest<T extends { error?: string; reason?: string }>(
+  run: () => Promise<T>,
+  failed: AnalyticsEventName,
+  fallbackMessage: string,
+  capture: (error: unknown, failedEvent: AnalyticsEventName) => void = captureJourneyFailure,
+): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    capture(error, failed);
+    return { error: fallbackMessage, reason: "request_failed" } as T;
+  }
+}

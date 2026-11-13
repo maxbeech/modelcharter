@@ -2,7 +2,7 @@ import { createServerSupabase } from "./supabase/server";
 import { isSupabaseConfigured } from "./supabase/config";
 import { buildAnalyticsIdentity, isTestUserMetadata } from "./analytics-identity";
 import type { AnalyticsIdentity } from "./analytics-events";
-import { captureServerError } from "./observability";
+import { captureServerError, captureServerMessage } from "./observability";
 import { confirmUrl } from "./auth-confirm";
 
 // Email + password auth on Supabase Auth. Session lives in the Supabase cookies
@@ -42,8 +42,14 @@ export async function destroySession(): Promise<void> {
 // `sign_up` and identify the user before they have ever reached the dashboard.
 export interface AuthResult { ok: boolean; error?: string; notice?: string; reason?: string; analytics?: AnalyticsIdentity }
 
+// Accounts switched off on this deployment: every visitor is stalled, so it is a Sentry warning.
+function notConfigured(stage: "signup" | "login"): AuthResult {
+  captureServerMessage("auth is not configured on this deployment", { scope: "auth", stage });
+  return { ok: false, error: "Accounts are not configured on this deployment yet.", reason: "not_configured" };
+}
+
 export async function signup(email: string, password: string): Promise<AuthResult> {
-  if (!isSupabaseConfigured()) return { ok: false, error: "Accounts are not configured on this deployment yet.", reason: "not_configured" };
+  if (!isSupabaseConfigured()) return notConfigured("signup");
   const e = normalizeEmail(email);
   if (!looksLikeEmail(e)) return { ok: false, error: "Enter a valid email address.", reason: "invalid_email" };
   const pwErr = validatePassword(password);
@@ -75,7 +81,7 @@ export async function signup(email: string, password: string): Promise<AuthResul
 }
 
 export async function login(email: string, password: string): Promise<AuthResult> {
-  if (!isSupabaseConfigured()) return { ok: false, error: "Accounts are not configured on this deployment yet.", reason: "not_configured" };
+  if (!isSupabaseConfigured()) return notConfigured("login");
   const supabase = await createServerSupabase();
   const { error } = await supabase.auth.signInWithPassword({ email: normalizeEmail(email), password });
   if (error) {

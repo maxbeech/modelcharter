@@ -4,12 +4,23 @@ import { getAlerts } from "@/lib/alerts";
 import { confirmCheckoutSession, reconcileCheckoutSession } from "@/lib/billing/entitlements";
 import { getSession } from "@/lib/auth";
 import { buildAnalyticsIdentity } from "@/lib/analytics-identity";
+import { captureServerMessage } from "@/lib/observability";
 import { PurchaseTracker, type PurchaseOutcome } from "@/components/PurchaseTracker";
 import { redirect } from "next/navigation";
 import { ContinueToCheckout } from "@/components/ContinueToCheckout";
 import { KIT, buyIntent, isPaidPlan } from "@/lib/site";
 import { planAvailable } from "@/lib/stripe";
 import { actionMarkAlertsRead } from "./actions";
+
+/**
+ * A Checkout return the server could not confirm leaves a paying visitor on a
+ * page without their plan. The browser reports `purchase_confirmation_failed`;
+ * this makes the same stall a Sentry warning with the reason code.
+ */
+function unconfirmedPurchase(stage: "reconcile" | "confirm", reason: string): PurchaseOutcome {
+  captureServerMessage("checkout return could not be confirmed", { scope: "stripe-checkout", stage, reason });
+  return { kind: "failed", reason };
+}
 
 export default async function DashboardHome({ searchParams }: { searchParams: Promise<{ upgraded?: string; session_id?: string; confirmed?: string; buy?: string }> }) {
   const org = await ensureOrg();
@@ -25,13 +36,13 @@ export default async function DashboardHome({ searchParams }: { searchParams: Pr
     // once, from a session Stripe has verified for this workspace.
     const result = await reconcileCheckoutSession(sessionId, org.id);
     if (result.ok) redirect(`/dashboard?upgraded=1&confirmed=${encodeURIComponent(sessionId)}`);
-    purchase = { kind: "failed", reason: result.reason };
+    purchase = unconfirmedPurchase("reconcile", result.reason);
   } else if (confirmedId) {
     const [result, user] = await Promise.all([confirmCheckoutSession(confirmedId, org.id), getSession()]);
     purchase = result.ok && user
       // The plan comes from the verified Checkout session, not from the stale org row.
       ? { kind: "confirmed", purchase: result.purchase, identity: buildAnalyticsIdentity(user.id, result.purchase.items[0]?.item_id, user.isTest) }
-      : { kind: "failed", reason: result.ok ? "unauthorized" : result.reason };
+      : unconfirmedPurchase("confirm", result.ok ? "unauthorized" : result.reason);
   }
   const [register, policies, attestations, alerts] = await Promise.all([
     getRegister(org.id), getPolicies(org.id), getAttestations(org.id), getAlerts(org.id, 8),
