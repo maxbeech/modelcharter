@@ -412,7 +412,7 @@
       "iso42001": null,
       "gdpr_dpa": "yes",
       "hipaa_baa": "yes",
-      "data_region_eu": null,
+      "data_region_eu": "no",
       "sso_saml": "yes",
       "enterprise_plan": "Enterprise",
       "notable_risk": "On free/Premium consumer tiers Grammarly uses de-identified content for product improvement/training unless you opt out, and HIPAA coverage requires an Enterprise BAA (not available on Free/Premium/Business).",
@@ -428,6 +428,18 @@
         {
           "claim": "Grammarly holds SOC 2 Type 2 and ISO 27001/27002; is HIPAA-compliant only with an Enterprise BAA.",
           "url": "https://www.grammarly.com/compliance"
+        },
+        {
+          "claim": "Grammarly hosts customer data in Amazon Web Services data centers in the US East region, and no EU-residency option is described. Transfers from the EU, UK and Switzerland rely on EU-U.S., UK Extension and Swiss-U.S. Data Privacy Framework certification and on Standard Contractual Clauses.",
+          "url": "https://support.grammarly.com/hc/en-us/articles/20916119474829-Privacy-and-security-FAQ"
+        },
+        {
+          "claim": "Grammarly is certified under the EU-U.S. Data Privacy Framework, the UK Extension and the Swiss-U.S. Data Privacy Framework.",
+          "url": "https://support.grammarly.com/hc/en-us/articles/360021115751-Does-Grammarly-participate-in-the-EU-U-S-Data-Privacy-Framework-EU-U-S-DPF-the-UK-Extension-to-the-EU-U-S-DPF-and-the-Swiss-U-S-Data-Privacy-Framework"
+        },
+        {
+          "claim": "Grammarly publishes controller-to-processor Standard Contractual Clauses for customer data. The full data processing agreement is not published on the public site; confirm its terms with Grammarly sales before relying on it.",
+          "url": "https://www.grammarly.com/terms/Grammarly-C2P_SCCs.pdf"
         }
       ],
       "confidence": "medium",

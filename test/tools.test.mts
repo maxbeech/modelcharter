@@ -25,6 +25,16 @@ for (const t of TOOLS) {
   for (const s of t.sources) ok(s.url.startsWith("http"), `${t.slug}: source URL valid`);
 }
 
+// Grammarly EU residency is answered from the vendor's own FAQ (AWS US East hosting).
+// If this fails, the GDPR page would show a stale "Not verified" residency answer.
+const grammarly = getTool("grammarly");
+ok(!!grammarly, "grammarly profile exists");
+eq(grammarly?.dataRegionEu, "no", "grammarly EU residency is 'no' per the vendor FAQ");
+ok(
+  !!grammarly?.sources.some((s) => s.url.includes("20916119474829") && /US East/.test(s.claim)),
+  "grammarly residency claim cites the privacy FAQ and names US East hosting",
+);
+
 // getTool + grouping.
 ok(!!getTool(TOOLS[0].slug), "getTool finds a known tool");
 eq(getTool("does-not-exist"), undefined, "getTool returns undefined for unknown");
