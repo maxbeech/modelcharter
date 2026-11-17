@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-17: Grammarly GDPR answer refresh
+
+Why: the weekly content lifecycle pass flagged `/tools/grammarly/gdpr` (56 impressions, position 9.4) for a substantive refresh.
+
+- **EU residency answered from the vendor's own page.** Grammarly's privacy FAQ says customer data is hosted in AWS data centers in the US East region. `data/ai-tools.json` changes `data_region_eu` from unverified to `no`, so the GDPR page reads "Not offered" rather than "Not verified".
+- **Transfer mechanism sourced.** The Data Privacy Framework support article (EU-U.S., UK Extension and Swiss-U.S.) and the controller-to-processor Standard Contractual Clauses PDF are added as sources.
+- **Not changed: the DPA claim.** `gdpr_dpa` stays `yes`. The public site publishes SCCs but not the DPA text, so the "publishes a DPA" wording still needs confirming with Grammarly sales.
+
 ## 2026-11-06: active return measurement
 
 - Record first measured visits and intentional returns using the shared three-hour, seven-day browser contract.
