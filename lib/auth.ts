@@ -4,6 +4,7 @@ import { buildAnalyticsIdentity, isTestUserMetadata } from "./analytics-identity
 import type { AnalyticsIdentity } from "./analytics-events";
 import { captureServerError, captureServerMessage } from "./observability";
 import { confirmUrl } from "./auth-confirm";
+import { providerErrorMessage } from "./auth-errors";
 
 // Email + password auth on Supabase Auth. Session lives in the Supabase cookies
 // (refreshed by middleware); authorization always uses getUser(), which
@@ -62,7 +63,8 @@ export async function signup(email: string, password: string): Promise<AuthResul
     // A rejected sign-up for a known reason is expected; anything else is the
     // stalled-user case, so it goes to Sentry with the provider's status code.
     if (!exists) captureServerError(error, { scope: "auth", stage: "signup", code: error.code ?? null, status: error.status ?? null });
-    const msg = exists ? "An account with that email already exists. Try logging in." : error.message;
+    // The visitor never sees raw provider text (a 5xx can arrive as "{}"); see lib/auth-errors.ts.
+    const msg = exists ? "An account with that email already exists. Try logging in." : providerErrorMessage(error);
     return { ok: false, error: msg, reason: exists ? "already_registered" : "auth_error" };
   }
   // With email confirmation enabled, signUp returns a user but no session.

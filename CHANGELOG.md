@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-11-19: sign-up shows a readable message when the auth provider fails
+
+Why: the journey E2E run for "Visit to paying customer" failed at "Account created". The sign-up form showed a red `{}` instead of a message. Sentry MODELCHARTER_WEB-6 (`AuthRetryableFetchError: {}`, status 500, `POST /signup`) shows Supabase answered the sign-up with a server error whose body was empty, and the client reported the literal text `{}`, which `lib/auth.ts` passed straight to the form.
+
+- **Readable message.** New `lib/auth-errors.ts`: a provider 5xx, or an empty or serialized-object message, becomes "We couldn't create your account just now. Please try again in a moment." A readable 4xx message (for example a weak password) still passes through unchanged.
+- **Still reported.** The full provider error is still captured to Sentry by `captureServerError` in `lib/auth.ts`, so the upstream failure stays visible.
+- **Tests.** `test/auth-errors.test.mts` (13 assertions, also run by `npm test`) covers the `{}`, empty, 5xx and readable cases and checks that `signup` no longer forwards the raw message.
+- **Not changed.** The upstream 500 itself. Supabase Auth sends confirmation mail through Resend SMTP; if the mail send is what fails, that is a configuration issue outside this repository.
+
 ## 2026-11-17: Grammarly GDPR answer refresh
 
 Why: the weekly content lifecycle pass flagged `/tools/grammarly/gdpr` (56 impressions, position 9.4) for a substantive refresh.
